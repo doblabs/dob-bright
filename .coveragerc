@@ -1,0 +1,11 @@
+# vim:tw=0:ts=2:sw=2:et:norl:ft=dosini
+
+# This file exists within 'dob-bright':
+#
+#   https://github.com/hotoffthehamster/dob-bright
+
+[run]
+source=dob_bright
+omit =
+    dob_bright/tests/*
+

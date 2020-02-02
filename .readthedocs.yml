@@ -1,0 +1,12 @@
+# This file exists within 'dob-bright':
+#
+#   https://github.com/hotoffthehamster/dob-bright
+
+version: 2
+
+python:
+  version: 3.8
+  install:
+     - method: pip
+       path: .
+

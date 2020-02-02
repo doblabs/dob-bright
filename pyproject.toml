@@ -1,0 +1,9 @@
+# This file exists within 'dob-bright':
+#
+#   https://github.com/hotoffthehamster/dob-bright
+
+# (lb): Including this file to be pedantic.
+
+[build-system]
+requires = ["setuptools", "wheel"]
+
