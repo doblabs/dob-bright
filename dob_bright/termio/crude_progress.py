@@ -17,7 +17,7 @@
 
 """Hamter CLI Nonbusiness Helper modules."""
 
-import click
+import click_hotoffthehamster as click
 
 from . import click_echo
 

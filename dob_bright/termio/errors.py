@@ -19,7 +19,7 @@
 
 import sys
 
-import click
+import click_hotoffthehamster as click
 
 from .ascii_art import infection_notice, lifeless
 from .paging import click_echo, flush_pager

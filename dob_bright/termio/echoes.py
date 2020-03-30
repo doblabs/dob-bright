@@ -17,7 +17,7 @@
 
 """Methods for common terminal echo operations."""
 
-import click
+import click_hotoffthehamster as click
 
 from .paging import click_echo
 from .style import attr, fg

@@ -20,7 +20,7 @@
 import sys
 from functools import update_wrapper
 
-import click
+import click_hotoffthehamster as click
 
 from .style import coloring
 

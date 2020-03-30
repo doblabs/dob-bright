@@ -37,7 +37,7 @@ requirements = [
     #    'click',
     #  - Still, had to make one adjustment, and too impatient to ask for a pull...
     #  https://github.com/hotoffthehamster/click
-    'click--hotoffthehamster',
+    'click-hotoffthehamster >= 7.1.1, < 8',
     # Enable Click color support (we don't use colorama directly, but it does),
     #  "on Windows, this ... is only available if colorama is installed".
     #  https://click.palletsprojects.com/en/5.x/utils/#ansi-colors

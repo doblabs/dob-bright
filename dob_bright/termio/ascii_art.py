@@ -20,7 +20,7 @@ import random
 
 from gettext import gettext as _
 
-import click
+import click_hotoffthehamster as click
 
 from .style import attr, bg, fg
 
