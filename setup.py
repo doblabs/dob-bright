@@ -28,10 +28,10 @@ requirements = [
     #  https://gitlab.com/dslackw/colored
     # See wrapper file:
     #  dob_bright/termio/style.py
-    'ansi-escape-room',
+    'ansi-escape-room >= 1.4.2, < 2',
     # Platform-specific directory magic.
     #  https://github.com/ActiveState/appdirs
-    'appdirs',
+    'appdirs >= 1.4.3, < 2',
     # (lb): Click may be the best optparser of any language I've used.
     #  https://github.com/pallets/click
     #    'click',
@@ -42,22 +42,22 @@ requirements = [
     #  "on Windows, this ... is only available if colorama is installed".
     #  https://click.palletsprojects.com/en/5.x/utils/#ansi-colors
     #  https://pypi.org/project/colorama/
-    'colorama',
+    'colorama >= 0.4.3, < 1',
     # INI/config parser, even better (preserves comments and ordering).
     #  https://github.com/DiffSK/configobj
     #  https://configobj.readthedocs.io/en/latest/
-    'configobj >= 5.0.6',
+    'configobj >= 5.0.6, < 6',
     # Vocabulary word pluralizer.
     #  https://github.com/ixmatus/inflector
-    'Inflector',
+    'Inflector >= 3.0.1, < 4',
     # https://github.com/mnmelo/lazy_import
-    'lazy_import',
+    'lazy_import >= 0.2.2, < 1',
 
     # *** Hamster packages.
 
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/hotoffthehamster/nark
-    'nark',
+    'nark >= 3.0.1, < 4',
 ]
 
 # *** Minimal setup() function -- Prefer using config where possible.
