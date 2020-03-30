@@ -16,8 +16,8 @@ History
 
 .. :changelog:
 
-1.0.0 (2020-02-01)
+1.0.0 (2020-03-30)
 ==================
 
-* Inaugural release.
+* Inaugural release (spin-off from dob).
 
