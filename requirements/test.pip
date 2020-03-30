@@ -4,10 +4,10 @@
 # *** DEV: When developing locally, if you touch the other projects,
 #          you may need to include them in the tox test environments.
 #          Uncomment these are appropriate.
-
-../config-decorator
-../human-friendly_pedantic-timedelta
-../nark
+#
+#  ../config-decorator
+#  ../human-friendly_pedantic-timedelta
+#  ../nark
 
 # *** Py.Test Framework & Related
 
