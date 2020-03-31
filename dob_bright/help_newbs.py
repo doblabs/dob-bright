@@ -67,7 +67,7 @@ def NEWBIE_HELP_WELCOME(ctx):
         {color}┃ Welcome to dob! ┃{reset}
         {color}┗━━━━━━━━━━━━━━━━━┛{reset}
         """
-    ).strip().format(
+    ).rstrip().strip('\n').format(
         color=(fg('spring_green_2a') + attr('bold')),
         # color=(fg('turquoise_4') + attr('bold')),
         # color=(fg('magenta_2a') + attr('bold')),
@@ -185,8 +185,8 @@ def NEWBIE_HELP_REPAIR_CONFIG(ctx, cfg_path):
         The configuration file is at least missing the db.orm setting, if not others.
 
         Either edit and repair the confirguration file manually, or blow it away:
-
-            {rawname} config create --force
+          \b
+          {codehi}{rawname} config create --force{reset}
         """
     ).strip().format(
         cfg_path=cfg_path,
