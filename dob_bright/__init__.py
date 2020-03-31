@@ -27,6 +27,7 @@ __all__ = (
 )
 
 __package_name__ = 'dob-bright'
+# Note that this package is a library, so __arg0name__ likely, e.g., 'dob'.
 __arg0name__ = os.path.basename(sys.argv[0])
 
 

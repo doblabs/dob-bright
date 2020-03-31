@@ -28,7 +28,6 @@ from nark.control import NarkControl
 from nark.helpers import logging as logging_helpers
 from nark.items.fact import Fact
 
-# MAYBE/2020-02-01: Have dob set __arg0name__.
 from . import __arg0name__
 from . import help_newbs as help_strings
 from .config.urable import ConfigUrable
