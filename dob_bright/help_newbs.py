@@ -19,7 +19,7 @@
 
 from gettext import gettext as _
 
-from . import __arg0name__, __package_name__
+from . import __arg0name__
 from .config.fileboss import default_config_path
 from .config.urable import ConfigUrable
 from .termio import attr, bg, fg, highlight_value
@@ -43,8 +43,8 @@ def common_format():
     # sourced. So wait until help strings are built and it's known if color
     # or not.
     common_format = {
-        'appname': highlight_value(__package_name__),
-        'rawname': __package_name__,
+        'appname': highlight_value(__arg0name__),
+        'rawname': __arg0name__,
         'codehi': fg('turquoise_2'),
         'reset': attr('reset'),
         'bold': attr('bold'),
@@ -110,24 +110,24 @@ def NEWBIE_HELP_ONBOARDING(ctx):
         {init_title}
         To create a fresh, empty database, run:
 
-          {cmd_color}{appname} init{reset}
+          {cmd_color}{rawname} init{reset}
 
         {upgrade_title}
         To learn how to import data from a previous version
         of dob, or to import from the old hamster app, run:
 
-          {cmd_color}{appname} migrate -h{reset}
+          {cmd_color}{rawname} migrate -h{reset}
 
         {demo_title}
         If you’d like to get your hands dirty, you can demo
         the application with some example data that you can
         follow as a walk-through. Run:
 
-          {cmd_color}{appname} demo{reset}
+          {cmd_color}{rawname} demo{reset}
         \b
         """
     ).format(
-        appname=__arg0name__,
+        rawname=__arg0name__,
         banner=NEWBIE_HELP_WELCOME(ctx),
         upgrade_title=section_heading(_('Import existing facts')),
         init_title=section_heading(_('Start from scratch')),
