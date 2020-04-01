@@ -20,42 +20,20 @@
 import os
 import sys
 
+from nark import get_version as _get_version
+
 __all__ = (
+    'get_version',
     '__arg0name__',
     '__package_name__',
-    '__resolve_vers__',
 )
 
-__package_name__ = 'dob-bright'
 # Note that this package is a library, so __arg0name__ likely, e.g., 'dob'.
 __arg0name__ = os.path.basename(sys.argv[0])
 
+__package_name__ = 'dob-bright'
 
-def __resolve_vers__():
-    """Returns the installed package version, or '<none>'.
 
-    In lieu of always setting __version__ -- and always loading pkg_resources --
-    use a method to avoid incurring startup costs if the version is not needed.
-    """
-    try:
-        import setuptools_scm
-        # For whatever reason, relative_to does not work, (lb) thought it would.
-        #   return setuptools_scm.get_version(relative_to=__file__)
-        pkg_dirname = os.path.dirname(os.path.dirname(__file__))
-        # See if parent directory (of this file) contains .git/.
-        proj_git = os.path.join(pkg_dirname, '.git')
-        if os.path.exists(proj_git):
-            # Get version from setuptools_scm, and git tags.
-            # This is similar to a developer running, e.g.,
-            #   python setup.py --version
-            return setuptools_scm.get_version(root=pkg_dirname)
-    except ImportError:
-        # ModuleNotFoundError added py3.6. Until then, ImportError.
-        from pkg_resources import get_distribution, DistributionNotFound
-        try:
-            return get_distribution(__package_name__).version
-        except DistributionNotFound:
-            return '<none>'
-    else:
-        return '<none>'
+def get_version(include_head=False):
+    return _get_version(ref_file=__file__, include_head=include_head)
 
