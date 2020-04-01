@@ -35,5 +35,9 @@ __package_name__ = 'dob-bright'
 
 
 def get_version(include_head=False):
-    return _get_version(ref_file=__file__, include_head=include_head)
+    return _get_version(
+        package_name=__package_name__,
+        reference_file=__file__,
+        include_head=include_head,
+    )
 
