@@ -197,16 +197,8 @@ docs: docs-html
 	$(PYBROWSER) docs/_build/html/index.html
 .PHONY: docs
 
-docs-html: venvforce
-	# Ref:
-	#   https://www.python.org/dev/peps/pep-0257/
-	# (lb): We auto-generate docs/modules.rst and docs/<package_name>.rst
-	# so that :ref:`genindex` and :ref:`modindex`, etc., work, but we also
-	# maintain a separate docs/<project-name>.rst, so that we can specify
-	# special methods' docs to include, such as `__new__`'s.
-	/bin/rm -f docs/$(PROJNAME).rst
-	/bin/rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ $(PROJNAME)
+docs-html: venvforce clean-docs
+	sphinx-apidoc --force -o docs/ $(PROJNAME)
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 .PHONY: docs-html
