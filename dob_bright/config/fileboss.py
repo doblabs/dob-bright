@@ -19,7 +19,7 @@ import os
 
 from gettext import gettext as _
 
-from configobj import ConfigObj, DuplicateError
+from configobj import ConfigObj, DuplicateError, ParseError
 
 from ..termio import dob_in_user_exit
 
@@ -45,15 +45,33 @@ def default_config_path():
 # ***
 
 def empty_config_obj(configfile_path):
-    config_obj = ConfigObj(
-        configfile_path,
-        write_empty_values=False,
-        # Note that ConfigObj has a raise_errors param, but if False, it
-        # just defers the error, if any; it'll still get raised, just at
-        # the end. So what's the point? -(lb)
-        #   raise_errors=False,
-    )
-    return config_obj
+    """"""
+    def _empty_config_obj():
+        try:
+            config_obj = create_config_obj()
+        except ParseError as err:
+            # E.g., "configobj.ParseError: Invalid line ('<>') (...) at line <>."
+            exit_parse_error(str(err))
+        return config_obj
+
+    def create_config_obj():
+        config_obj = ConfigObj(
+            configfile_path,
+            write_empty_values=False,
+            # Note that ConfigObj has a raise_errors param, but if False, it
+            # just defers the error, if any; it'll still get raised, just at
+            # the end. So what's the point? -(lb)
+            #   raise_errors=False,
+        )
+        return config_obj
+
+    def exit_parse_error(err):
+        msg = _(
+            'ERROR: Your config file at “{}” has a syntax error: “{}”'
+        ).format(configfile_path, str(err))
+        dob_in_user_exit(msg)
+
+    return _empty_config_obj()
 
 
 # ***
