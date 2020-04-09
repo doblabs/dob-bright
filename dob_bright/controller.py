@@ -54,6 +54,8 @@ class Controller(NarkControl):
     def __init__(self, config=None):
         super(Controller, self).__init__(config)
         self.configurable = None
+        self.configfile_path = None
+        self.config_keyvals = None
         self.arg0name = __arg0name__
 
     @property
@@ -155,10 +157,18 @@ class Controller(NarkControl):
         if self.configurable is not None:
             return
         self.ctx = ctx
+        self.configfile_path = configfile_path
+        self.config_keyvals = keyvals
+        self.setup_config(configfile_path, *keyvals)
+        self.wire_configience()
+
+    def setup_config(self, configfile_path=None, *keyvals):
         self.configurable = ConfigUrable()
         self.configurable.load_config(configfile_path)
         self.configurable.inject_from_cli(*keyvals)
-        self.wire_configience()
+
+    def replay_config(self):
+        self.setup_config(self.configfile_path, *self.config_keyvals)
 
     def create_config(self, force):
         self.configurable.create_config(force=force)
