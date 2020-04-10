@@ -55,6 +55,7 @@ class ConfigUrable(object):
     # ***
 
     def find_all(self, parts):
+        # Caller is responsible for catching KeyError on unrecognized part(s).
         return self.config_root.find_all(parts)
 
     # ***
