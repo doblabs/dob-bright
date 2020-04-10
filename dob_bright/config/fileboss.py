@@ -57,6 +57,7 @@ def empty_config_obj(configfile_path):
     def create_config_obj():
         config_obj = ConfigObj(
             configfile_path,
+            encoding='UTF8',
             interpolation=False,
             write_empty_values=False,
             # Note that ConfigObj has a raise_errors param, but if False, it
