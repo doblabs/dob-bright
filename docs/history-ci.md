@@ -2,6 +2,12 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.0.7 (2020-04-09)
+
+- Bugfix: Allow Unicode characters in config values.
+
+- Improve: Allow config to be reloaded, to support plugin config.
+
 ## 1.0.6 (2020-04-08)
 
 - Harden: Catch and report config file syntax error.
