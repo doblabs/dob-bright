@@ -21,9 +21,10 @@ from unittest import mock
 
 import pytest
 
+from nark.config import decorate_config
 from nark.helpers import logging as logging_helpers
 
-from dob_bright.config import decorate_config, app_dirs, fileboss
+from dob_bright.config import app_dirs, fileboss
 from dob_bright.config.fileboss import write_config_obj
 from dob_bright.config.urable import ConfigUrable
 
