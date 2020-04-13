@@ -57,7 +57,7 @@ requirements = [
 
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/hotoffthehamster/nark
-    'nark >= 3.0.5, < 4',
+    'nark >= 3.0.6, < 4',
 ]
 
 # *** Minimal setup() function -- Prefer using config where possible.
