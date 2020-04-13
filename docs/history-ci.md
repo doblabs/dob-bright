@@ -2,6 +2,10 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.0.9 (2020-04-13)
+
+- API: New method to refresh "now".
+
 ## 1.0.8 (2020-04-12)
 
 - API: Pass Click context to post_processor handler.
