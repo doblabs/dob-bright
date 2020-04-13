@@ -317,17 +317,39 @@ class Controller(NarkControl):
         Controller.POST_PROCESSORS.append(func)
 
     @staticmethod
-    def _post_process(ctx, controller, fact_facts_or_true, show_plugin_error=None):
+    def _post_process(
+        ctx,
+        controller,
+        fact_facts_or_true,
+        show_plugin_error=None,
+        carousel_active=False,
+    ):
         # facts_or_true is one of:
         # - The saved/edited Fact;
         # - a list of Facts;
         # - or True, on upgrade-legacy.
         for handler in Controller.POST_PROCESSORS:
-            handler(ctx, controller, fact_facts_or_true, show_plugin_error)
+            handler(
+                ctx,
+                controller,
+                fact_facts_or_true,
+                show_plugin_error=show_plugin_error,
+                carousel_active=carousel_active,
+            )
 
-    def post_process(self, controller, fact_facts_or_true, show_plugin_error=None):
+    def post_process(
+        self,
+        controller,
+        fact_facts_or_true,
+        show_plugin_error=None,
+        carousel_active=False,
+    ):
         Controller._post_process(
-            self.ctx, controller, fact_facts_or_true, show_plugin_error,
+            self.ctx,
+            controller,
+            fact_facts_or_true,
+            show_plugin_error=show_plugin_error,
+            carousel_active=carousel_active,
         )
 
     def setup_tty_color(self, use_color):
