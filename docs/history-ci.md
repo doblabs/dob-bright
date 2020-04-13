@@ -2,6 +2,10 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.0.8 (2020-04-12)
+
+- API: Pass Click context to post_processor handler.
+
 ## 1.0.7 (2020-04-09)
 
 - Bugfix: Allow Unicode characters in config values.
