@@ -62,6 +62,9 @@ class Controller(NarkControl):
     def now(self):
         return self.store.now
 
+    def now_refresh(self):
+        return self.store.now_refresh()
+
     @property
     def data_store_exists_at(self):
         return _(
