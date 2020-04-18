@@ -177,7 +177,7 @@ class Controller(NarkControl):
         self.configurable.create_config(force=force)
         self.wire_configience()
 
-    def round_out_config(self, force):
+    def round_out_config(self):
         self.configurable.round_out_config()
 
     def write_config(self, skip_unset=False):
