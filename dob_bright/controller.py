@@ -159,6 +159,8 @@ class Controller(NarkControl):
     def ensure_config(self, ctx, configfile_path=None, *keyvals):
         if self.configurable is not None:
             return
+        # NOTE: This ctx.command.name == 'run', i.e., not the same context
+        # passed to the Click command handlers. See: pass_context_wrap.
         self.ctx = ctx
         self.configfile_path = configfile_path
         self.config_keyvals = keyvals
