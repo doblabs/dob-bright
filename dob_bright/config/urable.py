@@ -147,6 +147,15 @@ class ConfigUrable(object):
 
     def write_config(self, skip_unset=False):
         config_obj = empty_config_obj(self.config_path)
+        # - (lb): If we did not want to use skip_unset, which won't pollute
+        #   the config_obj that was just read from the user's config, we
+        #   could similarly delete entries from the config, e.g.,
+        #       if skip_unset:
+        #           # Remove settings that are no different than their default
+        #           # (to not save them to the config, potentially cluttering it).
+        #           self.config_root.del_not_persisted(config_obj)
+        #   but sticking with apply_items(skip_unset=True) means self.config_root
+        #   will still be usable after this method returns. I.e., no side effects.
         # Fill in dict object using values previously set from config or newly set.
         self.config_root.apply_items(config_obj, skip_unset=skip_unset)
         write_config_obj(config_obj)
