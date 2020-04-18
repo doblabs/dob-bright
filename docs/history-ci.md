@@ -2,6 +2,27 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.1.0 (2020-04-20)
+
+- Improve: Option to exclude section column from config table.
+
+- Improve: Do not assume ASCII table width.
+
+- UX: Change difficult to read 'red' warning text to 'yellow'.
+
+  (Though really should be made configurable. Yellow works
+  better on a dark background.)
+
+- Harden: Prevent stylize from failing on user input.
+
+- API: Rename to avoid confusion/match other usage: `stylit` → `rules`.
+
+- Library: Refactor, Relocate, and DRY work.
+
+## 1.0.10 (2020-04-17)
+
+- Bugfix: `dob config update` command broken.
+
 ## 1.0.9 (2020-04-13)
 
 - API: New method to refresh "now".
