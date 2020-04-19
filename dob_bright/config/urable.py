@@ -67,7 +67,7 @@ class ConfigUrable(object):
 
         self.reset_config()
         click_echo(
-            _('Initialized default Dob configuration at {}').format(
+            _('Initialized default config file at {}').format(
                 highlight_value(self.config_path),
             )
         )
