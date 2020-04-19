@@ -44,7 +44,13 @@ def dob_in_user_exit(msg):
 # ***
 
 def dob_in_user_warning(msg):
-    click.echo(colorize(msg, 'red_3b'), err=True)
+    # FIXME: (lb): This should be a styles.conf configurables. #styling
+    # A lighter red works for white-on-black.
+    # - FIXME: Add to 'light'.
+    #  click.echo(colorize(msg, 'red_1'), err=True)  # 196
+    # Yellow pops and at least says caution. Works for dark.
+    # - FIXME: Add to 'night'.
+    click.echo(colorize(msg, 'yellow_1'), err=True)  # 226
 
 
 # ***
@@ -57,7 +63,8 @@ def barf_and_exit(msg, crude=True):
         click_echo(infection_notice().rstrip())
         # click.pause(info='')
     click_echo()
-    click_echo(colorize(msg, 'red'))
+    # FIXME: (lb): See comment in dob_in_user_warning. Make configurable. #styling
+    click_echo(colorize(msg, 'yellow_1'))
     sys.exit(1)
 
 
