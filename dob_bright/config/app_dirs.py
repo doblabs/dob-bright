@@ -19,7 +19,7 @@ import os
 
 from gettext import gettext as _
 
-from nark.helpers.app_dirs import NarkAppDirs
+from nark.helpers.app_dirs import NarkAppDirs, ensure_directory_exists
 
 from ..termio import dob_in_user_warning
 
@@ -61,7 +61,7 @@ def get_appdirs_subdir_file_path(
     """
     subdir_path = os.path.join(appdirs_dir, dir_dirname)
     # (lb): So disrespectful! Totally accessing "hidden" method.
-    AppDirs._ensure_directory_exists(subdir_path)
+    ensure_directory_exists(subdir_path)
     full_path = os.path.join(subdir_path, basename_fmt.format(file_basename))
     if os.path.exists(full_path) and not os.path.isfile(full_path):
         msg = _(
