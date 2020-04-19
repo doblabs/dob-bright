@@ -30,6 +30,7 @@ from .app_dirs import AppDirs
 __all__ = (
     'default_config_path',
     'empty_config_obj',
+    'ensure_file_path_dirred',
     'load_config_obj',
     'write_config_obj',
 )
@@ -113,17 +114,11 @@ def write_config_obj(config_obj):
     def _write_config_obj():
         if not config_obj.filename:
             raise AttributeError('ConfigObj missing ‘filename’')
-        ensure_dirs(config_obj.filename)
+        ensure_file_path_dirred(config_obj.filename)
         try:
             config_obj.write()
         except UnicodeEncodeError as err:
             die_write_failed(config_obj, err)
-
-    def ensure_dirs(filename):
-        # Avoid: FileNotFoundError: [Errno 2] No such file or directory: ....
-        configfile_dir = os.path.dirname(filename)
-        if configfile_dir:
-            ensure_directory_exists(configfile_dir)
 
     def die_write_failed(config_obj, err):
         # E.g.,:
@@ -140,4 +135,13 @@ def write_config_obj(config_obj):
         dob_in_user_exit(msg)
 
     return _write_config_obj()
+
+
+# ***
+
+def ensure_file_path_dirred(filename):
+    # Avoid: FileNotFoundError: [Errno 2] No such file or directory: ....
+    configfile_dir = os.path.dirname(filename)
+    if configfile_dir:
+        ensure_directory_exists(configfile_dir)
 
