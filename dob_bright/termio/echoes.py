@@ -70,6 +70,8 @@ def __format_block_header(title, sep='━', full_width=False):
 
 # ***
 
+# FIXME: (lb): Just another styles.conf configurable candidate. #styling
+
 def highlight_value(msg):
     highlight_color = 'medium_spring_green'
     return '{}{}{}'.format(fg(highlight_color), msg, attr('reset'))
