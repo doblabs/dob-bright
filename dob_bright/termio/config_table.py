@@ -24,7 +24,7 @@ __all__ = (
 )
 
 
-def echo_config_decorator_table(cfg_decors, table_type):
+def echo_config_decorator_table(cfg_decors, table_type, exclude_section=False):
     sec_key_vals = []
 
     def _echo_config_decorator_table():
@@ -42,20 +42,25 @@ def echo_config_decorator_table(cfg_decors, table_type):
         if val_def != str(keyval.default):
             val_def += val_def and ' ' or ''
             val_def += encode_default(str(keyval.default))
-        sec_key_vals.append((
-            condec.section_path(sep='.'),
+        val_row = [
+            condec.section_path(sep='.')
+        ] if not exclude_section else []
+        val_row += [
             keyval.name,
             val_def,
             keyval.doc,
-        ))
+        ]
+        sec_key_vals.append(val_row)
 
     def echo_table():
-        headers = (
-            _("Section"),
+        headers = [
+            _("Section")
+        ] if not exclude_section else []
+        headers += [
             _("Name"),
             _("Value {}").format(encode_default(_("Default"))),
             _("Help"),
-        )
+        ]
         generate_table(
             sec_key_vals,
             headers,
