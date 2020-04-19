@@ -156,7 +156,11 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
         #       If you add color to your headers, their columns will not
         #       line up with the content rows! (lb): "A deal breaker!"
         ttable = texttable.Texttable()
-        ttable.set_cols_align(["r", "l", "l", "l"])
+        # Right-align the first column; left-align the rest.
+        cols_align = ['r']
+        for idx in range(1, len(plain_headers)):
+            cols_align.append('l')
+        ttable.set_cols_align(cols_align)
         #
         term_width, _term_height = click.get_terminal_size()
         # We could be deliberate about each column's width, e.g.,
