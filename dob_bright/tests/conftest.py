@@ -35,6 +35,7 @@ import fauxfactory
 from pytest_factoryboy import register
 
 from nark.config import decorate_config
+from nark.helpers.app_dirs import ensure_directory_exists
 from nark.items.fact import Fact
 
 from dob_bright.config import app_dirs  # Needs container of AppDirs.
@@ -72,11 +73,6 @@ def filepath(tmpdir, filename):
 @pytest.fixture
 def appdirs(mocker, tmpdir):
     """Provide mocked version specific user dirs using a tmpdir."""
-    def ensure_directory_exists(directory):
-        if not os.path.lexists(directory):
-            os.makedirs(directory)
-        return directory
-
     mock_dirs = mocker.MagicMock()
     mock_dirs.user_config_dir = ensure_directory_exists(
         os.path.join(tmpdir.mkdir('config').strpath, 'dob/'),

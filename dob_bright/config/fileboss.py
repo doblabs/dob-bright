@@ -21,6 +21,8 @@ from gettext import gettext as _
 
 from configobj import ConfigObj, DuplicateError, ParseError
 
+from nark.helpers.app_dirs import ensure_directory_exists
+
 from ..termio import dob_in_user_exit
 
 from .app_dirs import AppDirs
@@ -120,8 +122,8 @@ def write_config_obj(config_obj):
     def ensure_dirs(filename):
         # Avoid: FileNotFoundError: [Errno 2] No such file or directory: ....
         configfile_dir = os.path.dirname(filename)
-        if configfile_dir and not os.path.lexists(configfile_dir):
-            os.makedirs(configfile_dir)
+        if configfile_dir:
+            ensure_directory_exists(configfile_dir)
 
     def die_write_failed(config_obj, err):
         # E.g.,:
