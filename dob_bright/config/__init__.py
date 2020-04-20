@@ -138,9 +138,9 @@ class DobConfigurableEditor(object):
     @property
     @ConfigRoot.setting(
         _("Path to file defining object matching used to stylize UX."),
-        name='stylit_fpath',
+        name='rules_fpath',
     )
-    def stylit_conf_path(self):
+    def rules_conf_path(self):
         # E.g., /home/user/config/.dob/styling/rules.conf
         return _styling_file_path(basename='rules.conf')
 
