@@ -20,17 +20,18 @@ import tempfile
 
 from gettext import gettext as _
 
-from configobj import ConfigObj, DuplicateError, ParseError
+from configobj import ConfigObj, ConfigObjError, DuplicateError, ParseError
 
 from nark.helpers.app_dirs import ensure_directory_exists
 
 from dob_bright.termio import click_echo
 
-from ..termio import dob_in_user_exit
+from ..termio import dob_in_user_exit, dob_in_user_warning
 
 from .app_dirs import AppDirs
 
 __all__ = (
+    'create_configobj',
     'default_config_path',
     'echo_config_obj',
     'empty_config_obj',
@@ -47,6 +48,27 @@ def default_config_path():
     config_filename = 'dob.conf'
     configfile_path = os.path.join(config_dir, config_filename)
     return configfile_path
+
+
+# ***
+
+def create_configobj(conf_path, nickname=''):
+    try:
+        return ConfigObj(
+            conf_path,
+            encoding='UTF8',
+            interpolation=False,
+            write_empty_values=False,
+        )
+    except ConfigObjError as err:
+        # Catches DuplicateError, and other errors, e.g.,
+        #       Parsing failed with several errors.
+        #       First error at line 55.
+        msg = _("Failed to load {0} config at “{1}”: {2}").format(
+            nickname, conf_path, str(err),
+        )
+        dob_in_user_warning(msg)
+        return None
 
 
 # ***
