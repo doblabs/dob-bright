@@ -24,5 +24,5 @@ from .errors import (  # noqa: F401
     barf_and_exit, dob_in_user_exit, dob_in_user_warning, echo_exit
 )
 from .paging import click_echo  # noqa: F401
-from .style import attr, bg, coloring, colorize, fg  # noqa: F401
+from .style import attr, bg, coloring, stylize, fg  # noqa: F401
 

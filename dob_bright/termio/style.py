@@ -27,7 +27,7 @@ __all__ = (
     'fg',
     'bg',
     'attr',
-    'colorize',
+    'stylize',
     # Private:
     #  'map_color'
 )
@@ -91,7 +91,7 @@ def attr(color):
     return ansi_escape_room.attr(map_color(color))
 
 
-def colorize(text, color, *args):
+def stylize(text, color, *args):
     if not coloring():
         return text
     more_attrs = ''.join([ansi_escape_room.attr(attr) for attr in args])
