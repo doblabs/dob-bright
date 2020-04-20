@@ -141,8 +141,8 @@ class DobConfigurableEditor(object):
         name='stylit_fpath',
     )
     def stylit_conf_path(self):
-        # E.g., /home/user/config/.dob/styling/queries.conf
-        return _styling_file_path(basename='stylit.conf')
+        # E.g., /home/user/config/.dob/styling/rules.conf
+        return _styling_file_path(basename='rules.conf')
 
     # ***
 
