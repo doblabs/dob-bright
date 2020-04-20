@@ -16,6 +16,7 @@
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
 import os
+import tempfile
 
 from gettext import gettext as _
 
@@ -23,12 +24,15 @@ from configobj import ConfigObj, DuplicateError, ParseError
 
 from nark.helpers.app_dirs import ensure_directory_exists
 
+from dob_bright.termio import click_echo
+
 from ..termio import dob_in_user_exit
 
 from .app_dirs import AppDirs
 
 __all__ = (
     'default_config_path',
+    'echo_config_obj',
     'empty_config_obj',
     'ensure_file_path_dirred',
     'load_config_obj',
@@ -43,6 +47,37 @@ def default_config_path():
     config_filename = 'dob.conf'
     configfile_path = os.path.join(config_dir, config_filename)
     return configfile_path
+
+
+# ***
+
+def echo_config_obj(config_obj):
+    def _echo_config_obj():
+        temp_f = prepare_temp_file(config_obj)
+        write_config_obj(config_obj)
+        open_and_print_dump(temp_f)
+
+    def prepare_temp_file(config_obj):
+        # Not that easy:
+        #   config_obj.filename = sys.stdout
+        # (lb): My understanding is that for the TemporaryFile to be openable
+        # on Windows, we should close it first (Linux can open an opened file
+        # again, but not Windows).
+        #   https://docs.python.org/3/library/tempfile.html#tempfile.NamedTemporaryFile
+        temp_f = tempfile.NamedTemporaryFile(delete=False)
+        temp_f.close()
+        config_obj.filename = temp_f.name
+        return temp_f
+
+    def write_styles_conf(config_obj):
+        config_obj.write()
+
+    def open_and_print_dump(temp_f):
+        with open(temp_f.name, 'r') as fobj:
+            click_echo(fobj.read().strip())
+        os.unlink(temp_f.name)
+
+    return _echo_config_obj()
 
 
 # ***
