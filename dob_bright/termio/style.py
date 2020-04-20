@@ -28,8 +28,11 @@ __all__ = (
     'bg',
     'attr',
     'stylize',
+    'verify_colors_attrs',
     # Private:
     #  'map_color'
+    #  '_try_attr',
+    #  '_try_fg_color',
 )
 
 
@@ -91,17 +94,55 @@ def attr(color):
     return ansi_escape_room.attr(map_color(color))
 
 
-def stylize(text, color, *args):
-    if not coloring():
-        return text
-    more_attrs = ''.join([ansi_escape_room.attr(attr) for attr in args])
-    return '{}{}{}{}'.format(
-        ansi_escape_room.fg(color),
-        more_attrs,
-        text,
-        ansi_escape_room.attr('reset'),
-    )
+# ***
 
+def stylize(text, *args):
+    def _stylize():
+        if not coloring():
+            return text
+
+        # The first argument may be a foreground color. If not, it's an
+        # attribute. The remaining arguments are assumed to be attributes.
+        ctrlseq = assemble_styling()
+        return '{}{}{}'.format(ctrlseq, text, ansi_escape_room.attr('reset'))
+
+    def assemble_styling():
+        ctrlseq = ''
+        for idx, arg in enumerate(args):
+            if not ctrlseq:
+                ctrlseq += _try_fg_color(arg)
+            if idx > 0 or not ctrlseq:
+                ctrlseq += _try_attr(arg)
+            # We silently ignore unknown args. Callers can use
+            # verify_colors_attrs to check their user input.
+        return ctrlseq
+
+    return _stylize()
+
+
+def verify_colors_attrs(*args):
+    errs = []
+    for arg in args:
+        if not _try_fg_color(arg) and not _try_attr(arg):
+            errs.append(arg)
+    return errs
+
+
+def _try_fg_color(color):
+    try:
+        return ansi_escape_room.fg(color)
+    except KeyError:
+        return ''
+
+
+def _try_attr(attr):
+    try:
+        return ansi_escape_room.attr(attr)
+    except KeyError:
+        return ''
+
+
+# ***
 
 def map_color(color):
     # FIXME/2018-06-08: (lb): Need a way to easily change palette.
