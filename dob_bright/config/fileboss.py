@@ -52,7 +52,7 @@ def default_config_path():
 
 # ***
 
-def create_configobj(conf_path, nickname=''):
+def create_configobj(conf_path, errname=''):
     try:
         return ConfigObj(
             conf_path,
@@ -65,7 +65,7 @@ def create_configobj(conf_path, nickname=''):
         #       Parsing failed with several errors.
         #       First error at line 55.
         msg = _("Failed to load {0} config at “{1}”: {2}").format(
-            nickname, conf_path, str(err),
+            errname, conf_path, str(err),
         )
         dob_in_user_warning(msg)
         return None
