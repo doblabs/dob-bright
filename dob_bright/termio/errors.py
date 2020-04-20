@@ -44,7 +44,7 @@ def dob_in_user_exit(msg):
 # ***
 
 def dob_in_user_warning(msg):
-    # FIXME: (lb): This should be a styles.conf configurables. #styling
+    # FIXME: (lb): Replace hardcoded styles. Assign from styles.conf. #styling
     # A lighter red works for white-on-black.
     # - FIXME: Add to 'light'.
     #  click.echo(stylize(msg, 'red_1'), err=True)  # 196
@@ -63,7 +63,7 @@ def barf_and_exit(msg, crude=True):
         click_echo(infection_notice().rstrip())
         # click.pause(info='')
     click_echo()
-    # FIXME: (lb): See comment in dob_in_user_warning. Make configurable. #styling
+    # FIXME: (lb): Replace hardcoded styles. Assign from styles.conf. #styling
     click_echo(stylize(msg, 'yellow_1'))
     sys.exit(1)
 

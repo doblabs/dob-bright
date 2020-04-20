@@ -42,6 +42,9 @@ def common_format():
     # and fg and attr will return empty strings if called when module is
     # sourced. So wait until help strings are built and it's known if color
     # or not.
+    # FIXME: (lb): Replace hardcoding. Retrieve styles from styles.conf. #styling
+    #        - Or probably disable for newbie message: we cannot discern terminal
+    #          colors, and user will not have assigned a style, probably.
     common_format = {
         'appname': highlight_value(__arg0name__),
         'rawname': __arg0name__,
@@ -61,6 +64,7 @@ def common_format():
 # ***
 
 def NEWBIE_HELP_WELCOME(ctx):
+    # FIXME: (lb): Need to test colors on light vs. night terminals. #styling
     _help = _(
         """
         {color}┏━━━━━━━━━━━━━━━━━┓{reset}
@@ -68,10 +72,8 @@ def NEWBIE_HELP_WELCOME(ctx):
         {color}┗━━━━━━━━━━━━━━━━━┛{reset}
         """
     ).rstrip().strip('\n').format(
+        # FIXME: (lb): Replace hardcoding. Assign from styles.conf. #styling
         color=(fg('spring_green_2a') + attr('bold')),
-        # color=(fg('turquoise_4') + attr('bold')),
-        # color=(fg('magenta_2a') + attr('bold')),
-        # color=(fg('dark_orange_3b') + attr('bold')),
         **common_format(),
     )
     return _help
@@ -85,14 +87,8 @@ def section_heading(title):
         """
     ).strip().format(
         title=title,
-        # sep='-',
         sep='─',
         len_title=len(title),
-        # color=fg('spring_green_2a'),
-        # color=fg('dark_orange'),
-        # color=fg('turquoise_4'),
-        # line_color=fg('grey_78'),
-        # line_color=fg('light_blue'),
         line_color='',
         color='',
         **common_format()
@@ -133,6 +129,7 @@ def NEWBIE_HELP_ONBOARDING(ctx):
         init_title=section_heading(_('Start from scratch')),
         demo_title=section_heading(_('Demo Dob')),
         help_title=section_heading(_('Such Help')),
+        # FIXME: (lb): Replace hardcoding. Assign from styles.conf. #styling
         cmd_color=fg('spring_green_2a'),
         **common_format(),
     )
