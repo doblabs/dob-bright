@@ -12,6 +12,22 @@ dob\_bright.termio.ascii\_art module
    :undoc-members:
    :show-inheritance:
 
+dob\_bright.termio.ascii\_table module
+--------------------------------------
+
+.. automodule:: dob_bright.termio.ascii_table
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+dob\_bright.termio.config\_table module
+---------------------------------------
+
+.. automodule:: dob_bright.termio.config_table
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 dob\_bright.termio.crude\_progress module
 -----------------------------------------
 
