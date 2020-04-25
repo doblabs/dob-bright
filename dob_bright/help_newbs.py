@@ -122,7 +122,7 @@ def NEWBIE_HELP_ONBOARDING(ctx):
           {cmd_color}{rawname} demo{reset}
         \b
         """
-    ).format(
+    ).lstrip().format(
         banner=NEWBIE_HELP_WELCOME(ctx),
         upgrade_title=section_heading(_('Import existing facts')),
         init_title=section_heading(_('Start from scratch')),
