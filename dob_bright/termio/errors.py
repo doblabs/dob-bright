@@ -43,6 +43,10 @@ def dob_in_user_exit(msg):
 
 # ***
 
+# (lb): Oh, bother.
+BEEN_WARNED = [False, ]
+
+
 def dob_in_user_warning(msg):
     # FIXME: (lb): Replace hardcoded styles. Assign from styles.conf. #styling
     # A lighter red works for white-on-black.
@@ -51,6 +55,13 @@ def dob_in_user_warning(msg):
     # Yellow pops and at least says caution. Works for dark.
     # - FIXME: Add to 'night'.
     click.echo(stylize(msg, 'yellow_1'), err=True)  # 226
+    BEEN_WARNED[0] = True
+
+
+def dob_been_warned_reset():
+    been_warned = BEEN_WARNED[0]
+    BEEN_WARNED[0] = False
+    return been_warned
 
 
 # ***
