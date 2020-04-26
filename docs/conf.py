@@ -44,8 +44,6 @@ sys.path.insert(0, project_root)
 # ┃                                                                     ┃
 # ┃ YOU/DEV: Customize this import and these strings for your project.  ┃
 
-import dob_bright
-
 project_dist = 'dob-bright'
 package_name = 'dob-bright'
 project_ghuser = 'hotoffthehamster'
