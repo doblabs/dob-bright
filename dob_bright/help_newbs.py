@@ -109,8 +109,8 @@ def NEWBIE_HELP_ONBOARDING(ctx):
           {cmd_color}{rawname} init{reset}
 
         {upgrade_title}
-        To learn how to import data from a previous version
-        of dob, or to import from the old hamster app, run:
+        To learn how to import from the old hamster app,
+        or to import an existing dob database, run:
 
           {cmd_color}{rawname} migrate -h{reset}
 
