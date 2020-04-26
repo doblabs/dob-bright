@@ -21,23 +21,9 @@ from setuptools import find_packages, setup
 # FIXME/2020-01-31: Cull this (and other split-packages') requirements.
 
 requirements = [
-    # "Very simple Python library for color and formatting in terminal."
-    # Forked (for italic "support") to:
-    #  https://github.com/hotoffthehamster/ansi-escape-room
-    # Forked from:
-    #  https://gitlab.com/dslackw/colored
-    # See wrapper file:
-    #  dob_bright/termio/style.py
-    'ansi-escape-room >= 1.4.2, < 2',
     # Platform-specific directory magic.
     #  https://github.com/ActiveState/appdirs
     'appdirs >= 1.4.3, < 2',
-    # (lb): Click may be the best optparser of any language I've used.
-    #  https://github.com/pallets/click
-    #    'click',
-    #  - Still, had to make one adjustment, and too impatient to ask for a pull...
-    #  https://github.com/hotoffthehamster/click
-    'click-hotoffthehamster >= 7.1.1, < 8',
     # Enable Click color support (we don't use colorama directly, but it does),
     #  "on Windows, this ... is only available if colorama is installed".
     #  https://click.palletsprojects.com/en/5.x/utils/#ansi-colors
@@ -53,11 +39,25 @@ requirements = [
     # https://github.com/mnmelo/lazy_import
     'lazy_import >= 0.2.2, < 1',
 
-    # *** Hamster packages.
+    # *** HOTH packages.
 
+    # "Very simple Python library for color and formatting in terminal."
+    # Forked (for italic "support") to:
+    #  https://github.com/hotoffthehamster/ansi-escape-room
+    # Forked from:
+    #  https://gitlab.com/dslackw/colored
+    # See wrapper file:
+    #  dob_bright/termio/style.py
+    'ansi-escape-room == 1.4.2',
+    # (lb): Click may be the best optparser of any language I've used.
+    #  https://github.com/pallets/click
+    #    'click',
+    #  - Still, had to make one adjustment, and too impatient to ask for a pull...
+    #  https://github.com/hotoffthehamster/click
+    'click-hotoffthehamster == 7.1.1',
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/hotoffthehamster/nark
-    'nark >= 3.1.1, < 3.2',
+    'nark == 3.2.0',
 ]
 
 # *** Minimal setup() function -- Prefer using config where possible.
