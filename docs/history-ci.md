@@ -2,6 +2,10 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.2.0 (2020-04-26)
+
+- Bugfix: Config settings path shows incorrectly when displaying errors.
+
 ## 1.1.1 (2020-04-25)
 
 - Bugfix: `dob edit` fails when no config, rather than printing message.
