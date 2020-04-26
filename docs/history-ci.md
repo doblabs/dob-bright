@@ -2,6 +2,22 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.1.1 (2020-04-25)
+
+- Bugfix: `dob edit` fails when no config, rather than printing message.
+
+  - Also affects other commands that require the config.
+
+  - E.g., this happens if the user has not called `dob init`.
+
+    In other words, this affects new users.
+
+- Bugfix: Config file errors crash dob.
+
+  - But rather than just catch one error, print it, and exit,
+    collect all errors, print them all, and then just keep chugging,
+    choosing to use default values rather then exiting.
+
 ## 1.1.0 (2020-04-20)
 
 - Improve: Option to exclude section column from config table.
