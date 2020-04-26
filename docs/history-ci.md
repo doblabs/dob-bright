@@ -2,6 +2,10 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.2.1 (2020-04-26)
+
+- Packaging: Update dependency versions to pickup library changes.
+
 ## 1.2.0 (2020-04-26)
 
 - Bugfix: Config settings path shows incorrectly when displaying errors.
