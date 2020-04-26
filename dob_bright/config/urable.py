@@ -26,7 +26,7 @@ from .fileboss import (
     default_config_path,
     empty_config_obj,
     load_config_obj,
-    warn_user_config_issues,
+    warn_user_config_errors,
     write_config_obj
 )
 
@@ -96,7 +96,7 @@ class ConfigUrable(object):
 
         def warn_if_smelly_config(unconsumed, errs):
             basename = os.path.basename(self.config_path)
-            warn_user_config_issues(unconsumed, errs, which=basename)
+            warn_user_config_errors(unconsumed, errs, which=basename)
 
         def _is_config_like():
             # What's a reasonable expectation to see if the config file

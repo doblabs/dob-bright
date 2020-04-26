@@ -37,7 +37,7 @@ __all__ = (
     'empty_config_obj',
     'ensure_file_path_dirred',
     'load_config_obj',
-    'warn_user_config_issues',
+    'warn_user_config_errors',
     'write_config_obj',
 )
 
@@ -206,41 +206,41 @@ def ensure_file_path_dirred(filename):
 
 # ***
 
-def warn_user_config_issues(unconsumed, errs, which=''):
+def warn_user_config_errors(_unconsumed, errs, which=''):
     """"""
 
-    def _warn_user_config_issues():
-        warn_user_config_unconsumed()
-        warn_user_config_value_errors()
-        return bool(unconsumed or errs)
+    def _warn_user_config_errors():
+        # Don't actually care about _unconsumed, for a few reasons. First, because
+        # plugins, the first time setup_config() is called, it will not recognize
+        # plugin settings. Second, there's no harm in config.
+        # MAYBE: (lb): Well, unless it's a user typo, then a config-audit command
+        #        might be useful.
+        warned = warn_user_config_settings(errs, _('value errors'))
+        return warned
 
-    def warn_user_config_unconsumed():
-        if not unconsumed:
-            return
+    def warn_user_config_settings(lookup, what):
+        if not lookup:
+            return False
+        lines = assemble_lines(lookup)
         msg = _(
-            "The {} contains unknown settings: {}"
-        ).format(which, unconsumed)
+            "The {} contains {}:\n{}"
+        ).format(which, what, '\n'.join(lines))
         dob_in_user_warning(msg)
+        return True
 
-    def warn_user_config_value_errors():
-        if not errs:
-            return
-        lines = assemble_errors(errs)
-        msg = _(
-            "The {} contains errors:\n{}"
-        ).format(which, '\n'.join(lines))
-        dob_in_user_warning(msg)
-
-    def assemble_errors(node, keys='', lines=None):
+    def assemble_lines(node, keys='', lines=None):
         if lines is None:
             lines = []
         for key, item in node.items():
             if isinstance(item, dict):
                 nkey = keys + '.' if keys else ''
-                assemble_errors(item, nkey + key, lines)
+                assemble_lines(item, nkey + key, lines)
+            elif not keys and not item:
+                # Unrecognized section.
+                lines.append('- [{}]'.format(key))
             else:
-                lines.append('- Section ‘{}’: {}'.format(keys, item))
+                lines.append('- {}.{} → {}'.format(keys, key, str(item)))
         return lines
 
-    return _warn_user_config_issues()
+    return _warn_user_config_errors()
 
