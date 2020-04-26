@@ -40,6 +40,7 @@ from nark.items.fact import Fact
 
 from dob_bright.config import app_dirs  # Needs container of AppDirs.
 from dob_bright.controller import Controller
+from dob_bright.termio.errors import dob_been_warned_reset
 
 from nark.tests import factories
 
@@ -383,6 +384,8 @@ def ongoing_fact(controller_with_logging, fact):
 def prepare_controller(config_root):
     controller = Controller()
     controller.wire_configience(config_root=config_root)
+    # (lb): My apologies for this assault. Reset module variable between tests.
+    dob_been_warned_reset()
     return controller
 
 
