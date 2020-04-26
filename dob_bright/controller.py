@@ -173,6 +173,10 @@ class Controller(NarkControl):
         self.configurable.inject_from_cli(*keyvals)
 
     def replay_config(self):
+        # Called by ensure_plugged_in after loading plugin config.
+        # NOTE: This'll re-print any errors messages from the first setup_config.
+        #       Except that color will not have been set the first time, so errors
+        #       before will be plain; and errors reprinted here will be colorful.
         self.setup_config(self.configfile_path, *self.config_keyvals)
 
     def create_config(self, force):

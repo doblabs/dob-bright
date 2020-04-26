@@ -22,11 +22,11 @@ from gettext import gettext as _
 from ..termio import click_echo, dob_in_user_exit, highlight_value
 
 from . import ConfigRoot
-
 from .fileboss import (
     default_config_path,
     empty_config_obj,
     load_config_obj,
+    warn_user_config_issues,
     write_config_obj
 )
 
@@ -80,7 +80,8 @@ class ConfigUrable(object):
             cfgfile_exists = os.path.exists(self.config_path)
             config_obj = load_config_obj(self.config_path)
             self.config_root.forget_config_values()
-            self.config_root.update_known(config_obj)
+            unconsumed, errs = self.config_root.update_known(config_obj, errors_ok=True)
+            warn_if_smelly_config(unconsumed, errs)
             self.cfgfile_exists = cfgfile_exists
             self.cfgfile_sanity = not self.cfgfile_exists or _is_config_like()
 
@@ -92,6 +93,10 @@ class ConfigUrable(object):
                 return os.environ[ConfigUrable.DOB_CONFIGFILE_ENVKEY]
 
             return default_config_path()
+
+        def warn_if_smelly_config(unconsumed, errs):
+            basename = os.path.basename(self.config_path)
+            warn_user_config_issues(unconsumed, errs, which=basename)
 
         def _is_config_like():
             # What's a reasonable expectation to see if the config file

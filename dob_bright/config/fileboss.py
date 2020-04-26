@@ -37,6 +37,7 @@ __all__ = (
     'empty_config_obj',
     'ensure_file_path_dirred',
     'load_config_obj',
+    'warn_user_config_issues',
     'write_config_obj',
 )
 
@@ -201,4 +202,45 @@ def ensure_file_path_dirred(filename):
     configfile_dir = os.path.dirname(filename)
     if configfile_dir:
         ensure_directory_exists(configfile_dir)
+
+
+# ***
+
+def warn_user_config_issues(unconsumed, errs, which=''):
+    """"""
+
+    def _warn_user_config_issues():
+        warn_user_config_unconsumed()
+        warn_user_config_value_errors()
+        return bool(unconsumed or errs)
+
+    def warn_user_config_unconsumed():
+        if not unconsumed:
+            return
+        msg = _(
+            "The {} contains unknown settings: {}"
+        ).format(which, unconsumed)
+        dob_in_user_warning(msg)
+
+    def warn_user_config_value_errors():
+        if not errs:
+            return
+        lines = assemble_errors(errs)
+        msg = _(
+            "The {} contains errors:\n{}"
+        ).format(which, '\n'.join(lines))
+        dob_in_user_warning(msg)
+
+    def assemble_errors(node, keys='', lines=None):
+        if lines is None:
+            lines = []
+        for key, item in node.items():
+            if isinstance(item, dict):
+                nkey = keys + '.' if keys else ''
+                assemble_errors(item, nkey + key, lines)
+            else:
+                lines.append('- Section ‘{}’: {}'.format(keys, item))
+        return lines
+
+    return _warn_user_config_issues()
 
