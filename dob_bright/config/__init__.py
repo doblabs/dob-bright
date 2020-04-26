@@ -23,7 +23,11 @@ from gettext import gettext as _
 from config_decorator import KeyChainedValue
 
 from nark.config import ConfigRoot
-from nark.config.log_levels import get_log_level_safe, must_verify_log_level
+from nark.config.log_levels import (
+    get_log_level_safe,
+    get_log_name_safe,
+    must_verify_log_level
+)
 from nark.helpers.parsing import FACT_METADATA_SEPARATORS
 
 from .app_dirs import AppDirs
@@ -186,6 +190,7 @@ class DobConfigurableDev(object):
           " (using Python logging library levels)"),
         validate=must_verify_log_level,
         conform=get_log_level_safe,
+        recover=get_log_name_safe,
     )
     def cli_log_level(self):
         return 'WARNING'
