@@ -57,7 +57,7 @@ requirements = [
     'click-hotoffthehamster == 7.1.1',
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/hotoffthehamster/nark
-    'nark == 3.2.1',
+    'nark == 3.2.2',
 ]
 
 # *** Minimal setup() function -- Prefer using config where possible.
