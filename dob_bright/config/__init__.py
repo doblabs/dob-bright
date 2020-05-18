@@ -339,3 +339,33 @@ class DobConfigurableTerm(object):
     def use_pager(self):
         return False
 
+    # ***
+
+    # TESTME/2020-05-17: Does this issue affect all ASCII table formatters?
+    #                    What about journal and factoid formats?
+    #                    - My original note said 'tabulate' is 'really slow', but I'd
+    #                      bet the `for fact in facts` loop in generate_facts_table
+    #                      that assembles the table data is probably not very speedy.
+    # Dumping lots of records to the display can be really slow, so apply a
+    # default upper limit.
+    # - Without this option, a simple `dob list facts` would dump the user's
+    #   whole dataset, which might not really be expected, or at best would
+    #   be annoying for new users who've just imported their 10-years-running
+    #   Hamster db, for example.
+    # TESTME/2020-05-17: Does `dob export` at least in a reasonable time?
+    #                    (I.e., ensure there's a quick way to output all Facts.)
+    # NOTE: There's obviously also --limit/--offset, which is more proactive;
+    #       this option is more of a safety mechanism.
+    @property
+    @ConfigRoot.setting(
+        _("Limits the number of result rows output to the terminal."),
+    )
+    def row_limit(self):
+        # 2018-05-09: (lb): Anecdotal evidence suggests 2500 is barely tolerable.
+        #   Except it overflows my terminal buffer? and hangs it? Can't even
+        #   Ctrl-C back to life?? Maybe less than 2500. 1000 seems fine. Why
+        #   would user want that many results in their terminal, anyway?
+        #   (Maybe if they were redirecting to a file, but dob can check
+        #   sys.stdin.isatty and ignore this option if not.)
+        return 1001
+
