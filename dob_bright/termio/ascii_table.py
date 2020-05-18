@@ -69,7 +69,6 @@ def _generate_table_max_width(rows, headers, table_type, truncate, trunccol):
     if not truncate or not rows:
         return -1
     num_cols = len(rows[0])
-    assert trunccol is not None
     column_width_used = _generate_table_width_content(rows, num_cols, trunccol)
     border_width_used = _generate_table_width_border(rows, num_cols, table_type)
 
@@ -78,7 +77,8 @@ def _generate_table_max_width(rows, headers, table_type, truncate, trunccol):
     ellipsis_width = len('...')
     max_width = term_width - (border_width_used + column_width_used + ellipsis_width)
     # (lb): We at least have the width of the header string!
-    min_avail = len(headers[trunccol]) - ellipsis_width
+    min_avail = len(headers[trunccol]) if trunccol is not None else 0
+    min_avail -= ellipsis_width
     max_width = max(0, min_avail, max_width)
 
     return max_width
@@ -122,6 +122,8 @@ def _generate_table_truncate_cell_values(rows, trunccol, max_width):
     for row in rows:
         trow = list(row)
         trows.append(trow)
+        if trunccol is None:
+            continue
         truncval = trow[trunccol] or ''
         if (max_width >= 0) and (len(truncval) >= max_width):
             trow[trunccol] = truncval[:max_width] + '...'
