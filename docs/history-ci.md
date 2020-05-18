@@ -2,6 +2,13 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.2.2 (2020-05-17)
+
+- Config: Add option, `term.row_limit`, to improve dob-list experience.
+
+  - I.e., avoid overwhelming user's terminal with too much output unless
+    they explicitly ask for it.
+
 ## 1.2.1 (2020-04-26)
 
 - Packaging: Update dependency versions to pickup library changes.
