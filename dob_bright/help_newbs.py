@@ -154,12 +154,12 @@ def NEWBIE_HELP_CREATE_CONFIG(ctx, cfg_path):
 
         or by specifying a global option:
 
-            -C/--configfile PATH
+            -F/--configfile PATH
 
         If you are certain the path is correct and you want to create
         a new configuration file at the path specified, run init, e.g.,:
 
-            {rawname} -C "{cfg_path}" init
+            {rawname} -F "{cfg_path}" init
         """
     ).strip().format(
         # FIXME/2019-11-19 14:42: Make wrapper for format() with common colors defined.
