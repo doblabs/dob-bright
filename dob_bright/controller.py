@@ -411,7 +411,7 @@ class Controller(NarkControl):
 
         if warn_name:
             self.client_logger.warning(
-                _('Unknown Client.cli_log_level specified: {}')
+                'Unknown Client.cli_log_level specified: {}'
                 .format(cli_log_level)
             )
 
