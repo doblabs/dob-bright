@@ -42,7 +42,7 @@ def generate_table(
     headers,
     table_type='friendly',
     truncate=False,
-    trunccol=None
+    trunccol=None,
 ):
     """Generates an ASCII table using the generator specified by table_type."""
     # Add some flair to the header labels.
