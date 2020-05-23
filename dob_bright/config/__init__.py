@@ -195,16 +195,6 @@ class DobConfigurableDev(object):
     def cli_log_level(self):
         return 'WARNING'
 
-    # ***
-
-    @property
-    @ConfigRoot.setting(
-        _("If True, enables features for developing dob"
-          " (e.g., stop at REPL on affirm faults)."),
-    )
-    def catch_errors(self):
-        return False
-
 
 # ***
 
