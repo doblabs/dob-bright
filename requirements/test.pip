@@ -67,3 +67,7 @@ pytest-faker >= 2.0.0
 #   https://github.com/omaciel/fauxfactory
 fauxfactory >= 3.0.6
 
+# - py used to contain py.test and is now in maintenance mode.
+#   We need py.path.local() to fake `tmpdir` fixure at 'class'-scope.
+py >= 1.8.1
+

@@ -28,10 +28,13 @@ Fixtures available to the tests/.
 
 import codecs
 import os
-import pytest
+import py
+import tempfile
 from configobj import ConfigObj
 
 import fauxfactory
+import pytest
+from unittest.mock import MagicMock
 
 from nark.config import decorate_config
 from nark.helpers.app_dirs import ensure_directory_exists
@@ -91,8 +94,7 @@ def appdirs(mocker, tmpdir):
 
 # ***
 
-@pytest.fixture
-def config_root(nark_config, dob_config):
+def _config_root(nark_config, dob_config):
     """Provide a generic baseline configuration."""
     config_root = decorate_config(nark_config)
     config_root.update(dob_config)
@@ -102,9 +104,18 @@ def config_root(nark_config, dob_config):
     return config
 
 
-# This method essentially same as: nark:tests/conftest.py::base_config.
 @pytest.fixture
-def nark_config(tmpdir):
+def config_root(nark_config, dob_config):
+    return _config_root(nark_config, dob_config)
+
+
+@pytest.fixture(scope="session")
+def config_root_ro(nark_config_ro, dob_config_ro):
+    return _config_root(nark_config_ro, dob_config_ro)
+
+
+# This method essentially same as: nark:tests/conftest.py::base_config.
+def _nark_config(tmpdir):
     """
     Provide a static backend config fixture.
     """
@@ -151,7 +162,16 @@ def nark_config(tmpdir):
 
 
 @pytest.fixture
-def dob_config(tmpdir):
+def nark_config(tmpdir):
+    return _nark_config(tmpdir)
+
+
+@pytest.fixture(scope="session")
+def nark_config_ro():
+    return _nark_config(tmpdir=None)
+
+
+def _dob_config(tmpdir):
     """
     Provide a static client config fixture.
     """
@@ -193,6 +213,22 @@ def dob_config(tmpdir):
         'term.use_color': False,
         'term.use_pager': False,
     }
+
+
+@pytest.fixture
+def dob_config(tmpdir):
+    return _dob_config(tmpdir)
+
+
+@pytest.fixture(scope="session")
+def dob_config_ro(request):
+    # https://stackoverflow.com/questions/25525202/py-test-temporary-folder-for-the-session-scope
+    # Make a temporary directory, and wrap the path string in a Path object,
+    # so that `.remove` works, and so test fixtures can treat it same as a
+    # `tmpdir` builtin pytest fixture.
+    _tmpdir = py.path.local(tempfile.mkdtemp())
+    request.addfinalizer(lambda: _tmpdir.remove(rec=1))
+    return _dob_config(_tmpdir)
 
 
 @pytest.fixture
@@ -381,12 +417,19 @@ def prepare_controller(config_root):
     controller = Controller()
     controller.wire_configience(config_root=config_root)
     # (lb): My apologies for this assault. Reset module variable between tests.
+    # (2020-05-26: We could try using @contextlib.contextmanager and `with:`,
+    #  with setup code, a `yield`, and then teardown.)
     dob_been_warned_reset()
     return controller
 
 
 @pytest.fixture
 def test_fact_cls():
+    return Fact
+
+
+@pytest.fixture(scope="session")
+def test_fact_cls_ro():
     return Fact
 
 
@@ -401,14 +444,30 @@ def controller(config_root, mocker, test_fact_cls):
     controller.store.cleanup()
 
 
-@pytest.yield_fixture
-def controller_with_logging(config_root, mocker, test_fact_cls):
+def _controller_with_logging(config_root, magic_mock, test_fact_cls):
     """Provide a pseudo controller instance with logging setup."""
     controller = prepare_controller(config_root=config_root)
-    controller.ctx = mocker.MagicMock()
-    controller.configurable = mocker.MagicMock()
+    controller.ctx = magic_mock()
+    controller.configurable = magic_mock()
     controller.setup_logging()
     controller.standup_store(fact_cls=test_fact_cls)
+    return controller
+
+
+@pytest.yield_fixture
+def controller_with_logging(config_root, mocker, test_fact_cls):
+    controller = _controller_with_logging(
+        config_root, mocker.MagicMock, test_fact_cls,
+    )
+    yield controller
+    controller.store.cleanup()
+
+
+@pytest.yield_fixture(scope="session")
+def controller_with_logging_ro(config_root_ro, test_fact_cls_ro):
+    controller = _controller_with_logging(
+        config_root_ro, MagicMock, test_fact_cls_ro,
+    )
     yield controller
     controller.store.cleanup()
 
