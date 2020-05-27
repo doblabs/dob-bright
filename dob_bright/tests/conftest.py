@@ -181,9 +181,6 @@ def _dob_config(tmpdir):
 
         'editor.lexer': '',
 
-        # Devmode catch_errors could be deadly under test, as it sets a trace trap.
-        'dev.catch_errors': False,
-
         'term.editor_suffix': '',
 
         # The default export path is '', i.e., local directory. Use /tmp instead.
@@ -319,7 +316,6 @@ def config_instance(tmpdir, faker):
 
         cli_log_level = kwargs.get('cli_log_level', test_cli_log_level)
         cfg_dev.setdefault('cli_log_level', cli_log_level)
-        cfg_dev.setdefault('catch_errors', 'False')
 
         # ***
 
