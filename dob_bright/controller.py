@@ -102,8 +102,11 @@ class Controller(NarkControl):
     def store_exists(self):
         # Check either db.path is set, or all of db.host/port/name/user.
         if self.config['db.engine'] == 'sqlite':
+            if self.config['db.path'] == ':memory:':
+                return True
             return os.path.isfile(self.config['db.path'])
         else:
+            # NOTE: db_url is an attribute of SQLAlchemyStore, not BaseStore.
             return bool(self.store.db_url)
 
     def standup_store(self, fact_cls=Fact):
