@@ -44,13 +44,19 @@ class ConfigUrable(object):
         super(ConfigUrable, self).__init__()
         self.configfile_path = None
         # The ConfigRoot is a module-level Singleton. Deal.
-        self.config_root = ConfigRoot
+        self._config_root = ConfigRoot
 
     # ***
 
     @property
     def config_path(self):
         return self.configfile_path
+
+    # ***
+
+    @property
+    def config_root(self):
+        return self._config_root
 
     # ***
 
