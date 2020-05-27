@@ -32,7 +32,6 @@ import pytest
 from configobj import ConfigObj
 
 import fauxfactory
-from pytest_factoryboy import register
 
 from nark.config import decorate_config
 from nark.helpers.app_dirs import ensure_directory_exists
@@ -42,11 +41,8 @@ from dob_bright.config import app_dirs  # Needs container of AppDirs.
 from dob_bright.controller import Controller
 from dob_bright.termio.errors import dob_been_warned_reset
 
-from nark.tests import factories
-
-register(factories.CategoryFactory)
-register(factories.ActivityFactory)
-register(factories.FactFactory)
+# Register the fact_factory, etc.
+from nark.tests.item_factories import *
 
 test_lib_log_level = 'WARNING'
 test_cli_log_level = 'WARNING'
