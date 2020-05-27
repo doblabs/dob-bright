@@ -168,9 +168,15 @@ class Controller(NarkControl):
         self.wire_configience()
 
     def setup_config(self, configfile_path=None, *keyvals):
-        self.configurable = ConfigUrable()
-        self.configurable.load_config(configfile_path)
-        self.configurable.inject_from_cli(*keyvals)
+        self.configurable = self.setup_config_from_file_and_cli(
+            configfile_path=configfile_path, *keyvals,
+        )
+
+    def setup_config_from_file_and_cli(self, configfile_path=None, *keyvals):
+        configurable = ConfigUrable()
+        configurable.load_config(configfile_path)
+        configurable.inject_from_cli(*keyvals)
+        return configurable
 
     def replay_config(self):
         # Called by ensure_plugged_in after loading plugin config.

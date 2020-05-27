@@ -82,27 +82,11 @@ class ConfigUrable(object):
 
     def load_config(self, configfile_path):
         def _load_config():
-            self.configfile_path = _resolve_configfile_path(configfile_path)
-            cfgfile_exists = os.path.exists(self.config_path)
-            config_obj = load_config_obj(self.config_path)
-            self.config_root.forget_config_values()
-            unconsumed, errs = self.config_root.update_known(config_obj, errors_ok=True)
-            warn_if_smelly_config(unconsumed, errs)
+            # The tests mock load_configfile when going through CliRunner,
+            # to wire the Alchemy store and config upon CLI invocation.
+            cfgfile_exists = self.load_configfile(configfile_path)
             self.cfgfile_exists = cfgfile_exists
             self.cfgfile_sanity = not self.cfgfile_exists or _is_config_like()
-
-        def _resolve_configfile_path(commandline_value):
-            if commandline_value is not None:
-                return commandline_value
-
-            if ConfigUrable.DOB_CONFIGFILE_ENVKEY in os.environ:
-                return os.environ[ConfigUrable.DOB_CONFIGFILE_ENVKEY]
-
-            return default_config_path()
-
-        def warn_if_smelly_config(unconsumed, errs):
-            basename = os.path.basename(self.config_path)
-            warn_user_config_errors(unconsumed, errs, which=basename)
 
         def _is_config_like():
             # What's a reasonable expectation to see if the config file
@@ -120,6 +104,31 @@ class ConfigUrable(object):
                 return False
 
         _load_config()
+
+    def load_configfile(self, configfile_path):
+        def _load_configfile():
+            self.configfile_path = _resolve_configfile_path(configfile_path)
+            cfgfile_exists = os.path.exists(self.config_path)
+            config_obj = load_config_obj(self.config_path)
+            self.config_root.forget_config_values()
+            unconsumed, errs = self.config_root.update_known(config_obj, errors_ok=True)
+            warn_if_smelly_config(unconsumed, errs)
+            return cfgfile_exists
+
+        def _resolve_configfile_path(commandline_value):
+            if commandline_value is not None:
+                return commandline_value
+
+            if ConfigUrable.DOB_CONFIGFILE_ENVKEY in os.environ:
+                return os.environ[ConfigUrable.DOB_CONFIGFILE_ENVKEY]
+
+            return default_config_path()
+
+        def warn_if_smelly_config(unconsumed, errs):
+            basename = os.path.basename(self.config_path)
+            warn_user_config_errors(unconsumed, errs, which=basename)
+
+        return _load_configfile()
 
     def inject_from_cli(self, *keyvals):
         def _inject_cli_settings():
