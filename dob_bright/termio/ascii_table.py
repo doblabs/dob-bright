@@ -137,9 +137,10 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
             __generate_table_tabulate()
         elif table_type == 'texttable':
             __generate_table_texttable()
-        else:
-            assert table_type == 'friendly'
+        elif table_type == 'friendly' or not table_type:
             __generate_table_friendly()
+        else:
+            raise ValueError('Unknown table_type: ‘{}’'.format(table_type))
 
     def __generate_table_tabulate():
         tabulation = tabulate.tabulate(
