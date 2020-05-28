@@ -44,8 +44,11 @@ from dob_bright.config import app_dirs  # Needs container of AppDirs.
 from dob_bright.controller import Controller
 from dob_bright.termio.errors import dob_been_warned_reset
 
-# Register the fact_factory, etc.
-from nark.tests.item_factories import *
+# Register fixtures: 'fact_factory', 'fact', 'activity', etc.
+# - (lb): Disabled for now, because not used in dob_bright, but if we
+#   improve dob-bright test coverage, I'd guess we'll want this back.
+#
+#    from nark.tests.item_factories import *
 
 test_lib_log_level = 'WARNING'
 test_cli_log_level = 'WARNING'
