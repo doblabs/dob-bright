@@ -312,7 +312,7 @@ def config_instance(tmpdir, faker):
 
         # ***
 
-        assert('dev' in cfg_dict)
+        assert 'dev' in cfg_dict
 
         cli_log_level = kwargs.get('cli_log_level', test_cli_log_level)
         cfg_dev.setdefault('cli_log_level', cli_log_level)
