@@ -17,8 +17,10 @@
 
 """"""
 
-# For the fixture to work, either import specifically, or glob it all.
-# noqa: F401 'foo.bar' imported but unused
-# noqa: F403 'from foo.bar import *' used; unable to detect undefined names
+# For the fixture to work, either import what you need, or glob it all.
+# - Globbing is easier and more akin to how conftest.py normally magically works.
+# - Skip the linter's two gripes:
+#    noqa: F401 'foo.bar' imported but unused
+#    noqa: F403 'from foo.bar import *' used; unable to detect undefined names
 from dob_bright.tests.conftest import *  # noqa: F401, F403
 
