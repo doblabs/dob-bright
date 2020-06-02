@@ -15,10 +15,12 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
-import os
-import tempfile
-
 from gettext import gettext as _
+
+import os
+import re
+import tempfile
+from pathlib import Path
 
 from configobj import ConfigObj, ConfigObjError, DuplicateError, ParseError
 
@@ -33,6 +35,7 @@ from .app_dirs import AppDirs
 __all__ = (
     'create_configobj',
     'default_config_path',
+    'default_config_path_abbrev',
     'echo_config_obj',
     'empty_config_obj',
     'ensure_file_path_dirred',
@@ -50,6 +53,12 @@ def default_config_path():
     configfile_path = os.path.join(config_dir, config_filename)
     return configfile_path
 
+
+def default_config_path_abbrev():
+    # Path.home() is Python 3.5+. See os.path.expanduser('~') for older Python.
+    user_home = str(Path.home())
+    abbrev_path = re.sub(r'^{}'.format(user_home), '~', default_config_path())
+    return abbrev_path
 
 # ***
 
