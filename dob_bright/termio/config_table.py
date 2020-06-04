@@ -24,7 +24,12 @@ __all__ = (
 )
 
 
-def echo_config_decorator_table(cfg_decors, table_type, exclude_section=False):
+def echo_config_decorator_table(
+    cfg_decors,
+    table_type,
+    exclude_section=False,
+    include_hidden=False,
+):
     sec_key_vals = []
 
     def _echo_config_decorator_table():
@@ -35,7 +40,7 @@ def echo_config_decorator_table(cfg_decors, table_type, exclude_section=False):
     def visitor(condec, keyval):
         # MAYBE: Option to show hidden config.
         # MAYBE: Option to show generated config.
-        if keyval.hidden:
+        if keyval.hidden and not include_hidden:
             return
 
         val_def = str(keyval.value)
