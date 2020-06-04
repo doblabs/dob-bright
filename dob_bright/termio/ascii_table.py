@@ -139,8 +139,10 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
     def __generate_table_display():
         if table_type == 'texttable':
             __generate_table_texttable()
-        elif table_type == 'journal':
-            __generate_table_texttable(plain=True)
+        elif table_type == 'texttable_borderless_headerless':
+            # Why 'super' and not just 'plain'? Plain is typically just no
+            # borders, but 'super_plain' omits headers, too.
+            __generate_table_texttable(no_borders=True, hide_headers=True)
         elif table_type == 'friendly' or not table_type:
             __generate_table_friendly()
         else:
@@ -162,7 +164,7 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
                 'Unknown table_type: ‘{}’ ({})'.format(table_type, str(err))
             )
 
-    def __generate_table_texttable(plain=False):
+    def __generate_table_texttable(no_borders=False, hide_headers=False):
         # PROS: Texttable wraps long lines by **default**!
         #       And within the same column!
         #         So you don't need to --truncate.
@@ -173,14 +175,14 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
         #       If you add color to your headers, their columns will not
         #       line up with the content rows! (lb): "A deal breaker!"
         ttable = texttable.Texttable()
-        if plain:
+        if no_borders:
             ttable.set_deco(0)
         # Right-align the first column; left-align the rest.
         cols_align = ['r']
         for idx in range(1, len(plain_headers)):
             cols_align.append('l')
         ttable.set_cols_align(cols_align)
-        if plain:
+        if hide_headers:
             ttable.set_header_align(cols_align)
         #
         term_width, _term_height = click.get_terminal_size()
@@ -189,7 +191,7 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
         # but the library does an excellent job on its own.
         ttable.set_max_width(term_width)
         #
-        if not plain:
+        if not hide_headers:
             rows.insert(0, plain_headers)
         ttable.add_rows(rows)
         #
