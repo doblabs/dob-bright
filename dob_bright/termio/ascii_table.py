@@ -131,10 +131,16 @@ def _generate_table_truncate_cell_values(rows, trunccol, max_width):
 
 
 def _generate_table_display(rows, plain_headers, color_headers, table_type):
-    """Generates and display a table in for format specified."""
+    """Generates and display a table in for format specified.
+
+    NOTE: 'texttable' is the only library that wraps long column text
+    so that it aligns nicely in the terminal, hence it's the default.
+    """
     def __generate_table_display():
         if table_type == 'texttable':
             __generate_table_texttable()
+        elif table_type == 'journal':
+            __generate_table_texttable(plain=True)
         elif table_type == 'friendly' or not table_type:
             __generate_table_friendly()
         else:
@@ -156,7 +162,7 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
                 'Unknown table_type: ‘{}’ ({})'.format(table_type, str(err))
             )
 
-    def __generate_table_texttable():
+    def __generate_table_texttable(plain=False):
         # PROS: Texttable wraps long lines by **default**!
         #       And within the same column!
         #         So you don't need to --truncate.
@@ -167,19 +173,24 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
         #       If you add color to your headers, their columns will not
         #       line up with the content rows! (lb): "A deal breaker!"
         ttable = texttable.Texttable()
+        if plain:
+            ttable.set_deco(0)
         # Right-align the first column; left-align the rest.
         cols_align = ['r']
         for idx in range(1, len(plain_headers)):
             cols_align.append('l')
         ttable.set_cols_align(cols_align)
+        if plain:
+            ttable.set_header_align(cols_align)
         #
         term_width, _term_height = click.get_terminal_size()
         # We could be deliberate about each column's width, e.g.,
-        #   ttable.set_cols_width(a, b, c, d)
+        #   ttable.set_cols_width([a, b, c, d])
         # but the library does an excellent job on its own.
         ttable.set_max_width(term_width)
         #
-        rows.insert(0, plain_headers)
+        if not plain:
+            rows.insert(0, plain_headers)
         ttable.add_rows(rows)
         #
         textable = ttable.draw()
