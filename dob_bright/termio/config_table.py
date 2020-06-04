@@ -17,7 +17,7 @@
 
 from gettext import gettext as _
 
-from dob_bright.termio.ascii_table import generate_table
+from dob_bright.reports.render_results import render_results
 
 __all__ = (
     'echo_config_decorator_table',
@@ -25,8 +25,9 @@ __all__ = (
 
 
 def echo_config_decorator_table(
+    controller,
     cfg_decors,
-    table_type,
+    output_format,
     exclude_section=False,
     include_hidden=False,
 ):
@@ -66,12 +67,11 @@ def echo_config_decorator_table(
             _("Value {}").format(encode_default(_("Default"))),
             _("Help"),
         ]
-        generate_table(
-            sec_key_vals,
-            headers,
-            table_type=table_type,
-            truncate=False,
-            trunccol=0,
+        render_results(
+            controller,
+            results=sec_key_vals,
+            headers=headers,
+            output_format=output_format,
         )
 
     def encode_default(text):
