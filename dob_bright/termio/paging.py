@@ -17,7 +17,6 @@
 
 """Methods to control paging and manage (accumulate) pager output."""
 
-import sys
 from functools import update_wrapper
 
 import click_hotoffthehamster as click

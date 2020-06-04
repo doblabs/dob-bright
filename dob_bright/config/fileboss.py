@@ -60,6 +60,7 @@ def default_config_path_abbrev():
     abbrev_path = re.sub(r'^{}'.format(user_home), '~', default_config_path())
     return abbrev_path
 
+
 # ***
 
 def create_configobj(conf_path, errname=''):
