@@ -274,13 +274,12 @@ class DobConfigurableTerm(object):
 
     # ***
 
+    # FIXME: (lb): We should force user to specify path. I cannot think of
+    #        another CLI tool that uses a default output path, much less one
+    #        that clobbers existing files without asking.
     @property
     @ConfigRoot.setting(
         _("Path to directory where export files are created"),
-
-        # FIXME/2019-11-17 00:56: Nothing uses export_path.
-        #   So hidden for now. Delete later, or implement.
-        hidden=True,
     )
     def export_path(self):
         """
