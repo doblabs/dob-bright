@@ -46,7 +46,8 @@ def render_results(
     hide_duration=False,
     hide_description=False,
     custom_columns=None,
-    output_format='friendly',
+    output_format='table',
+    table_style='texttable',
     datetime_format=None,
     duration_fmt=None,
     spark_total=None,
@@ -72,7 +73,11 @@ def render_results(
 
     def fetch_report_writer(output_format, output_obj):
         row_width = restrict_width(term_width)
-        writer = fetch_report_writer_cls(output_format, term_width=row_width)
+        writer = fetch_report_writer_cls(
+            output_format=output_format,
+            table_style=table_style,
+            term_width=row_width,
+        )
         writer.output_setup(
             output_obj=output_obj,
             row_limit=row_limit,
@@ -81,7 +86,7 @@ def render_results(
         )
         return writer
 
-    def fetch_report_writer_cls(output_format, term_width):
+    def fetch_report_writer_cls(output_format, table_style, term_width):
         writer = None
         if output_format == 'csv':
             writer = CSVWriter()
@@ -105,12 +110,14 @@ def render_results(
             )
         elif output_format == 'journal':
             writer = JournalWriter()
-        else:
+        elif output_format == 'table':
             writer = TableWriter(
-                output_format=output_format,
-                chop=chop,
+                table_style=table_style,
                 term_width=term_width,
+                chop=chop,
             )
+        else:
+            raise Exception('Unknown output_format: {}'.format(output_format))
         return writer
 
     # ***

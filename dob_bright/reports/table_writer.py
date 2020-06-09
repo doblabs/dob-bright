@@ -32,17 +32,17 @@ class TableWriter(ReportWriter):
     def __init__(
         self,
         *args,
-        output_format='textile',
+        table_style='texttable',
+        term_width=None,
         chop=False,
         desc_col_idx=None,
-        term_width=None,
         **kwargs,
     ):
         super(TableWriter, self).__init__(*args, **kwargs)
-        self.output_format = output_format
+        self.table_style = table_style
+        self.term_width = term_width
         self.chop = chop
         self.desc_col_idx = desc_col_idx
-        self.term_width = term_width
 
     @property
     def requires_table(self):
@@ -54,7 +54,7 @@ class TableWriter(ReportWriter):
         generate_table(
             table,
             headers,
-            table_type=self.output_format,
+            table_style=self.table_style,
             truncate=self.chop,
             trunccol=self.desc_col_idx,
         )

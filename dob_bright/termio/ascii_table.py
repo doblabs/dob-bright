@@ -40,19 +40,19 @@ __all__ = (
 def generate_table(
     rows,
     headers,
-    table_type='friendly',
+    table_style='texttable',
     truncate=False,
     trunccol=None,
 ):
-    """Generates an ASCII table using the generator specified by table_type."""
+    """Generates an ASCII table using the generator specified by table_style."""
     # Add some flair to the header labels.
     plain_headers = headers
     color_headers = _generate_table_color_headers(plain_headers)
     # Determine the max_width of the elastic cell; or use 0, if not truncating.
-    max_width = _generate_table_max_width(rows, headers, table_type, truncate, trunccol)
+    max_width = _generate_table_max_width(rows, headers, table_style, truncate, trunccol)
     # Truncate long values in the trunccol column, if requested.
     trows = _generate_table_truncate_cell_values(rows, trunccol, max_width)
-    _generate_table_display(trows, plain_headers, color_headers, table_type)
+    _generate_table_display(trows, plain_headers, color_headers, table_style)
 
 
 def _generate_table_color_headers(plain_headers):
@@ -65,12 +65,12 @@ def _generate_table_color_headers(plain_headers):
     return color_headers
 
 
-def _generate_table_max_width(rows, headers, table_type, truncate, trunccol):
+def _generate_table_max_width(rows, headers, table_style, truncate, trunccol):
     if not truncate or not rows:
         return -1
     num_cols = len(rows[0])
     column_width_used = _generate_table_width_content(rows, num_cols, trunccol)
-    border_width_used = _generate_table_width_border(rows, num_cols, table_type)
+    border_width_used = _generate_table_width_border(rows, num_cols, table_style)
 
     # Determine the width available for the elastic column.
     term_width, _term_height = click.get_terminal_size()
@@ -98,7 +98,7 @@ def _generate_table_width_content(rows, num_cols, trunccol):
     return column_width_used
 
 
-def _generate_table_width_border(rows, num_cols, table_type):
+def _generate_table_width_border(rows, num_cols, table_style):
     n_inner_borders = num_cols - 1
     # FIXME/2018-05-11 22:09: (lb): This looks nice for 2 columns. Not sure on others.
     border_width_used = (
@@ -109,7 +109,7 @@ def _generate_table_width_border(rows, num_cols, table_type):
     #   texttable: 2 off (but only if terminal narrower than default table width)
     #   friendly: also 2 off
     # ... at least for the currently chosen table border designs.
-    if table_type in ('texttable', 'friendly'):
+    if table_style in ('texttable', 'friendly'):
         # MAGIC_NUMBER: Nudge these formatters' widths inward a titch.
         border_width_used -= 2
     # MAGIC_NUMBER: (lb): I like a 1 character column gutter.
@@ -130,27 +130,27 @@ def _generate_table_truncate_cell_values(rows, trunccol, max_width):
     return trows
 
 
-def _generate_table_display(rows, plain_headers, color_headers, table_type):
+def _generate_table_display(rows, plain_headers, color_headers, table_style):
     """Generates and display a table in for format specified.
 
     NOTE: 'texttable' is the only library that wraps long column text
     so that it aligns nicely in the terminal, hence it's the default.
     """
     def __generate_table_display():
-        if table_type == 'texttable':
+        if table_style == 'texttable':
             __generate_table_texttable()
-        elif table_type == 'texttable_borderless_headerless':
+        elif table_style == 'texttable_borderless_headerless':
             # Why 'super' and not just 'plain'? Plain is typically just no
             # borders, but 'super_plain' omits headers, too.
             __generate_table_texttable(no_borders=True, hide_headers=True)
-        elif table_type == 'friendly' or not table_type:
+        elif table_style == 'friendly' or not table_style:
             __generate_table_friendly()
         else:
-            # table_type == 'tabulate' or table_type is tabulate.tablefmt.
-            __generate_table_tabulate(table_type)
+            # table_style == 'tabulate' or table_style is tabulate.tablefmt.
+            __generate_table_tabulate(table_style)
 
-    def __generate_table_tabulate(table_type):
-        tablefmt = "fancy_grid" if table_type == 'tabulate' else table_type
+    def __generate_table_tabulate(table_style):
+        tablefmt = "fancy_grid" if table_style == 'tabulate' else table_style
         tabulation = __generate_table_tabulate_tablefmt(tablefmt)
         click_echo(tabulation)
 
@@ -161,7 +161,7 @@ def _generate_table_display(rows, plain_headers, color_headers, table_type):
             )
         except Exception as err:
             raise ValueError(
-                'Unknown table_type: ‘{}’ ({})'.format(table_type, str(err))
+                'Unknown table_style: ‘{}’ ({})'.format(table_style, str(err))
             )
 
     def __generate_table_texttable(no_borders=False, hide_headers=False):
