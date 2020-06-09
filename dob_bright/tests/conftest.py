@@ -186,10 +186,6 @@ def _dob_config(tmpdir):
 
         'term.editor_suffix': '',
 
-        # The default export path is '', i.e., local directory. Use /tmp instead.
-        # 'term.export_path': '',  # Default.
-        'term.export_path': os.path.join(tmpdir.mkdir('export').strpath, 'export'),
-
         # Disable color, otherwise tests will have to look for color codes.
         'log.use_color': False,
 
@@ -335,7 +331,6 @@ def config_instance(tmpdir, faker):
         cfg_term = {}
         cfg_dict['term'] = cfg_term
 
-        cfg_term.setdefault('export_path', '')
         cfg_term.setdefault('editor_suffix', '')
         cfg_term.setdefault('show_greeting', 'False')
         cfg_term.setdefault('use_color', 'True')

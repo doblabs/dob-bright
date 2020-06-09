@@ -274,26 +274,6 @@ class DobConfigurableTerm(object):
 
     # ***
 
-    # FIXME: (lb): We should force user to specify path. I cannot think of
-    #        another CLI tool that uses a default output path, much less one
-    #        that clobbers existing files without asking.
-    @property
-    @ConfigRoot.setting(
-        _("Path to directory where export files are created"),
-    )
-    def export_path(self):
-        """
-        Return path to save exports to.
-        File extension will be added by export method.
-        """
-        # FIXME: Not sure who this'll be used... maybe two separate config
-        #        values, one editable and one generated, like log_filename
-        #        and logfile_path. But first, we need a feature that exports!
-        #        Until then... either keep this setting hidden, or delete it!
-        return os.path.join(AppDirs.user_data_dir, 'export')
-
-    # ***
-
     @property
     @ConfigRoot.setting(
         _("The filename suffix to tell EDITOR so it can determine highlighting"),
