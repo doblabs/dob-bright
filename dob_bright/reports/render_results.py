@@ -21,6 +21,7 @@ import click_hotoffthehamster as click
 
 from nark.reports.csv_writer import CSVWriter
 from nark.reports.ical_writer import ICALWriter
+from nark.reports.json_writer import JSONWriter
 from nark.reports.tsv_writer import TSVWriter
 from nark.reports.xml_writer import XMLWriter
 
@@ -94,6 +95,8 @@ def render_results(
             writer = TSVWriter()
         elif output_format == 'ical':
             writer = ICALWriter()
+        elif output_format == 'json':
+            writer = JSONWriter()
         elif output_format == 'xml':
             writer = XMLWriter()
         elif output_format == 'factoid':
