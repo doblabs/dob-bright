@@ -102,9 +102,11 @@ def render_results(
         elif output_format == 'factoid':
             colorful = controller.config['term.use_color']
             cut_width = term_width if chop else None
-            rule_mult = term_width if len(factoid_rule) == 1 else 1
-            # FIXME: This should be customizable, eh.
-            factoid_sep = stylize(factoid_rule * rule_mult, 'indian_red_1c')
+            factoid_sep = ''
+            if factoid_rule:
+                rule_mult = term_width if len(factoid_rule) == 1 else 1
+                # FIXME: This color should be customizable, eh. #styling
+                factoid_sep = stylize(factoid_rule * rule_mult, 'indian_red_1c')
             writer = FactoidWriter(
                 colorful=colorful,
                 cut_width=cut_width,
