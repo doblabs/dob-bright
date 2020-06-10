@@ -32,14 +32,14 @@ class TableWriter(ReportWriter):
     def __init__(
         self,
         *args,
-        table_style='texttable',
+        table_type='texttable',
         term_width=None,
         chop=False,
         desc_col_idx=None,
         **kwargs,
     ):
         super(TableWriter, self).__init__(*args, **kwargs)
-        self.table_style = table_style
+        self.table_type = table_type
         self.term_width = term_width
         self.chop = chop
         self.desc_col_idx = desc_col_idx
@@ -54,7 +54,7 @@ class TableWriter(ReportWriter):
         generate_table(
             table,
             headers,
-            table_style=self.table_style,
+            table_type=self.table_type,
             truncate=self.chop,
             trunccol=self.desc_col_idx,
         )

@@ -48,7 +48,7 @@ def render_results(
     hide_description=False,
     custom_columns=None,
     output_format='table',
-    table_style='texttable',
+    table_type='texttable',
     datetime_format=None,
     duration_fmt=None,
     spark_total=None,
@@ -76,7 +76,7 @@ def render_results(
         row_width = restrict_width(term_width)
         writer = fetch_report_writer_cls(
             output_format=output_format,
-            table_style=table_style,
+            table_type=table_type,
             term_width=row_width,
         )
         writer.output_setup(
@@ -87,7 +87,7 @@ def render_results(
         )
         return writer
 
-    def fetch_report_writer_cls(output_format, table_style, term_width):
+    def fetch_report_writer_cls(output_format, table_type, term_width):
         writer = None
         if output_format == 'csv':
             writer = CSVWriter()
@@ -117,7 +117,7 @@ def render_results(
             writer = JournalWriter()
         elif output_format == 'table':
             writer = TableWriter(
-                table_style=table_style,
+                table_type=table_type,
                 term_width=term_width,
                 chop=chop,
             )

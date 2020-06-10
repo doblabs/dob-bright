@@ -28,7 +28,7 @@ def echo_config_decorator_table(
     controller,
     cfg_decors,
     output_format='table',
-    table_style='texttable',
+    table_type='texttable',
     exclude_section=False,
     include_hidden=False,
 ):
@@ -73,7 +73,7 @@ def echo_config_decorator_table(
             results=sec_key_vals,
             headers=headers,
             output_format=output_format,
-            table_style=table_style,
+            table_type=table_type,
         )
 
     def encode_default(text):
