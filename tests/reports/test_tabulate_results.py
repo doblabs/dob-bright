@@ -24,20 +24,16 @@ class TestGenerateTable(object):
     def test_generate_table(self, controller_with_logging, fact):
         """Make sure the table contains all expected fact data."""
         controller = controller_with_logging
-        table, columns = tabulate_results(
-            controller, [fact],
-        )
-        assert table[0].start == fact.start.strftime('%Y-%m-%d %H:%M')
-        assert table[0].activity == fact.activity.name
+        tabulation = tabulate_results(controller, [fact])
+        assert tabulation.table[0].start == fact.start.strftime('%Y-%m-%d %H:%M')
+        assert tabulation.table[0].activity == fact.activity.name
 
     def test_generate_basic_table_column_count(self, controller_with_logging):
         """Make sure the number of table columns matches our expectation."""
         controller = controller_with_logging
-        table, columns = tabulate_results(
-            controller, [],
-        )
+        tabulation = tabulate_results(controller, [])
         # MAGIC_NUMBER: A basic query (without grouping or addition stats)
         # creates a table with the 8 following columns:
         #   key, start, end, activity, category, tags, description, duration
-        assert len(columns) == 8
+        assert len(tabulation.repcols) == 8
 

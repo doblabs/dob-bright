@@ -30,6 +30,10 @@ __all__ = (
     'headers_for_columns',
     'report_table_columns',
     'tabulate_results',
+    # Private:
+    #  '_ReportColumn',
+    #  '_ResultsTabulation',
+    #  'FACT_TABLE_HEADERS',
 )
 
 # ***
@@ -77,6 +81,24 @@ def report_table_columns():
 
 def headers_for_columns(columns):
     return [FACT_TABLE_HEADERS[column].header for column in columns]
+
+
+# ***
+
+# (lb): I wrote tabulate_results as a procedural function because it's called
+# just once, so it does not need to maintain state, but really to avoid cluttering
+# the code with a bunch of `self.` references. (But take your pick: not everyone
+# will like function-scoped functions; some devs might consider a class to be
+# cleaner.) Nonetheless, tabulate_results generates a few different result
+# structures, which we encapsulate using a named tuple (the following namedtuple),
+# so at least the calling code is more readable and better maintainable, and the
+# caller does not have to unpack a list and to know what's what by position alone.
+# (Is this too explain-y? I figured I should at least rationalize why I started
+# scoping functions within functions this past year, as opposed to my earlier
+# hacking-development efforts where I tended toward writing classes instead.)
+_ResultsTabulation = namedtuple(
+    '_ResultsTabulation', ('table', 'columns')
+)
 
 
 # ***
@@ -204,7 +226,9 @@ def tabulate_results(
 
         table = [TableRow(**row) for row in table_rows]
 
-        return table, columns
+        tabulation = _ResultsTabulation(table, columns)
+
+        return tabulation
 
     # ***
 

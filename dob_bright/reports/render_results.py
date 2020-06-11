@@ -135,10 +135,10 @@ def render_results(
             n_written = writer.write_report(results, headers)
         elif query_terms.include_stats or writer.requires_table:
             # For reports with stats, post-process results; possibly sort.
-            table, columns = prepare_table_and_columns()
+            tabulation = prepare_table_and_columns()
             writer.desc_col_idx = deduce_trunccol(columns) if chop else None
-            col_headers = headers_for_columns(columns)
-            n_written = writer.write_report(table, col_headers)
+            col_headers = headers_for_columns(tabulation.columns)
+            n_written = writer.write_report(tabulation.table, col_headers)
         else:
             # When dumping Facts to a simple format (e.g., CSV), we can write
             # each Fact on the fly and avoid looping through the results (and,
@@ -152,7 +152,7 @@ def render_results(
     # ***
 
     def prepare_table_and_columns():
-        table, columns = tabulate_results(
+        tabulation = tabulate_results(
             controller,
             results,
             row_limit=row_limit,
@@ -169,7 +169,7 @@ def render_results(
             spark_secs=spark_secs,
             re_sort=re_sort,
         )
-        return table, columns
+        return tabulation
 
     # ***
 
