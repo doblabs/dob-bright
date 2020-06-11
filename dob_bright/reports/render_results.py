@@ -25,6 +25,7 @@ from nark.reports.json_writer import JSONWriter
 from nark.reports.tsv_writer import TSVWriter
 from nark.reports.xml_writer import XMLWriter
 
+from ..termio import dob_in_user_exit
 from ..termio.paging import ClickEchoPager
 from ..termio.style import stylize
 
@@ -76,13 +77,20 @@ def render_results(
             output_format=output_format,
             table_type=table_type,
         )
-        writer.output_setup(
-            output_obj=output_obj,
-            row_limit=row_limit,
-            datetime_format=datetime_format,
-            duration_fmt=duration_fmt,
-        )
+        must_prepare_output(writer, output_obj)
         return writer
+
+    def must_prepare_output(writer, output_obj):
+        try:
+            writer.output_setup(
+                output_obj=output_obj,
+                row_limit=row_limit,
+                datetime_format=datetime_format,
+                duration_fmt=duration_fmt,
+            )
+        except Exception as err:
+            # I.e., FileNotFoundError, or PermissionError.
+            dob_in_user_exit(str(err))
 
     def fetch_report_writer_cls(output_format, table_type):
         writer = None
