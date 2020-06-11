@@ -25,6 +25,10 @@ __all__ = (
 
 
 class FactoidWriter(LineWriter):
+    # Note that specifying cut_width_complete makes the output not technically
+    # Factoid format, because the complete Fact will not be represented. But
+    # it's nonetheless still useful for showing abbreviated output. Just FYI.
+    # (lb): Same with show_elapsed, that text will not be parsable, either.
     def __init__(
         self,
         *args,
@@ -41,13 +45,12 @@ class FactoidWriter(LineWriter):
         self.show_elapsed = not hide_duration
 
     def _write_fact(self, idx, fact):
-        # Note that specifying cut_width_complete makes the output not technically
-        # Factoid format, because the complete Fact will not be represented. But
-        # it's nonetheless still useful for showing abbreviated output. Just FYI.
-        # (lb): Same with show_elapsed, that text will not be parsable, either.
+        description_sep = '\n\n'
+        if self.cut_width_complete is not None and self.cut_width_complete > 0:
+            description_sep = ': '
         line = fact.friendly_str(
             shellify=False,
-            description_sep='\n\n',
+            description_sep=description_sep,
             localize=True,
             include_id=False,
             colorful=self.colorful,
