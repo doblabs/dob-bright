@@ -233,6 +233,7 @@ def tabulate_results(
     # ***
 
     def prepare_columns(test_result):
+        # REMINDER: Use sneaky [:] slice trick to mutate outer-scoped 'columns' var.
         columns[:], sortref_cols = assemble_columns(test_result)
         repcols.update({
             key: val for key, val in FACT_TABLE_HEADERS.items() if key in columns
