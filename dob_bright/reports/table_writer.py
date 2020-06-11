@@ -50,6 +50,7 @@ class TableWriter(ReportWriter):
         generate_table(
             table,
             headers,
+            output_obj=self.output_file,
             table_type=self.table_type,
             max_width=self.max_width,
         )

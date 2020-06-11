@@ -19,7 +19,7 @@ from gettext import gettext as _
 
 import lazy_import
 
-from dob_bright.termio import click_echo, dob_in_user_exit
+from dob_bright.termio import dob_in_user_exit
 
 # (lb): This module uses 2 popular table generator packages, texttable and tabulate.
 # - We use 'texttable' to generate an ASCII table that'll fit nicely in the user's
@@ -53,6 +53,7 @@ __all__ = (
 def generate_table(
     rows,
     headers,
+    output_obj,
     table_type='texttable',
     max_width=0,
 ):
@@ -96,7 +97,8 @@ def generate_table(
         ttable.add_rows(rows)
         # Render the table.
         textable = generate_table_texttable_draw(ttable)
-        click_echo(textable)
+        output_obj.write(textable)
+        output_obj.write('\n')
 
     def generate_table_texttable_draw(ttable):
         try:
@@ -111,7 +113,8 @@ def generate_table(
 
     def generate_table_tabulate(rows, headers, table_type):
         tabulation = generate_table_tabulate_tabulate(rows, headers, table_type)
-        click_echo(tabulation)
+        output_obj.write(tabulation)
+        output_obj.write('\n')
 
     def generate_table_tabulate_tabulate(rows, headers, table_type):
         try:
