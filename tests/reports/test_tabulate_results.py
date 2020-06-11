@@ -25,7 +25,7 @@ class TestGenerateTable(object):
         """Make sure the table contains all expected fact data."""
         controller = controller_with_logging
         tabulation = tabulate_results(controller, [fact])
-        assert tabulation.table[0].start == fact.start.strftime('%Y-%m-%d %H:%M')
+        assert tabulation.table[0].start == fact.start.strftime('%Y-%m-%d %H:%M:%S')
         assert tabulation.table[0].activity == fact.activity.name
 
     def test_generate_basic_table_column_count(self, controller_with_logging):
