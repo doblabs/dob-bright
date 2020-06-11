@@ -30,11 +30,11 @@ class JournalWriter(LineWriter):
     def __init__(self, *args, **kwargs):
         super(JournalWriter, self).__init__(*args, **kwargs)
 
-    def write_report(self, table, headers):
+    def write_report(self, table, headers, max_widths):
         self.curr_section = None
-        return super(JournalWriter, self).write_report(table, headers)
+        return super(JournalWriter, self).write_report(table, headers, max_widths)
 
-    def _write_result(self, row, columns):
+    def _write_result(self, row, columns, max_widths):
         line = ''
         next_section = self.curr_section
         if self.curr_section is None or row[0] != self.curr_section:
@@ -43,10 +43,11 @@ class JournalWriter(LineWriter):
                 # Emit a blank row-line.
                 self.output_write()
             line += row[0]
+            line += ' ' * (max_widths[0] - term_len(row[0]))
         else:
             # Omit the first column value when it's the same as the previous row's.
             # Strip Unicode/ASNI control characters to compute whitespace to fill.
-            line += ' ' * term_len(row[0])
+            line += ' ' * term_len(max_widths[0])
         i_remainder = 1
 
         line += '  ' + '  '.join([str(val) for val in row[i_remainder:]])

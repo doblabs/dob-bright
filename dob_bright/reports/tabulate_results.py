@@ -15,6 +15,7 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
+from click_hotoffthehamster._compat import term_len
 from collections import namedtuple
 from collections.abc import Iterable
 from operator import attrgetter
@@ -97,7 +98,7 @@ def headers_for_columns(columns):
 # scoping functions within functions this past year, as opposed to my earlier
 # hacking-development efforts where I tended toward writing classes instead.)
 _ResultsTabulation = namedtuple(
-    '_ResultsTabulation', ('table', 'columns')
+    '_ResultsTabulation', ('table', 'columns', 'max_widths')
 )
 
 
@@ -135,6 +136,8 @@ def tabulate_results(
     # The --re-sort option lets a developer force this function to re-sort the
     # results, even if the SQL query already guaranteed their ordering.
     re_sort=False,
+    # Include maximum column widths if needed by the output formatter.
+    track_widths=False,
 ):
     """
     Prepares Facts for display in an ASCII table.
@@ -146,6 +149,7 @@ def tabulate_results(
     qt = query_terms if query_terms is not None else QueryTerms()
 
     for_journal = output_format == 'journal'
+    track_widths = True if for_journal else track_widths
 
     columns = []
     repcols = {}
@@ -198,6 +202,7 @@ def tabulate_results(
     def _generate_facts_table():
         test_result = results[0] if results else None
         TableRow, sortref_cols = prepare_columns(test_result)
+        max_widths = {column: -1 for column in columns}
 
         gross_totals = initial_gross()
 
@@ -213,8 +218,9 @@ def tabulate_results(
             table_rows.append(table_row)
 
             update_gross(fact_etc, gross_totals)
+            update_widths(table_row, max_widths)
 
-        create_sparklines(table_rows, gross_totals)
+        create_sparklines(table_rows, gross_totals, max_widths)
 
         results_final_sort(table_rows)
 
@@ -225,8 +231,9 @@ def tabulate_results(
             table_rows.append(table_row)
 
         table = [TableRow(**row) for row in table_rows]
+        max_widths_tup = TableRow(**max_widths)
 
-        tabulation = _ResultsTabulation(table, columns)
+        tabulation = _ResultsTabulation(table, columns, max_widths_tup)
 
         return tabulation
 
@@ -788,7 +795,7 @@ def tabulate_results(
 
     # +++
 
-    def create_sparklines(table_rows, gross_totals):
+    def create_sparklines(table_rows, gross_totals, max_widths):
         if 'sparkline' not in columns:
             return
 
@@ -831,6 +838,10 @@ def tabulate_results(
 
             # We've used the seconds value, so now we can format the duration.
             table_row['duration'] = format_duration_secs(dur_seconds)
+
+            if track_widths:
+                for col in ['sparkline', 'duration']:
+                    max_widths[col] = max(term_len(table_row[col]), max_widths[col])
 
         def spark_up(dur_seconds, spark_chunk_secs):
             # Thanks to:
@@ -985,6 +996,17 @@ def tabulate_results(
             gross_totals[i_final_end] = max(
                 gross_totals[i_final_end], final_end,
             )
+
+    def update_widths(table_row, max_widths):
+        if not track_widths:
+            return
+
+        for column in columns:
+            try:
+                max_widths[column] = max(term_len(table_row[column]), max_widths[column])
+            except TypeError:
+                # Not a string, e.g., an int or float.
+                pass
 
     # +++
 

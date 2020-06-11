@@ -138,7 +138,9 @@ def render_results(
             # For reports with stats, post-process results; possibly sort.
             tabulation = prepare_table_and_columns()
             col_headers = headers_for_columns(tabulation.columns)
-            n_written = writer.write_report(tabulation.table, col_headers)
+            n_written = writer.write_report(
+                tabulation.table, col_headers, tabulation.max_widths,
+            )
         else:
             # When dumping Facts to a simple format (e.g., CSV), we can write
             # each Fact on the fly and avoid looping through the results (and,

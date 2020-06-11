@@ -63,6 +63,6 @@ class FactoidWriter(LineWriter):
             self.output_write()
             self.output_write(self.factoid_sep)
 
-    def write_report(self, table, headers):
+    def write_report(self, table, headers, max_widths=None):
         raise NotImplementedError
 
