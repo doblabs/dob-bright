@@ -19,26 +19,6 @@
 
 from click_hotoffthehamster._compat import term_len
 
-# 2020-06-03: (lb): I tried a plain texttable, which sorta works, except it
-# won't work with styling -- the style bleeds to the end of line and from the
-# start of the next line if the value is cell-wrapped; and also other columns'
-# cell-wrapped value don't align on rows without something styled, because the
-# width is not computed properly.
-# - I cannot think of any advantage to using the table library, other than
-#   aligning columns or enforcing width constraints, neither of which matter
-#   to the Journal format. So use LineWriter and do what little special
-#   formatting there is on output in this writer class.
-# - To test with texttable, derive from TableWriter and use the plain-esque
-#   table format:
-#       import TableWriter
-#       ...
-#       class JournalWriter(TableWriter):
-#           def __init__(self, *args, **kwarg):
-#               kwargs['output_format'] = 'texttable_borderless_headerless'
-#               super(JournalWriter, self).__init__(*args, **kwargs)
-#   except then tabulate_results() needs to do the blank line section
-#   injection and first column value scrubbing that makes Journal special.
-
 from .line_writer import LineWriter
 
 __all__ = (
