@@ -49,16 +49,15 @@ def render_results(
     custom_columns=None,
     output_format='table',
     table_type='texttable',
+    max_width=-1,
+    row_limit=0,
+    output_path=None,
+    factoid_rule='',
     datetime_format=None,
     duration_fmt=None,
     spark_total=None,
     spark_width=None,
     spark_secs=None,
-    output_path=None,
-    row_limit=0,
-    term_width=None,
-    chop=False,
-    factoid_rule='',
     re_sort=False,
 ):
     """"""
@@ -73,11 +72,9 @@ def render_results(
     # ***
 
     def fetch_report_writer(output_format, output_obj):
-        row_width = restrict_width(term_width)
         writer = fetch_report_writer_cls(
             output_format=output_format,
             table_type=table_type,
-            term_width=row_width,
         )
         writer.output_setup(
             output_obj=output_obj,
@@ -87,7 +84,7 @@ def render_results(
         )
         return writer
 
-    def fetch_report_writer_cls(output_format, table_type, term_width):
+    def fetch_report_writer_cls(output_format, table_type):
         writer = None
         if output_format == 'csv':
             writer = CSVWriter()
@@ -101,15 +98,14 @@ def render_results(
             writer = XMLWriter()
         elif output_format == 'factoid':
             colorful = controller.config['term.use_color']
-            cut_width = term_width if chop else None
             factoid_sep = ''
             if factoid_rule:
-                rule_mult = term_width if len(factoid_rule) == 1 else 1
+                rule_mult = max_width if len(factoid_rule) == 1 else 1
                 # FIXME: This color should be customizable, eh. #styling
                 factoid_sep = stylize(factoid_rule * rule_mult, 'indian_red_1c')
             writer = FactoidWriter(
                 colorful=colorful,
-                cut_width=cut_width,
+                cut_width_complete=max_width,
                 factoid_sep=factoid_sep,
                 hide_duration=hide_duration,
             )
@@ -118,8 +114,7 @@ def render_results(
         elif output_format == 'table':
             writer = TableWriter(
                 table_type=table_type,
-                term_width=term_width,
-                chop=chop,
+                max_width=restrict_width(max_width),
             )
         else:
             raise Exception('Unknown output_format: {}'.format(output_format))
@@ -128,15 +123,12 @@ def render_results(
     # ***
 
     def prepare_and_render_results(writer):
-        # MAYBE: Do we care?: The desc_col_idx feature only works if
-        #                     prepare_table_and_columns is called.
         if headers is not None:
             # For list/usage act/cat/tag, already have ready table and headers.
             n_written = writer.write_report(results, headers)
         elif query_terms.include_stats or writer.requires_table:
             # For reports with stats, post-process results; possibly sort.
             tabulation = prepare_table_and_columns()
-            writer.desc_col_idx = deduce_trunccol(columns) if chop else None
             col_headers = headers_for_columns(tabulation.columns)
             n_written = writer.write_report(tabulation.table, col_headers)
         else:
@@ -173,37 +165,12 @@ def render_results(
 
     # ***
 
-    def deduce_trunccol(columns):
-        # This is very inexact psyence. (We could maybe expose this as a CLI
-        # option.) Figure out which column is appropriate to truncate.
-        # - (lb): Back in 2018 when I first wrote this, the 'description'
-        #   seemed like the obvious column. But it's no longer always there.
-        #   And also, now you can group-by columns, which can make for a
-        #   very long actegories column. Even tags might be a candidate.
-        if columns is None:
-            return 'description'
-
-        for candidate in [
-            'description',
-            'actegories',
-            'activities',
-            'categories',
-            'tags',
-        ]:
-            try:
-                return columns.index(candidate)
-            except ValueError:
-                pass
-        # Give up. No column identified.
-        return None
-
-    # ***
-
-    def restrict_width(term_width):
-        if term_width is not None:
-            return term_width
+    def restrict_width(max_width):
+        if max_width is not None and max_width >= 0:
+            return max_width
         elif sys.stdout.isatty():
-            return click.get_terminal_size()[0]
+            # MAGIC_NUMBER: Subtract 1 to leave an empty column border on the right.
+            return click.get_terminal_size()[0] - 1
         else:
             return 80
 

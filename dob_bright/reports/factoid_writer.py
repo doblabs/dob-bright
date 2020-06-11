@@ -45,9 +45,8 @@ class FactoidWriter(LineWriter):
         self.show_elapsed = not hide_duration
 
     def _write_fact(self, idx, fact):
-        description_sep = '\n\n'
-        if self.cut_width_complete is not None and self.cut_width_complete > 0:
-            description_sep = ': '
+        one_liners = self.cut_width_complete is not None and self.cut_width_complete > 0
+        description_sep = '\n\n' if not one_liners else ': '
         line = fact.friendly_str(
             shellify=False,
             description_sep=description_sep,
@@ -57,7 +56,8 @@ class FactoidWriter(LineWriter):
             cut_width_complete=self.cut_width_complete,
             show_elapsed=self.show_elapsed,
         )
-        self.output_write() if idx > 0 else None
+        if (not one_liners or self.factoid_sep) and idx > 0:
+            self.output_write()
         self.output_write(line)
         if self.factoid_sep:
             self.output_write()
