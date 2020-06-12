@@ -54,7 +54,9 @@ REPORT_COLUMNS = {
     _ReportColumn('description', _("Description"), 'l', True),
     # Group-by aggregates. See: FactManager.RESULT_GRP_INDEX.
     # MAYBE/2020-06-02: Append units to header, e.g., "Duration (mins.)"
-    _ReportColumn('duration', _("Duration"), 'r', True),
+    # NOTE: Because we right-pad duration with spaces, use left-align,
+    #       otherwise the texttable format will strip right whitespace.
+    _ReportColumn('duration', _("Duration"), 'l', True),
     # The journal format shows a sparkline.
     # MAYBE/2020-05-18: Add sparkline option to ASCII table formats.
     _ReportColumn('sparkline', _("Sparkline"), 'l', True),
@@ -186,6 +188,8 @@ def tabulate_results(
             # - Another option: duration_fmt = '%H:%M'
             # - Another option: duration_fmt = '%S'
             duration_fmt = '%M'
+    # A tracking variable to pad 'duration' so decimal points align in table view.
+    col_adjust = {'duration_apres_dot': -1}
 
     i_cum_duration = FactManager.RESULT_GRP_INDEX['duration']
     i_group_count = FactManager.RESULT_GRP_INDEX['group_count']
@@ -215,7 +219,7 @@ def tabulate_results(
                 break
 
             fact_etc = prepare_fact_and_aggs_list(result)
-            table_row = prepare_row(fact_etc)
+            table_row = prepare_row(fact_etc, max_widths)
             table_rows.append(table_row)
 
             update_gross(fact_etc, gross_totals)
@@ -231,7 +235,7 @@ def tabulate_results(
             table_rows.append(empty_row)
             table_rows.append(table_row)
 
-        table = [TableRow(**row) for row in table_rows]
+        table = [TableRow(**finalize_row(row)) for row in table_rows]
         repcols = [FACT_TABLE_HEADERS[column] for column in columns]
         max_widths_tup = TableRow(**max_widths)
         tabulation = _ResultsTabulation(table, repcols, max_widths_tup)
@@ -511,7 +515,7 @@ def tabulate_results(
         aggregate_cols = group_cols_shim(result)
         return result, *aggregate_cols
 
-    def prepare_row(fact_etc):
+    def prepare_row(fact_etc, max_widths):
         # Each result is a tuple: First the Fact, and then the
         # aggregate columns (see FactManager.RESULT_GRP_INDEX).
         (
@@ -539,7 +543,7 @@ def tabulate_results(
         prepare_activity_and_category(
             table_row, fact, activities, actegories, categories,
         )
-        prepare_duration(table_row, fact, duration)
+        prepare_duration(table_row, fact, duration, max_widths)
         prepare_group_count(table_row, group_count)
         prepare_first_start(table_row, first_start)
         prepare_final_end(table_row, final_end)
@@ -729,7 +733,7 @@ def tabulate_results(
 
     # +++
 
-    def prepare_duration(table_row, fact, duration):
+    def prepare_duration(table_row, fact, duration, max_widths):
         if 'duration' not in repcols:
             return
 
@@ -739,13 +743,15 @@ def tabulate_results(
         if 'sparkline' not in columns:
             # Finalize the duration as a string value.
             duration = format_fact_or_query_duration(fact, duration)
-        # else, we'll prepare a sparkline later, so keep the durations value
-        # (in secs.), until we post-process it.
-        elif not duration:
-            duration = fact.delta().total_seconds()
+            prepare_row_duration(table_row, duration, max_widths)
         else:
-            duration = convert_duration_days_to_secs(duration)
-        table_row['duration'] = duration
+            # We'll prepare a sparkline later, so keep the durations value
+            # (in secs.), until we post-process it.
+            if not duration:
+                duration = fact.delta().total_seconds()
+            else:
+                duration = convert_duration_days_to_secs(duration)
+            table_row['duration'] = duration
 
     def format_fact_or_query_duration(fact, duration):
         if not duration:
@@ -794,6 +800,29 @@ def tabulate_results(
         )
         return fmt_duration
 
+    def prepare_row_duration(table_row, duration, max_widths):
+        table_row['duration'] = duration
+        update_max_widths_column(table_row, 'duration', max_widths)
+        update_duration_apres_dot(duration)
+
+    def update_max_widths_column(table_row, column, max_widths):
+        if not track_widths:
+            return
+
+        max_widths[column] = max(term_len(table_row[column]), max_widths[column])
+
+    def update_duration_apres_dot(duration):
+        if output_format not in ('table', 'journal'):
+            return
+
+        try:
+            col_adjust['duration_apres_dot'] = max(
+                term_len(duration) - duration.index('.'),
+                col_adjust['duration_apres_dot'],
+            )
+        except ValueError:
+            pass
+
     # +++
 
     def create_sparklines(table_rows, gross_totals, max_widths):
@@ -836,13 +865,11 @@ def tabulate_results(
             dur_seconds = table_row['duration']
             sparkline = spark_up(dur_seconds, spark_chunk_secs)
             table_row['sparkline'] = sparkline
+            update_max_widths_column(table_row, 'sparkline', max_widths)
 
             # We've used the seconds value, so now we can format the duration.
-            table_row['duration'] = format_duration_secs(dur_seconds)
-
-            if track_widths:
-                for col in ['sparkline', 'duration']:
-                    max_widths[col] = max(term_len(table_row[col]), max_widths[col])
+            duration = format_duration_secs(dur_seconds)
+            prepare_row_duration(table_row, duration, max_widths)
 
         def spark_up(dur_seconds, spark_chunk_secs):
             # Thanks to:
@@ -1073,6 +1100,24 @@ def tabulate_results(
         final_end = gross_totals[i_final_end]
         final_end = final_end.strftime(datetime_format) if final_end else ''
         table_row['final_end'] = final_end
+
+    # ***
+
+    def finalize_row(row):
+        finalize_row_duration(row)
+        return row
+
+    def finalize_row_duration(row):
+        if 'duration' not in row or col_adjust['duration_apres_dot'] < 0:
+            return
+
+        try:
+            apres_dot = term_len(row['duration']) - row['duration'].index('.')
+        except ValueError:
+            pass
+        else:
+            if apres_dot < col_adjust['duration_apres_dot']:
+                row['duration'] += ' ' * (col_adjust['duration_apres_dot'] - apres_dot)
 
     # ***
 
