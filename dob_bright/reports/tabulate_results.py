@@ -878,18 +878,20 @@ def tabulate_results(
         if 'group_count' not in repcols:
             return
 
-        table_row['group_count'] = group_count
+        table_row['group_count'] = str(group_count)
 
     def prepare_first_start(table_row, first_start):
         if 'first_start' not in repcols:
             return
 
+        first_start = first_start.strftime(datetime_format) if first_start else ''
         table_row['first_start'] = first_start
 
     def prepare_final_end(table_row, final_end):
         if 'final_end' not in repcols:
             return
 
+        final_end = final_end.strftime(datetime_format) if final_end else ''
         table_row['final_end'] = final_end
 
     # +++
@@ -1054,19 +1056,23 @@ def tabulate_results(
         if 'group_count' not in repcols:
             return
 
-        table_row['group_count'] = gross_totals[i_group_count]
+        table_row['group_count'] = str(gross_totals[i_group_count])
 
     def produce_gross_first_start(gross_totals, table_row):
         if 'first_start' not in repcols:
             return
 
-        table_row['first_start'] = gross_totals[i_first_start]
+        first_start = gross_totals[i_first_start]
+        first_start = first_start.strftime(datetime_format) if first_start else ''
+        table_row['first_start'] = first_start
 
     def produce_gross_final_end(gross_totals, table_row):
         if 'final_end' not in repcols:
             return
 
-        table_row['final_end'] = gross_totals[i_final_end]
+        final_end = gross_totals[i_final_end]
+        final_end = final_end.strftime(datetime_format) if final_end else ''
+        table_row['final_end'] = final_end
 
     # ***
 
