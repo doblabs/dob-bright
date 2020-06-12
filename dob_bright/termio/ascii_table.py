@@ -56,6 +56,7 @@ def generate_table(
     output_obj,
     table_type='texttable',
     max_width=0,
+    cols_align=None,
 ):
     """Generates and prints a table in the format specified."""
     def _generate_table():
@@ -80,11 +81,7 @@ def generate_table(
         #   row values (which are not ANSI-encoded) will not align properly.
         #   (lb): So I abandoned my plan to emphasize the header values.
         ttable = texttable.Texttable()
-        # Right-align the first column; left-align the rest.
-        cols_align = ['r']
-        for idx in range(1, len(headers)):
-            cols_align.append('l')
-        ttable.set_cols_align(cols_align)
+        set_cols_align(ttable)
         # Set the table width. Note that we could be
         # deliberate about each column's width, e.g.,
         #   ttable.set_cols_width([a, b, c, d])
@@ -99,6 +96,20 @@ def generate_table(
         textable = generate_table_texttable_draw(ttable)
         output_obj.write(textable)
         output_obj.write('\n')
+
+    def set_cols_align(ttable):
+        if cols_align is None:
+            set_cols_align_right_then_lefts(ttable)
+        else:
+            cols_align[0] = 'r'
+            ttable.set_cols_align(cols_align)
+
+    def set_cols_align_right_then_lefts(ttable):
+        # Right-align the first column; left-align the rest.
+        cols_align = ['r']
+        for idx in range(1, len(headers)):
+            cols_align.append('l')
+        ttable.set_cols_align(cols_align)
 
     def generate_table_texttable_draw(ttable):
         try:

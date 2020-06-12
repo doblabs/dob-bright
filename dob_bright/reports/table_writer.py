@@ -47,12 +47,16 @@ class TableWriter(ReportWriter):
     def write_report(self, table, headers, tabulation=None):
         # SKIP:
         #   super(TableWriter, self).write_report(table, headers, tabulation)
+        cols_align = None
+        if tabulation is not None:
+            cols_align = [repcol.align for repcol in tabulation.repcols]
         generate_table(
             table,
             headers,
             output_obj=self.output_file,
             table_type=self.table_type,
             max_width=self.max_width,
+            cols_align=cols_align,
         )
         return len(table)
 
