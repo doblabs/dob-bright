@@ -39,41 +39,47 @@ __all__ = (
 
 # ***
 
-_ReportColumn = namedtuple('_ReportColumn', ('column', 'header', 'option'))
+_ReportColumn = namedtuple(
+    '_ReportColumn',
+    ('column', 'header', 'option'),
+)
 
-FACT_TABLE_HEADERS = {
+REPORT_COLUMNS = {
     # Fact attributes.
-    'key': _ReportColumn('key', _("Key"), True),
-    'start': _ReportColumn('start', _("Start"), True),
-    'end': _ReportColumn('end', _("End"), True),
-    'activity': _ReportColumn('activity', _("Activity"), True),
-    'category': _ReportColumn('category', _("Category"), True),
-    'tags': _ReportColumn('tags', _("Tags"), True),
-    'description': _ReportColumn('description', _("Description"), True),
+    _ReportColumn('key', _("Key"), True),
+    _ReportColumn('start', _("Start"), True),
+    _ReportColumn('end', _("End"), True),
+    _ReportColumn('activity', _("Activity"), True),
+    _ReportColumn('category', _("Category"), True),
+    _ReportColumn('tags', _("Tags"), True),
+    _ReportColumn('description', _("Description"), True),
     # Group-by aggregates. See: FactManager.RESULT_GRP_INDEX.
     # MAYBE/2020-06-02: Append units to header, e.g., "Duration (mins.)"
-    'duration': _ReportColumn('duration', _("Duration"), True),
+    _ReportColumn('duration', _("Duration"), True),
     # The journal format shows a sparkline.
     # MAYBE/2020-05-18: Add sparkline option to ASCII table formats.
-    'sparkline': _ReportColumn('sparkline', _("Sparkline"), True),
-    'group_count': _ReportColumn('group_count', _("Uses"), True),
+    _ReportColumn('sparkline', _("Sparkline"), True),
+    _ReportColumn('group_count', _("Uses"), True),
     # MAYBE/2020-05-18: Format first_start and final_end per user --option.
     # - For now, ASCII table formatter is just str()'ifying.
-    'first_start': _ReportColumn('first_start', _("First Start"), True),
-    'final_end': _ReportColumn('final_end', _("Final End"), True),
-    'activities': _ReportColumn('activities', _("Activities"), True),
-    'actegories': _ReportColumn('actegories', _("Actegories"), True),
-    'categories': _ReportColumn('categories', _("Categories"), True),
+    _ReportColumn('first_start', _("First Start"), True),
+    _ReportColumn('final_end', _("Final End"), True),
+    _ReportColumn('activities', _("Activities"), True),
+    _ReportColumn('actegories', _("Actegories"), True),
+    _ReportColumn('categories', _("Categories"), True),
     # The actegory is used for the journal format.
-    'actegory': _ReportColumn('actegory', _("Actegory"), True),
+    _ReportColumn('actegory', _("Actegory"), True),
     # A singular 'tag' column happens when Act@Cat aggregated b/c group_tags.
-    'tag': _ReportColumn('tag', _("Tag"), True),
+    _ReportColumn('tag', _("Tag"), True),
     # More options for the journal format:
-    'start_date': _ReportColumn('start_date', _("Start date"), True),
-    'start_date_cmp': _ReportColumn('start_date_cmp', _("Startdate"), False),
-    'start_time': _ReportColumn('start_time', _("Start time"), True),
-    'end_date': _ReportColumn('end_date', _("End date"), True),
+    _ReportColumn('start_date', _("Start date"), True),
+    _ReportColumn('start_date_cmp', _("Startdate"), False),
+    _ReportColumn('start_time', _("Start time"), True),
+    _ReportColumn('end_date', _("End date"), True),
 }
+
+
+FACT_TABLE_HEADERS = {repcol.column: repcol for repcol in REPORT_COLUMNS}
 
 
 def report_table_columns():
