@@ -28,7 +28,6 @@ from nark.helpers.format_time import format_delta
 from nark.managers.query_terms import QueryTerms
 
 __all__ = (
-    'headers_for_columns',
     'report_table_columns',
     'tabulate_results',
     # Private:
@@ -86,10 +85,6 @@ def report_table_columns():
     return [item.column for key, item in FACT_TABLE_HEADERS.items() if item.option]
 
 
-def headers_for_columns(columns):
-    return [FACT_TABLE_HEADERS[column].header for column in columns]
-
-
 # ***
 
 # (lb): I wrote tabulate_results as a procedural function because it's called
@@ -104,7 +99,7 @@ def headers_for_columns(columns):
 # scoping functions within functions this past year, as opposed to my earlier
 # hacking-development efforts where I tended toward writing classes instead.)
 _ResultsTabulation = namedtuple(
-    '_ResultsTabulation', ('table', 'columns', 'max_widths')
+    '_ResultsTabulation', ('table', 'repcols', 'max_widths')
 )
 
 
@@ -237,9 +232,9 @@ def tabulate_results(
             table_rows.append(table_row)
 
         table = [TableRow(**row) for row in table_rows]
+        repcols = [FACT_TABLE_HEADERS[column] for column in columns]
         max_widths_tup = TableRow(**max_widths)
-
-        tabulation = _ResultsTabulation(table, columns, max_widths_tup)
+        tabulation = _ResultsTabulation(table, repcols, max_widths_tup)
 
         return tabulation
 

@@ -32,7 +32,7 @@ from ..termio.style import stylize
 from .factoid_writer import FactoidWriter
 from .journal_writer import JournalWriter
 from .table_writer import TableWriter
-from .tabulate_results import headers_for_columns, tabulate_results
+from .tabulate_results import tabulate_results
 
 __all__ = (
     'render_results',
@@ -133,14 +133,12 @@ def render_results(
     def prepare_and_render_results(writer):
         if headers is not None:
             # For list/usage act/cat/tag, already have ready table and headers.
-            n_written = writer.write_report(results, headers)
+            n_written = writer.write_report(results, headers, tabulation=None)
         elif query_terms.include_stats or writer.requires_table:
             # For reports with stats, post-process results; possibly sort.
             tabulation = prepare_table_and_columns()
-            col_headers = headers_for_columns(tabulation.columns)
-            n_written = writer.write_report(
-                tabulation.table, col_headers, tabulation.max_widths,
-            )
+            tabn_headers = [repcol.header for repcol in tabulation.repcols]
+            n_written = writer.write_report(tabulation.table, tabn_headers, tabulation)
         else:
             # When dumping Facts to a simple format (e.g., CSV), we can write
             # each Fact on the fly and avoid looping through the results (and,

@@ -44,9 +44,9 @@ class TableWriter(ReportWriter):
     def requires_table(self):
         return True
 
-    def write_report(self, table, headers, max_widths=None):
+    def write_report(self, table, headers, tabulation=None):
         # SKIP:
-        #   super(TableWriter, self).write_report(table, columns)
+        #   super(TableWriter, self).write_report(table, headers, tabulation)
         generate_table(
             table,
             headers,
