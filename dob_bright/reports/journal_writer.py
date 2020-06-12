@@ -47,7 +47,7 @@ class JournalWriter(LineWriter):
         else:
             # Omit the first column value when it's the same as the previous row's.
             # Strip Unicode/ASNI control characters to compute whitespace to fill.
-            line += ' ' * term_len(max_widths[0])
+            line += ' ' * max_widths[0]
         i_remainder = 1
 
         line += '  ' + '  '.join([str(val) for val in row[i_remainder:]])
