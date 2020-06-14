@@ -55,6 +55,9 @@ requirements = [
     #  - Still, had to make one adjustment, and too impatient to ask for a pull...
     #  https://github.com/hotoffthehamster/click
     'click-hotoffthehamster == 7.1.1',
+    # Pythonic config @decorator.
+    #  https://github.com/hotoffthehamster/config-decorator
+    'config-decorator >= 2.0.12, <= 2.0.13',
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/hotoffthehamster/nark
     'nark == 3.2.2',
