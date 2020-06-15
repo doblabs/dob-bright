@@ -2,12 +2,46 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
-## 1.2.2 (2020-05-17)
+## 1.2.2 (2020-06-18)
 
-- Config: Add option, `term.row_limit`, to improve dob-list experience.
+- Feature: New 'journal' format shows ledger-style report.
 
-  - I.e., avoid overwhelming user's terminal with too much output unless
-    they explicitly ask for it.
+  - Including sparklines and tag frequencies, e.g.:
+
+      ```shell
+      $ dob report
+      Fri Jun 12  8.3 hours  ████▌    Sleep & Offline@Sleep
+                  2.5 hours  █▍       Development@Tally Bark  #dob(5)
+      ```
+
+- Feature: Add JSON output format.
+
+  - E.g., `dob find --since yesterday --json`.
+
+- Feature: Add markup-related output formats: html, mediawiki, rst, etc.
+
+  - E.g., `dob find --since 'last week' --rst`.
+
+- Feature: Replace broken output truncate option with width option.
+
+  - Also changes Factoid report to default to compact view (no blank
+    lines) when width is used.
+
+    - E.g., `dob find --since 'last week' --factoid --width 110`.
+
+- Improve: Align columns better in table formatted report.
+
+  - E.g., align 'duration' column on decimal places, and right-align
+    other number columns.
+
+- Improve: Show hidden config options when requested directly.
+
+  - E.g., `dob config dump foo bar`.
+
+- Config: New option, `term.row_limit`, to improve dob-list experience.
+
+  - This avoids overwhelming the terminal with too much output, unless
+    the user explicitly asks for it.
 
 ## 1.2.1 (2020-04-26)
 
