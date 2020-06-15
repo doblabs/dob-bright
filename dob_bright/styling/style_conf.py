@@ -849,6 +849,11 @@ def night():
         set_header_tag_parts_style(styling)
         set_header_facts_diff_style(styling)
         set_factoid_parts_style(styling)
+
+        # Fact.description background when showing help.
+        # https://en.wikipedia.org/wiki/International_orange
+        styling['content-help'] = 'bg:#F04A00 #000000'
+
         return styling
 
     # FIXME: (lb): Devise similar #styling for 'light'.
