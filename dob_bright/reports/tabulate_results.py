@@ -32,7 +32,7 @@ __all__ = (
     'tabulate_results',
     # Private:
     #  '_ReportColumn',
-    #  '_ResultsTabulation',
+    #  'ResultsTabulation',
     #  'FACT_TABLE_HEADERS',
 )
 
@@ -100,8 +100,8 @@ def report_table_columns():
 # (Is this too explain-y? I figured I should at least rationalize why I started
 # scoping functions within functions this past year, as opposed to my earlier
 # hacking-development efforts where I tended toward writing classes instead.)
-_ResultsTabulation = namedtuple(
-    '_ResultsTabulation', ('table', 'repcols', 'max_widths')
+ResultsTabulation = namedtuple(
+    'ResultsTabulation', ('table', 'repcols', 'max_widths')
 )
 
 
@@ -238,7 +238,7 @@ def tabulate_results(
         table = [TableRow(**finalize_row(row)) for row in table_rows]
         repcols = [FACT_TABLE_HEADERS[column] for column in columns]
         max_widths_tup = TableRow(**max_widths)
-        tabulation = _ResultsTabulation(table, repcols, max_widths_tup)
+        tabulation = ResultsTabulation(table, repcols, max_widths_tup)
 
         return tabulation
 
