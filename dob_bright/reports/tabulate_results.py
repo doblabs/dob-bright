@@ -186,6 +186,9 @@ def tabulate_results(
     spark_total=None,
     spark_width=None,
     spark_secs=None,
+    # Include totals by default when aggregating results, except for Journal.
+    show_totals=False,
+    hide_totals=False,
     # The --re-sort option lets a developer force this function to re-sort the
     # results, even if the SQL query already guaranteed their ordering.
     re_sort=False,
@@ -1058,7 +1061,11 @@ def tabulate_results(
     # +++
 
     def produce_gross(gross_totals):
-        if gross_totals is None or not qt.include_stats:
+        if (
+            (gross_totals is None or not qt.include_stats)
+            or (not for_journal and hide_totals)
+            or (for_journal and not show_totals)
+        ):
             return None
 
         # Start with defaults for each column.

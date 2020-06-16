@@ -59,6 +59,8 @@ def render_results(
     spark_total=None,
     spark_width=None,
     spark_secs=None,
+    show_totals=False,
+    hide_totals=False,
     re_sort=False,
 ):
     """"""
@@ -167,6 +169,8 @@ def render_results(
             spark_total=spark_total,
             spark_width=spark_width,
             spark_secs=spark_secs,
+            show_totals=show_totals,
+            hide_totals=hide_totals,
             re_sort=re_sort,
         )
         return tabulation
