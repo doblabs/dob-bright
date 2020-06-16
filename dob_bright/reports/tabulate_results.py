@@ -120,6 +120,24 @@ class _GrossTotals(object):
         # Final final_end (final_end).
         self.final_end = None
 
+    def update_durations(self, duration):
+        self.cum_duration += duration
+        self.max_duration = max(self.max_duration, duration)
+
+    def update_group_count(self, group_count):
+        self.group_count += group_count
+
+    def update_first_and_final(self, first_start, final_end):
+        if self.first_start is None:
+            self.first_start = first_start
+        else:
+            self.first_start = min(self.first_start, first_start)
+
+        if self.final_end is None:
+            self.final_end = final_end
+        else:
+            self.final_end = max(self.final_end, final_end)
+
 
 # ***
 
@@ -993,36 +1011,16 @@ def tabulate_results(
 
     def update_gross(fact_etc, gross_totals):
         _fact, *cols = fact_etc
-        duration = cols[i_cum_duration]
-        group_count = cols[i_group_count]
+
+        gross_totals.update_durations(cols[i_cum_duration])
+
+        gross_totals.update_group_count(cols[i_group_count])
+
         first_start = cols[i_first_start]
         final_end = cols[i_final_end] or controller.store.now
+        gross_totals.update_first_and_final(first_start, final_end)
 
-        update_gross_values(
-            gross_totals, duration, group_count, first_start, final_end,
-        )
-
-    def update_gross_values(
-        gross_totals, duration, group_count, first_start, final_end,
-    ):
-        gross_totals.cum_duration += duration
-        gross_totals.max_duration = max(gross_totals.max_duration, duration)
-
-        gross_totals.group_count += group_count
-
-        if gross_totals.first_start is None:
-            gross_totals.first_start = first_start
-        else:
-            gross_totals.first_start = min(
-                gross_totals.first_start, first_start,
-            )
-
-        if gross_totals.final_end is None:
-            gross_totals.final_end = final_end
-        else:
-            gross_totals.final_end = max(
-                gross_totals.final_end, final_end,
-            )
+    # +++
 
     def update_widths(table_row, max_widths):
         if not track_widths:
