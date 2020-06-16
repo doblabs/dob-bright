@@ -754,11 +754,15 @@ def tabulate_results(
         table_row['tag'] = assemble_tags(fact.tags)
 
     def assemble_tags(fact_tags):
-        if fact_tags:
-            # FIXME/2020-05-18: Get '#' symbol from new config setting.
-            tags = ' '.join(sorted(['#' + x.name for x in fact_tags]))
-        else:
-            tags = ''
+        tag_names = []
+        for tag in fact_tags:
+            if tag.freq == 1:
+                tag_name = '#{}'.format(tag.name)
+            else:
+                tag_name = '#{}({})'.format(tag.name, tag.freq)
+            tag_names.append(tag_name)
+
+        tags = ' '.join(sorted(tag_names))
         return tags
 
     # +++
