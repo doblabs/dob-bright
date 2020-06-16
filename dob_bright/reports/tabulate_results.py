@@ -25,6 +25,7 @@ from gettext import gettext as _
 from nark.backends.sqlalchemy.managers import query_sort_order_at_index
 from nark.backends.sqlalchemy.managers.fact import FactManager
 from nark.helpers.format_time import format_delta
+from nark.items.tag import Tag
 from nark.managers.query_terms import QueryTerms
 
 __all__ = (
@@ -119,6 +120,8 @@ class _GrossTotals(object):
         self.first_start = None
         # Final final_end (final_end).
         self.final_end = None
+        # Accumulated tags (and their frequencies).
+        self.amassed_tags = {}
 
     def update_durations(self, duration):
         self.cum_duration += duration
@@ -137,6 +140,19 @@ class _GrossTotals(object):
             self.final_end = final_end
         else:
             self.final_end = max(self.final_end, final_end)
+
+    def update_amassed_tags(self, fact_tags):
+        for fact_tag in fact_tags:
+            self.update_amassed_tag(fact_tag)
+
+    def update_amassed_tag(self, fact_tag):
+        try:
+            gross_tag = self.amassed_tags[fact_tag.name]
+        except KeyError:
+            gross_tag = Tag(fact_tag.name, fact_tag.pk, freq=fact_tag.freq)
+            self.amassed_tags[fact_tag.name] = gross_tag
+        else:
+            gross_tag.freq += fact_tag.freq
 
 
 # ***
@@ -1014,7 +1030,7 @@ def tabulate_results(
     # ***
 
     def update_gross(fact_etc, gross_totals):
-        _fact, *cols = fact_etc
+        fact, *cols = fact_etc
 
         gross_totals.update_durations(cols[i_cum_duration])
 
@@ -1023,6 +1039,8 @@ def tabulate_results(
         first_start = cols[i_first_start]
         final_end = cols[i_final_end] or controller.store.now
         gross_totals.update_first_and_final(first_start, final_end)
+
+        gross_totals.update_amassed_tags(fact.tags)
 
     # +++
 
@@ -1062,6 +1080,7 @@ def tabulate_results(
         produce_gross_group_count(gross_totals, table_row)
         produce_gross_first_start(gross_totals, table_row)
         produce_gross_final_end(gross_totals, table_row)
+        produce_gross_amassed_tags(gross_totals, table_row)
 
         # Remove columns that may be omitted.
         row_slice = unprepare_unmentioned_columns(table_row)
@@ -1099,6 +1118,12 @@ def tabulate_results(
         final_end = gross_totals.final_end
         final_end = final_end.strftime(datetime_format) if final_end else ''
         table_row['final_end'] = final_end
+
+    def produce_gross_amassed_tags(gross_totals, table_row):
+        if 'tags' not in repcols:
+            return
+
+        table_row['tags'] = assemble_tags(gross_totals.amassed_tags.values())
 
     # ***
 
