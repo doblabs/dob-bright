@@ -31,6 +31,7 @@ __all__ = (
     'report_table_columns',
     'tabulate_results',
     # Private:
+    #  '_GrossTotals',
     #  '_ReportColumn',
     #  'ResultsTabulation',
     #  'FACT_TABLE_HEADERS',
@@ -103,6 +104,21 @@ def report_table_columns():
 ResultsTabulation = namedtuple(
     'ResultsTabulation', ('table', 'repcols', 'max_widths')
 )
+
+
+# ***
+
+class _GrossTotals(object):
+    def __init__(self):
+        # Durations summation (duration).
+        self.cum_duration = 0
+        self.max_duration = 0
+        # Group count count (group_count).
+        self.group_count = 0
+        # First first_start (first_start).
+        self.first_start = None
+        # Final final_end (final_end).
+        self.final_end = None
 
 
 # ***
@@ -200,16 +216,12 @@ def tabulate_results(
     i_categories = FactManager.RESULT_GRP_INDEX['categories']
     i_start_date = FactManager.RESULT_GRP_INDEX['start_date']
 
-    # A special index into the gross_totals lookup.
-    # MAYBE/2020-05-18: Convert gross_totals to a class object...
-    i_max_duration = i_final_end + 1
-
     def _generate_facts_table():
         test_result = results[0] if results else None
         TableRow, sortref_cols = prepare_columns(test_result)
         max_widths = {column: -1 for column in columns}
 
-        gross_totals = initial_gross()
+        gross_totals = _GrossTotals()
 
         table_rows = []
         n_row = 0
@@ -830,8 +842,8 @@ def tabulate_results(
             return
 
         # REMINDER: These values are in days.
-        cum_duration = convert_duration_days_to_secs(gross_totals[i_cum_duration])
-        max_duration = convert_duration_days_to_secs(gross_totals[i_max_duration])
+        cum_duration = convert_duration_days_to_secs(gross_totals.cum_duration)
+        max_duration = convert_duration_days_to_secs(gross_totals.max_duration)
 
         if not spark_total or spark_total == 'max':
             spark_max_value = max_duration
@@ -979,28 +991,13 @@ def tabulate_results(
 
     # ***
 
-    def initial_gross():
-        # MAGIC_ARRAY: Create aggregate values of all results.
-        # These are the indices of this results aggregate:
-        #   0: Durations summation.
-        #   1: Group count count.
-        #   2: First first_start.
-        #   3: Final final_end.
-        #   Skip: Activities, Actegories, Categories.
-        # - See: FactManager.RESULT_GRP_INDEX.
-        # - Also add an additional member not in RESULT_GRP_INDEX:
-        #   4: Maximum duration.
-        gross_totals = [0, 0, None, None, 0]
-        return gross_totals
-
-    # +++
-
     def update_gross(fact_etc, gross_totals):
         _fact, *cols = fact_etc
         duration = cols[i_cum_duration]
         group_count = cols[i_group_count]
         first_start = cols[i_first_start]
         final_end = cols[i_final_end] or controller.store.now
+
         update_gross_values(
             gross_totals, duration, group_count, first_start, final_end,
         )
@@ -1008,23 +1005,23 @@ def tabulate_results(
     def update_gross_values(
         gross_totals, duration, group_count, first_start, final_end,
     ):
-        gross_totals[i_cum_duration] += duration
-        gross_totals[i_max_duration] = max(gross_totals[i_max_duration], duration)
+        gross_totals.cum_duration += duration
+        gross_totals.max_duration = max(gross_totals.max_duration, duration)
 
-        gross_totals[i_group_count] += group_count
+        gross_totals.group_count += group_count
 
-        if gross_totals[i_first_start] is None:
-            gross_totals[i_first_start] = first_start
+        if gross_totals.first_start is None:
+            gross_totals.first_start = first_start
         else:
-            gross_totals[i_first_start] = min(
-                gross_totals[i_first_start], first_start,
+            gross_totals.first_start = min(
+                gross_totals.first_start, first_start,
             )
 
-        if gross_totals[i_final_end] is None:
-            gross_totals[i_final_end] = final_end
+        if gross_totals.final_end is None:
+            gross_totals.final_end = final_end
         else:
-            gross_totals[i_final_end] = max(
-                gross_totals[i_final_end], final_end,
+            gross_totals.final_end = max(
+                gross_totals.final_end, final_end,
             )
 
     def update_widths(table_row, max_widths):
@@ -1075,7 +1072,7 @@ def tabulate_results(
 
         # The SQLite aggregate result is in (julian)days, but the
         # timedelta is specified in seconds, so convert to the latter.
-        fmt_duration = format_duration_days(gross_totals[i_cum_duration])
+        fmt_duration = format_duration_days(gross_totals.cum_duration)
         table_row['duration'] = fmt_duration
         return fmt_duration
 
@@ -1083,13 +1080,13 @@ def tabulate_results(
         if 'group_count' not in repcols:
             return
 
-        table_row['group_count'] = str(gross_totals[i_group_count])
+        table_row['group_count'] = str(gross_totals.group_count)
 
     def produce_gross_first_start(gross_totals, table_row):
         if 'first_start' not in repcols:
             return
 
-        first_start = gross_totals[i_first_start]
+        first_start = gross_totals.first_start
         first_start = first_start.strftime(datetime_format) if first_start else ''
         table_row['first_start'] = first_start
 
@@ -1097,7 +1094,7 @@ def tabulate_results(
         if 'final_end' not in repcols:
             return
 
-        final_end = gross_totals[i_final_end]
+        final_end = gross_totals.final_end
         final_end = final_end.strftime(datetime_format) if final_end else ''
         table_row['final_end'] = final_end
 
