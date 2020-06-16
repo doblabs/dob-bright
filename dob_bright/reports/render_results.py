@@ -120,7 +120,16 @@ def render_results(
                 hide_duration=hide_duration,
             )
         elif output_format == 'journal':
-            writer = JournalWriter()
+            # For default `dob report` command, or when otherwise grouping
+            # results by day, show a blank line between sections (Days).
+            print_blank_line_between_sections = (
+                query_terms.group_days
+                and query_terms.sort_cols
+                and query_terms.sort_cols[0] == 'day'
+            )
+            writer = JournalWriter(
+                section_nls=print_blank_line_between_sections,
+            )
         elif output_format == 'table':
             writer = TableWriter(
                 table_type=table_type,
