@@ -110,7 +110,13 @@ def render_results(
             colorful = controller.config['term.use_color']
             factoid_sep = ''
             if factoid_rule:
-                rule_mult = max_width if len(factoid_rule) == 1 else 1
+                # MAYBE/2020-06-16: (lb): Now that max_width truncates, this no
+                # longer works as expected. max_width will generally be -1 now...
+                # so either caller has to make ruler the length they want, or we
+                # need a separate argument here... sorta think leave up to caller.
+                rule_mult = 1
+                if max_width > 0 and len(factoid_rule) == 1:
+                    rule_mult = max_width
                 # FIXME: This color should be customizable, eh. #styling
                 factoid_sep = stylize(factoid_rule * rule_mult, 'indian_red_1c')
             writer = FactoidWriter(
