@@ -360,7 +360,8 @@ def tabulate_results(
 
     def assemble_columns_sample_aggregate(test_result):
         if test_result and isinstance(test_result, Iterable):
-            _fact, *aggregate_cols = test_result
+            # Ignore the fact, which is the first element.
+            aggregate_cols = test_result[1:]
         else:
             aggregate_cols = group_cols_shim(test_result)
         return aggregate_cols
@@ -562,7 +563,7 @@ def tabulate_results(
             return result
         # The result is a simple Fact. Create the equivalent aggregate columns.
         aggregate_cols = group_cols_shim(result)
-        return result, *aggregate_cols
+        return [result] + aggregate_cols
 
     def prepare_row(fact_etc, max_widths):
         # Each result is a tuple: First the Fact, and then the
