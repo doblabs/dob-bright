@@ -2,11 +2,11 @@
 dob-bright
 @@@@@@@@@@
 
-.. image:: https://travis-ci.com/hotoffthehamster/dob-bright.svg?branch=develop
+.. image:: https://travis-ci.com/hotoffthehamster/dob-bright.svg?branch=proving
   :target: https://travis-ci.com/hotoffthehamster/dob-bright
   :alt: Build Status
 
-.. image:: https://codecov.io/gh/hotoffthehamster/dob-bright/branch/develop/graph/badge.svg
+.. image:: https://codecov.io/gh/hotoffthehamster/dob-bright/branch/proving/graph/badge.svg
   :target: https://codecov.io/gh/hotoffthehamster/dob-bright
   :alt: Coverage Status
 
@@ -23,7 +23,7 @@ dob-bright
   :alt: PyPI Release Status
 
 .. image:: https://img.shields.io/github/license/hotoffthehamster/dob-bright.svg?style=flat
-  :target: https://github.com/hotoffthehamster/dob-bright/blob/master/LICENSE
+  :target: https://github.com/hotoffthehamster/dob-bright/blob/release/LICENSE
   :alt: License Status
 
 .. |dob| replace:: ``dob``
