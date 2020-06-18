@@ -12,6 +12,14 @@ dob\_bright.config.app\_dirs module
    :undoc-members:
    :show-inheritance:
 
+dob\_bright.config.dec\_wrap module
+-----------------------------------
+
+.. automodule:: dob_bright.config.dec_wrap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 dob\_bright.config.fileboss module
 ----------------------------------
 

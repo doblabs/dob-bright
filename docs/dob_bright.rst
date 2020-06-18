@@ -8,7 +8,10 @@ Subpackages
    :maxdepth: 4
 
    dob_bright.config
-   dob_bright.facts
+   dob_bright.crud
+   dob_bright.helpers
+   dob_bright.reports
+   dob_bright.styling
    dob_bright.termio
    dob_bright.tests
 
