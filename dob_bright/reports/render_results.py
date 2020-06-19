@@ -44,8 +44,8 @@ def render_results(
     results,
     headers=None,
     query_terms=None,
-    hide_usage=False,
-    hide_duration=False,
+    show_usage=False,
+    show_duration=False,
     hide_description=False,
     custom_columns=None,
     output_format='table',
@@ -123,7 +123,7 @@ def render_results(
                 colorful=colorful,
                 cut_width_complete=max_width,
                 factoid_sep=factoid_sep,
-                hide_duration=hide_duration,
+                show_duration=show_duration,
             )
         elif output_format == 'journal':
             # For default `dob report` command, or when otherwise grouping
@@ -174,8 +174,8 @@ def render_results(
             results,
             row_limit=row_limit,
             query_terms=query_terms,
-            show_usage=not hide_usage,
-            show_duration=not hide_duration,
+            show_usage=show_usage,
+            show_duration=show_duration,
             show_description=not hide_description,
             custom_columns=custom_columns,
             output_format=output_format,

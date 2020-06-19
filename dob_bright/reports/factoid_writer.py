@@ -35,14 +35,15 @@ class FactoidWriter(LineWriter):
         colorful=False,
         cut_width_complete=None,
         factoid_sep='',
-        hide_duration=False,
+        show_duration=False,
         **kwargs,
     ):
         super(FactoidWriter, self).__init__(*args, **kwargs)
         self.colorful = colorful
         self.cut_width_complete = cut_width_complete
         self.factoid_sep = factoid_sep
-        self.show_elapsed = not hide_duration
+        # TESTME/FIXME/2020-06-18: (lb): I doubt dob-import parses duration correctly.
+        self.show_elapsed = show_duration
 
     def _write_fact(self, idx, fact):
         one_liners = self.cut_width_complete is not None and self.cut_width_complete > 0
