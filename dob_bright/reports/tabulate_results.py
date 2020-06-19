@@ -1058,6 +1058,10 @@ def tabulate_results(
             except TypeError:
                 # Not a string, e.g., an int or float.
                 pass
+            except KeyError:
+                # 'sparkline' not computed until end so in columns but not in table_row.
+                assert column == 'sparkline'
+                pass
 
     # +++
 
