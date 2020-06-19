@@ -31,6 +31,10 @@ class JournalWriter(LineWriter):
         super(JournalWriter, self).__init__(*args, **kwargs)
         self.section_nls = section_nls
 
+    @property
+    def requires_table(self):
+        return True
+
     def write_report(self, table, headers, tabulation=None):
         self.curr_section = None
         return super(JournalWriter, self).write_report(table, headers, tabulation)
