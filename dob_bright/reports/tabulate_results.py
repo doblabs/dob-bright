@@ -997,7 +997,7 @@ def tabulate_results(
     # (lb): I added `X not in repcols` checks to all the `table_row[Y] =` functions.
     # So I'd guess the table_row is has the correct attrs, and none superfluous.
     def unprepare_unmentioned_columns(table_row):
-        if custom_columns is None:
+        if not custom_columns:
             return table_row
 
         # Rebuild the table row, but exclude excluded columns.
