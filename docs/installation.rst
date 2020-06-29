@@ -3,7 +3,7 @@ Installation
 ############
 
 .. |dob-bright| replace:: ``dob-bright``
-.. _dob-bright: https://github.com/hotoffthehamster/dob-bright
+.. _dob-bright: https://github.com/tallybark/dob-bright
 
 .. |virtualenv| replace:: ``virtualenv``
 .. _virtualenv: https://virtualenv.pypa.io/en/latest/
@@ -28,7 +28,7 @@ To develop on the project, link to the source files instead::
 
     (dob-bright) $ deactivate
     $ rmvirtualenv dob-bright
-    $ git clone git@github.com:hotoffthehamster/dob-bright.git
+    $ git clone git@github.com:tallybark/dob-bright.git
     $ cd dob-bright
     $ mkvirtualenv -a $(pwd) --python=/usr/bin/python3.7 dob-bright
     (dob-bright) $ make develop

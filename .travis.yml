@@ -4,7 +4,7 @@
 
 # Travis CI config.
 #
-#   https://travis-ci.org/hotoffthehamster/dob-bright
+#   https://travis-ci.com/github/tallybark/dob-bright
 
 language: python
 
