@@ -2,6 +2,10 @@
 
 [comment]: # DEV: release-ghub-pypi scrapes Markdown from the first section below for the GitHub release.
 
+## 1.2.4 (2020-06-29)
+
+- Change ownership to `github.com/tallybark`.
+
 ## 1.2.3 (2020-06-18)
 
 - Bugfix: Repair report issues exposed by upstream release testing.

@@ -3,12 +3,17 @@ History
 #######
 
 .. |dob| replace:: ``dob``
-.. _dob: https://github.com/hotoffthehamster/dob
+.. _dob: https://github.com/tallybark/dob
 
 .. |dob-bright| replace:: ``dob-bright``
 .. _dob-bright: https://github.com/tallybark/dob-bright
 
 .. :changelog:
+
+1.2.4 (2020-06-29)
+==================
+
+- Change ownership to ``github.com/tallybark``.
 
 1.2.3 (2020-06-18)
 ==================
