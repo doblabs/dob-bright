@@ -27,7 +27,7 @@ dob-bright
   :alt: License Status
 
 .. |dob| replace:: ``dob``
-.. _dob: https://github.com/hotoffthehamster/dob
+.. _dob: https://github.com/tallybark/dob
 
 .. |dob-docs| replace:: Dob documentation
 .. _dob-docs: https://dob.readthedocs.io/en/latest/
