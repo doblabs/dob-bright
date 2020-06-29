@@ -2,7 +2,7 @@
 
 # This file exists within 'dob-bright':
 #
-#   https://github.com/hotoffthehamster/dob-bright
+#   https://github.com/tallybark/dob-bright
 
 # Boilerplate documentation build configuration file,
 # (Originally) created by sphinx-quickstart on Tue Jul 9 22:26:36 2013

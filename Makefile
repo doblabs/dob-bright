@@ -2,7 +2,7 @@
 
 # This file exists within 'dob-bright':
 #
-#   https://github.com/hotoffthehamster/dob-bright
+#   https://github.com/tallybark/dob-bright
 
 PROJNAME = dob_bright
 

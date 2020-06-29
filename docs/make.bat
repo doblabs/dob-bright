@@ -2,7 +2,7 @@
 
 REM This file exists within 'dob-bright':
 REM
-REM   https://github.com/hotoffthehamster/dob-bright
+REM   https://github.com/tallybark/dob-bright
 
 set PROJECTNAME=dob_bright
 

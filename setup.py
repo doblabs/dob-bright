@@ -1,6 +1,6 @@
 # This file exists within 'dob-bright':
 #
-#   https://github.com/hotoffthehamster/dob-bright
+#   https://github.com/tallybark/dob-bright
 
 """
 Packaging instruction for setup tools.
@@ -59,7 +59,7 @@ requirements = [
     #  https://github.com/hotoffthehamster/config-decorator
     'config-decorator == 2.0.13',
     # The heart of Hamster. (Ye olde `hamster-lib`).
-    #  https://github.com/hotoffthehamster/nark
+    #  https://github.com/tallybark/nark
     'nark > 3.2.2, < 3.2.4',  # I.e., release 3.2.3, or whatever dev's running.
 ]
 

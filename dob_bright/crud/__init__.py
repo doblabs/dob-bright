@@ -1,6 +1,6 @@
-# This file exists within 'dob-viewer':
+# This file exists within 'dob-bright':
 #
-#   https://github.com/hotoffthehamster/dob-viewer
+#   https://github.com/tallybark/dob-bright
 #
 # Copyright © 2020 Landon Bouma. All rights reserved.
 #

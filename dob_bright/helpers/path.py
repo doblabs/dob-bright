@@ -1,6 +1,6 @@
-# This file exists within 'dob-prompt':
+# This file exists within 'dob-bright':
 #
-#   https://github.com/hotoffthehamster/dob-prompt
+#   https://github.com/tallybark/dob-bright
 #
 # Copyright © 2018-2020 Landon Bouma. All rights reserved.
 #
