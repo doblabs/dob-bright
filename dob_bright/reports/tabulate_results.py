@@ -770,7 +770,6 @@ def tabulate_results(
         if 'tag' not in repcols:
             return
 
-        controller.affirm(len(fact.tags) <= 1)
         table_row['tag'] = assemble_tags(fact.tags)
 
     def assemble_tags(fact_tags):
