@@ -48,10 +48,12 @@ class FactoidWriter(LineWriter):
     def _write_fact(self, idx, fact):
         one_liners = self.cut_width_complete is not None and self.cut_width_complete > 0
         description_sep = '\n\n' if not one_liners else ': '
+        # FIXME: (lb): Add UTC support. Currently, all time assumed "local".
+        localize = True
         line = fact.friendly_str(
             shellify=False,
             description_sep=description_sep,
-            localize=True,
+            localize=localize,
             include_id=False,
             colorful=self.colorful,
             cut_width_complete=self.cut_width_complete,
