@@ -52,7 +52,7 @@ def render_results(
     table_type='texttable',
     max_width=-1,
     row_limit=0,
-    output_path=None,
+    output_obj_or_path=None,
     factoid_rule='',
     datetime_format=None,
     duration_fmt=None,
@@ -66,8 +66,8 @@ def render_results(
     """"""
 
     def _render_results():
-        # Send output to the path indicated, or stdout or pager.
-        output_obj = output_path or ClickEchoPager
+        # Send output to the path or object indicated, or stdout or pager.
+        output_obj = output_obj_or_path or ClickEchoPager
         writer = fetch_report_writer(output_format, output_obj)
         n_written = prepare_and_render_results(writer)
         return n_written
