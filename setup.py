@@ -57,10 +57,10 @@ requirements = [
     'click-hotoffthehamster >= 7.1.1, <= 7.1.2',
     # Pythonic config @decorator.
     #  https://github.com/hotoffthehamster/config-decorator
-    'config-decorator == 2.0.14',
+    'config-decorator > 2.0.14, < 2.0.16',  # I.e., release 2.0.15, or dev vers after.
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/tallybark/nark
-    'nark > 3.2.2, < 3.2.4',  # I.e., release 3.2.3, or whatever dev's running.
+    'nark > 3.2.3, < 3.2.5',  # I.e., release 3.2.4, or whatever dev's running.
 ]
 
 # *** Minimal setup() function -- Prefer using config where possible.
