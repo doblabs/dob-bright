@@ -30,6 +30,7 @@ from nark.items.fact import Fact
 
 from . import __arg0name__
 from . import help_newbs as help_strings
+from .config import ConfigRoot
 from .config.urable import ConfigUrable
 from .termio.echoes import click_echo, highlight_value
 from .termio.errors import dob_in_user_exit, dob_in_user_warning
@@ -50,6 +51,8 @@ class Controller(NarkControl):
     """
 
     POST_PROCESSORS = []
+
+    DOB_CONFIGFILE_ENVKEY = 'DOB_CONFIGFILE'
 
     def __init__(self, config=None):
         super(Controller, self).__init__(config)
@@ -176,7 +179,10 @@ class Controller(NarkControl):
         )
 
     def setup_config_from_file_and_cli(self, configfile_path=None, *keyvals):
-        configurable = ConfigUrable()
+        configurable = ConfigUrable(
+            config_root=ConfigRoot,
+            configfile_envkey=Controller.DOB_CONFIGFILE_ENVKEY,
+        )
         configurable.load_config(configfile_path)
         configurable.inject_from_cli(*keyvals)
         return configurable

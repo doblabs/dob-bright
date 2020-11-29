@@ -21,7 +21,6 @@ from gettext import gettext as _
 
 from ..termio import click_echo, dob_in_user_exit, highlight_value
 
-from . import ConfigRoot
 from .fileboss import (
     default_config_path,
     empty_config_obj,
@@ -38,13 +37,13 @@ __all__ = (
 class ConfigUrable(object):
     """"""
 
-    DOB_CONFIGFILE_ENVKEY = 'DOB_CONFIGFILE'
-
-    def __init__(self):
+    def __init__(self, config_root, configfile_envkey):
         super(ConfigUrable, self).__init__()
+        # The os.environ config file path, e.g., DOB_CONFIGFILE.
+        self.configfile_envkey = configfile_envkey
         self.configfile_path = None
         # The ConfigRoot is a module-level Singleton. Deal.
-        self._config_root = ConfigRoot
+        self._config_root = config_root
 
     # ***
 
@@ -119,8 +118,8 @@ class ConfigUrable(object):
             if commandline_value is not None:
                 return commandline_value
 
-            if ConfigUrable.DOB_CONFIGFILE_ENVKEY in os.environ:
-                return os.environ[ConfigUrable.DOB_CONFIGFILE_ENVKEY]
+            if self.configfile_envkey in os.environ:
+                return os.environ[self.configfile_envkey]
 
             return default_config_path()
 

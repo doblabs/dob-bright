@@ -21,12 +21,13 @@ from unittest import mock
 
 import pytest
 
-from nark.config import decorate_config
+from nark.config import decorate_config, ConfigRoot
 from nark.helpers import logging as logging_helpers
 
 from dob_bright.config import app_dirs, fileboss
 from dob_bright.config.fileboss import write_config_obj
 from dob_bright.config.urable import ConfigUrable
+from dob_bright.controller import Controller
 
 
 class TestSetupLogging(object):
@@ -149,6 +150,12 @@ class TestGetConfig(object):
 
 
 class TestGetConfigInstance(object):
+    def get_configurable(self):
+        return ConfigUrable(
+            config_root=ConfigRoot,
+            configfile_envkey=Controller.DOB_CONFIGFILE_ENVKEY,
+        )
+
     def test_no_file_present(self, appdirs, mocker):
         # In lieu of testing from completely vanilla account, ensure config file does
         # not exist (which probably exists for your user at ~/.config/dob/dob.conf).
@@ -158,14 +165,14 @@ class TestGetConfigInstance(object):
         app_dirs_mock.configure_mock(user_config_dir='/XXX')
         app_dirs_mock.configure_mock(user_data_dir='/XXX')
         mocker.patch.object(fileboss, 'AppDirs', app_dirs_mock)
-        self.configurable = ConfigUrable()
+        self.configurable = self.get_configurable()
         self.configurable.load_config(configfile_path=None)
         assert len(list(self.configurable.config_root.items())) > 0
         assert self.configurable.cfgfile_exists is False
 
     def test_file_present(self, config_instance):
         """Make sure we try parsing a found config file."""
-        self.configurable = ConfigUrable()
+        self.configurable = self.get_configurable()
         self.configurable.load_config(configfile_path=None)
         cfg_val = self.configurable.config_root['db']['orm']
         assert cfg_val == config_instance()['db']['orm']
@@ -175,7 +182,7 @@ class TestGetConfigInstance(object):
         """Make sure the config target path is constructed to our expectations."""
         mocker.patch('dob_bright.config.fileboss.load_config_obj')
         # DRY?/2020-01-09: (lb): Perhaps move repeated ConfigUrable code to fixture.
-        self.configurable = ConfigUrable()
+        self.configurable = self.get_configurable()
         self.configurable.load_config(configfile_path=None)
         # 'dob.conf' defined and used in dob_bright.config.fileboss.default_config_path.
         expectation = os.path.join(appdirs.user_config_dir, 'dob.conf')
