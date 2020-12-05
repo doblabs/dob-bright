@@ -44,6 +44,7 @@ class ConfigUrable(object):
         self.configfile_path = None
         # The ConfigRoot is a module-level Singleton. Deal.
         self._config_root = config_root
+        self._unstructured = {}
 
     # ***
 
@@ -56,6 +57,12 @@ class ConfigUrable(object):
     @property
     def config_root(self):
         return self._config_root
+
+    # ***
+
+    @property
+    def unstructured(self):
+        return self._unstructured
 
     # ***
 
@@ -112,6 +119,7 @@ class ConfigUrable(object):
             self.config_root.forget_config_values()
             unconsumed, errs = self.config_root.update_known(config_obj, errors_ok=True)
             warn_if_smelly_config(unconsumed, errs)
+            self._unstructured = unconsumed
             return cfgfile_exists
 
         def _resolve_configfile_path(commandline_value):
