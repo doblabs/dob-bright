@@ -30,7 +30,7 @@ To develop on the project, link to the source files instead::
     $ rmvirtualenv dob-bright
     $ git clone git@github.com:tallybark/dob-bright.git
     $ cd dob-bright
-    $ mkvirtualenv -a $(pwd) --python=/usr/bin/python3.7 dob-bright
+    $ mkvirtualenv -a $(pwd) --python=/usr/bin/python3.8 dob-bright
     (dob-bright) $ make develop
 
 After creating the virtual environment,
