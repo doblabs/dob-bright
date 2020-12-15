@@ -58,6 +58,9 @@ requirements = [
     # Pythonic config @decorator.
     #  https://github.com/hotoffthehamster/config-decorator
     'config-decorator > 2.0.14, < 2.0.16',  # I.e., release 2.0.15, or dev vers after.
+    # Get-package-or-Git-version helper.
+    #  https://github.com/tallybark/easy-as-pypi-getver
+    'easy-as-pypi-getver',
     # Click + ansi_escape_room (color) + convenience.
     #  https://github.com/tallybark/easy-as-pypi-termio
     'easy-as-pypi-termio',
