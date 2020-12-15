@@ -19,11 +19,13 @@
 
 from gettext import gettext as _
 
-from . import __arg0name__
+from easy_as_pypi_termio.echoes import highlight_value
+from easy_as_pypi_termio.style import attr, bg, fg
+
 from .config.fileboss import default_config_path
 from .config.urable import ConfigUrable
-from .termio import attr, bg, fg, highlight_value
 
+from . import __arg0name__
 
 __all__ = (
     'NEWBIE_HELP_WELCOME',

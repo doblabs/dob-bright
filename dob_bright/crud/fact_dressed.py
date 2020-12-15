@@ -24,9 +24,10 @@ from collections import namedtuple
 from nark.items.activity import Activity
 from nark.items.fact import Fact
 
+from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.style import stylize, set_coloring, verify_colors_attrs
+
 from ..styling.class_namilize import namilize
-from ..termio import dob_in_user_warning
-from ..termio.style import stylize, set_coloring, verify_colors_attrs
 
 from .facts_diff import FactsDiff
 

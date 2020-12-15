@@ -26,9 +26,8 @@ from configobj import ConfigObj, ConfigObjError, DuplicateError, ParseError
 
 from nark.helpers.app_dirs import ensure_directory_exists
 
-from dob_bright.termio import click_echo
-
-from ..termio import dob_in_user_exit, dob_in_user_warning
+from easy_as_pypi_termio.echoes import click_echo
+from easy_as_pypi_termio.errors import dob_in_user_exit, dob_in_user_warning
 
 from .app_dirs import AppDirs
 

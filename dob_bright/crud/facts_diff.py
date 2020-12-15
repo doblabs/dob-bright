@@ -22,8 +22,8 @@ import click_hotoffthehamster as click
 from nark.helpers.format_text import format_value_truncate
 from nark.helpers.objects import resolve_attr_or_method
 
-from ..termio import dob_in_user_warning
-from ..termio.style import stylize, verify_colors_attrs
+from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.style import stylize, verify_colors_attrs
 
 __all__ = (
     'FactsDiff',

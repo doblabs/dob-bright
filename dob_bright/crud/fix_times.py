@@ -38,7 +38,8 @@ from nark.helpers.fact_time import datetime_from_clock_after, datetime_from_cloc
 from nark.helpers.facts_fit import antecedent_fact, subsequent_fact
 from nark.helpers.parse_time import parse_clock_time, parse_relative_minutes
 
-from ..termio import barf_and_exit, click_echo, echo_block_header
+from easy_as_pypi_termio.echoes import click_echo, echo_block_header
+from easy_as_pypi_termio.errors import barf_and_exit
 
 from .fact_dressed import FactDressed
 from .parse_mistakes import conflict_prefix, prepare_log_msg

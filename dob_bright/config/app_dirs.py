@@ -21,7 +21,7 @@ from gettext import gettext as _
 
 from nark.helpers.app_dirs import NarkAppDirs, ensure_directory_exists
 
-from ..termio import dob_in_user_warning
+from easy_as_pypi_termio.errors import dob_in_user_warning
 
 __all__ = (
     'AppDirs',

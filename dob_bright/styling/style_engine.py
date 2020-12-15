@@ -25,10 +25,11 @@ from prompt_toolkit.layout.containers import Container
 from prompt_toolkit.widgets.base import Label
 from prompt_toolkit.widgets.base import TextArea
 
-from ..config.fileboss import warn_user_config_errors
 # MAYBE/2019-12-02: (lb) Is using normal stdout to print errors okay?
 #                        Or should we use the Carousel (e.g., PPT modal)?
-from ..termio import dob_in_user_warning
+from easy_as_pypi_termio.errors import dob_in_user_warning
+
+from ..config.fileboss import warn_user_config_errors
 
 from .rules_conf import create_style_rules_object
 

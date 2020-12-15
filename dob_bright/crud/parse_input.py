@@ -26,14 +26,9 @@ from datetime import datetime, time, timedelta
 
 from nark.helpers.parsing import parse_factoid
 
-from ..termio import (
-    attr,
-    barf_and_exit,
-    bg,
-    click_echo,
-    echo_block_header,
-    fg
-)
+from easy_as_pypi_termio.echoes import click_echo, echo_block_header
+from easy_as_pypi_termio.errors import barf_and_exit
+from easy_as_pypi_termio.style import attr, bg, fg
 
 from .fact_dressed import FactDressed
 from .fix_times import (

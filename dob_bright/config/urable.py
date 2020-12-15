@@ -19,7 +19,8 @@ import os
 
 from gettext import gettext as _
 
-from ..termio import click_echo, dob_in_user_exit, highlight_value
+from easy_as_pypi_termio.echoes import click_echo, highlight_value
+from easy_as_pypi_termio.errors import dob_in_user_exit
 
 from .fileboss import (
     default_config_path,

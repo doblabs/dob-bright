@@ -21,12 +21,14 @@ from gettext import gettext as _
 
 from config_decorator.config_decorator import ConfigDecorator
 
+from easy_as_pypi_termio.echoes import click_echo, highlight_value
+from easy_as_pypi_termio.errors import dob_in_user_exit
+from easy_as_pypi_termio.style import attr
+
+from ..config.config_table import echo_config_decorator_table
 from ..config.dec_wrap import decorate_and_wrap
 from ..config.fileboss import ensure_file_path_dirred
 from ..crud.interrogate import run_editor_safe
-from ..termio import click_echo, dob_in_user_exit, highlight_value
-from ..termio.config_table import echo_config_decorator_table
-from ..termio.style import attr
 
 from .load_styling import (
     load_style_classes,

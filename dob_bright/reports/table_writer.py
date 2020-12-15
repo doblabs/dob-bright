@@ -17,9 +17,9 @@
 
 """ASCII Table writer output format module."""
 
-from ..termio.ascii_table import generate_table
-
 from nark.reports import ReportWriter
+
+from easy_as_pypi_termio.ascii_table import generate_table
 
 __all__ = (
     'TableWriter',

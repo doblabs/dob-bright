@@ -22,8 +22,9 @@ import re
 
 from gettext import gettext as _
 
+from easy_as_pypi_termio.errors import dob_in_user_warning
+
 from ..crud.enc_actegory_re import RegExpActegory
-from ..termio import dob_in_user_warning
 
 __all__ = (
     'ignore_file_path',

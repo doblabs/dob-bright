@@ -58,6 +58,9 @@ requirements = [
     # Pythonic config @decorator.
     #  https://github.com/hotoffthehamster/config-decorator
     'config-decorator > 2.0.14, < 2.0.16',  # I.e., release 2.0.15, or dev vers after.
+    # Click + ansi_escape_room (color) + convenience.
+    #  https://github.com/tallybark/easy-as-pypi-termio
+    'easy-as-pypi-termio',
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/tallybark/nark
     'nark > 3.2.3, < 3.2.5',  # I.e., release 3.2.4, or whatever dev's running.

@@ -19,11 +19,13 @@ import os
 
 from gettext import gettext as _
 
+from easy_as_pypi_termio.echoes import click_echo, highlight_value
+from easy_as_pypi_termio.errors import dob_in_user_exit
+from easy_as_pypi_termio.style import attr
+
 from ..config.fileboss import ensure_file_path_dirred
 from ..crud.interrogate import run_editor_safe
 from ..reports.render_results import render_results
-from ..termio import click_echo, dob_in_user_exit, highlight_value
-from ..termio.style import attr
 
 from .load_ignore import ignore_file_path, load_no_completion
 

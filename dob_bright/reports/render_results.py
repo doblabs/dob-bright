@@ -25,9 +25,9 @@ from nark.reports.json_writer import JSONWriter
 from nark.reports.tsv_writer import TSVWriter
 from nark.reports.xml_writer import XMLWriter
 
-from ..termio import dob_in_user_exit
-from ..termio.paging import ClickEchoPager
-from ..termio.style import stylize
+from easy_as_pypi_termio.errors import dob_in_user_exit
+from easy_as_pypi_termio.paging import ClickEchoPager
+from easy_as_pypi_termio.style import stylize
 
 from .factoid_writer import FactoidWriter
 from .journal_writer import JournalWriter

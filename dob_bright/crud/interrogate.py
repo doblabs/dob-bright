@@ -23,7 +23,7 @@ from gettext import gettext as _
 
 import editor
 
-from ..termio import dob_in_user_warning
+from easy_as_pypi_termio.errors import dob_in_user_warning
 
 __all__ = (
     'ask_edit_with_editor',

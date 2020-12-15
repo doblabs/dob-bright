@@ -19,7 +19,7 @@
 
 from gettext import gettext as _
 
-from ..termio import attr, bg, fg
+from easy_as_pypi_termio.style import attr, bg, fg
 
 __all__ = (
     'conflict_prefix',

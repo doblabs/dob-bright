@@ -36,13 +36,14 @@ import fauxfactory
 import pytest
 from unittest.mock import MagicMock
 
+from easy_as_pypi_termio.errors import dob_been_warned_reset
+
 from nark.config import decorate_config
 from nark.helpers.app_dirs import ensure_directory_exists
 from nark.items.fact import Fact
 
 from dob_bright.config import app_dirs  # Needs container of AppDirs.
 from dob_bright.controller import Controller
-from dob_bright.termio.errors import dob_been_warned_reset
 
 # Register fixtures: 'fact_factory', 'fact', 'activity', etc.
 # - (lb): Disabled for now, because not used in dob_bright, but if we

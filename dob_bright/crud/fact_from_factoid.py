@@ -21,7 +21,7 @@ from gettext import gettext as _
 
 from nark.helpers.parsing import ParserException
 
-from ..termio import dob_in_user_exit
+from easy_as_pypi_termio.errors import dob_in_user_exit
 
 from .fact_dressed import FactDressed
 from .fix_times import reduce_time_hint

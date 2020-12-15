@@ -28,13 +28,14 @@ from nark.control import NarkControl
 from nark.helpers import logging as logging_helpers
 from nark.items.fact import Fact
 
+from easy_as_pypi_termio.echoes import click_echo, highlight_value
+from easy_as_pypi_termio.errors import dob_in_user_exit, dob_in_user_warning
+from easy_as_pypi_termio.style import disable_colors, enable_colors
+
 from . import __arg0name__
 from . import help_newbs as help_strings
 from .config import ConfigRoot
 from .config.urable import ConfigUrable
-from .termio.echoes import click_echo, highlight_value
-from .termio.errors import dob_in_user_exit, dob_in_user_warning
-from .termio.style import disable_colors, enable_colors
 
 __all__ = (
     'Controller',

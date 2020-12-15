@@ -21,8 +21,9 @@ from gettext import gettext as _
 
 import os
 
+from easy_as_pypi_termio.errors import dob_in_user_warning
+
 from ..config.fileboss import create_configobj
-from ..termio import dob_in_user_warning
 
 from . import load_obj_from_internal, style_conf
 

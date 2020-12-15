@@ -19,7 +19,7 @@
 
 from gettext import gettext as _
 
-from ..termio import dob_in_user_warning
+from easy_as_pypi_termio.errors import dob_in_user_warning
 
 __all__ = (
     'load_obj_from_internal',
