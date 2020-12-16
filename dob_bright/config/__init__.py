@@ -20,7 +20,7 @@ import os
 
 from gettext import gettext as _
 
-from config_decorator import KeyChainedValue
+from easy_as_pypi_apppth import AppDirs
 
 from nark.config import ConfigRoot
 from nark.config.log_levels import (
@@ -29,8 +29,6 @@ from nark.config.log_levels import (
     must_verify_log_level
 )
 from nark.helpers.parsing import FACT_METADATA_SEPARATORS
-
-from .app_dirs import AppDirs
 
 __all__ = (
     'DobConfigurableDev',
@@ -43,15 +41,12 @@ __all__ = (
 )
 
 
-KeyChainedValue._envvar_prefix = 'DOB_'
-
-
 # ***
 # *** Client (dob) Config.
 # ***
 
 def _styling_file_path(basename):
-    dirname = AppDirs.user_config_dir
+    dirname = AppDirs().user_config_dir
     subdir = 'styling'
     # E.g., /home/user/config/.dob/styling/{basename}
     return os.path.join(dirname, subdir, basename)
@@ -239,7 +234,7 @@ class DobConfigurableLog(object):
             # self set to None -- meaning, this return statement technically
             # unreachable. But we'll still keep it, for completeness.
             return ''
-        log_dir = AppDirs.user_log_dir
+        log_dir = AppDirs().user_log_dir
         # Note that self is the root ConfigDecorator, not the DobConfigurableLog.
         log_filename = self['filename']
         return os.path.join(log_dir, log_filename)

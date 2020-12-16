@@ -36,13 +36,14 @@ import fauxfactory
 import pytest
 from unittest.mock import MagicMock
 
+from easy_as_pypi_apppth import app_dirs  # Import module that contains AppDirsWithMkdir (AppDirs).
+from easy_as_pypi_apppth.expand_and_mkdirs import ensure_directory_exists
+
 from easy_as_pypi_termio.errors import dob_been_warned_reset
 
 from nark.config import decorate_config
-from nark.helpers.app_dirs import ensure_directory_exists
 from nark.items.fact import Fact
 
-from dob_bright.config import app_dirs  # Needs container of AppDirs.
 from dob_bright.controller import Controller
 
 # Register fixtures: 'fact_factory', 'fact', 'activity', etc.
@@ -77,23 +78,24 @@ def filepath(tmpdir, filename):
 @pytest.fixture
 def appdirs(mocker, tmpdir):
     """Provide mocked version specific user dirs using a tmpdir."""
-    mock_dirs = mocker.MagicMock()
-    mock_dirs.user_config_dir = ensure_directory_exists(
+    app_dirs_mock = mocker.MagicMock()
+
+    app_dirs_mock.user_config_dir = ensure_directory_exists(
         os.path.join(tmpdir.mkdir('config').strpath, 'dob/'),
     )
-    mock_dirs.user_data_dir = ensure_directory_exists(
+    app_dirs_mock.user_data_dir = ensure_directory_exists(
         os.path.join(tmpdir.mkdir('data').strpath, 'dob/'),
     )
-    mock_dirs.user_cache_dir = ensure_directory_exists(
+    app_dirs_mock.user_cache_dir = ensure_directory_exists(
         os.path.join(tmpdir.mkdir('cache').strpath, 'dob/'),
     )
-    mock_dirs.user_log_dir = ensure_directory_exists(
+    app_dirs_mock.user_log_dir = ensure_directory_exists(
         os.path.join(tmpdir.mkdir('log').strpath, 'dob/'),
     )
 
-    app_dirs.AppDirs = mock_dirs
+    app_dirs.AppDirsWithMkdir = app_dirs_mock
 
-    return mock_dirs
+    return app_dirs_mock
 
 
 # ***
@@ -235,7 +237,7 @@ def config_instance(tmpdir, faker):
     def generate_config(**kwargs):
         cfg_dict = generate_dict(**kwargs)
         # NOPE: You'd overwrite your user's file with the default path:
-        #   from dob_bright.config.fileboss import default_config_path
+        #   from easy_as_pypi_config.fileboss import default_config_path
         #   configfile_path = default_config_path()
         configfile_path = os.path.join(tmpdir, 'dob.conf')
         config = ConfigObj(configfile_path)

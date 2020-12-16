@@ -19,11 +19,10 @@
 
 from gettext import gettext as _
 
+from easy_as_pypi_config.fileboss import default_config_path
+
 from easy_as_pypi_termio.echoes import highlight_value
 from easy_as_pypi_termio.style import attr, bg, fg
-
-from .config.fileboss import default_config_path
-from .config.urable import ConfigUrable
 
 from . import __arg0name__
 
@@ -138,6 +137,8 @@ def NEWBIE_HELP_ONBOARDING(ctx):
 
 
 def NEWBIE_HELP_CREATE_CONFIG(ctx, cfg_path):
+    controller = ctx.obj
+
     _help = _(
         """
         {errcol}ERROR: No config file found at: “{cfg_path}”{reset}
@@ -169,13 +170,15 @@ def NEWBIE_HELP_CREATE_CONFIG(ctx, cfg_path):
         #   but only for white on black terms (based on some setting?).
         cfg_path=cfg_path,
         default_config_path=default_config_path(),
-        envkey=ConfigUrable.DOB_CONFIGFILE_ENVKEY,
+        envkey=controller.DOB_CONFIGFILE_ENVKEY,
         **common_format()
     )
     return _help
 
 
 def NEWBIE_HELP_REPAIR_CONFIG(ctx, cfg_path):
+    controller = ctx.obj
+
     _help = _(
         """
         {errcol}ERROR: Please fix the config file found at: “{cfg_path}”{reset}
@@ -189,7 +192,7 @@ def NEWBIE_HELP_REPAIR_CONFIG(ctx, cfg_path):
     ).strip().format(
         cfg_path=cfg_path,
         default_config_path=default_config_path(),
-        envkey=ConfigUrable.DOB_CONFIGFILE_ENVKEY,
+        envkey=controller.DOB_CONFIGFILE_ENVKEY,
         **common_format()
     )
     return _help

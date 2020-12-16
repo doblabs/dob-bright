@@ -21,17 +21,16 @@ from gettext import gettext as _
 
 from config_decorator.config_decorator import ConfigDecorator
 
+from easy_as_pypi_apppth.exists_or_mkdirs import ensure_file_path_dirred
+
+from easy_as_pypi_config.dec_wrap import decorate_and_wrap
+from easy_as_pypi_config.fileboss import create_configobj, echo_config_obj
+
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import dob_in_user_exit, dob_in_user_warning
 from easy_as_pypi_termio.style import attr
 
 from ..config.config_table import echo_config_decorator_table
-from ..config.dec_wrap import decorate_and_wrap
-from ..config.fileboss import (
-    create_configobj,
-    echo_config_obj,
-    ensure_file_path_dirred
-)
 from ..crud.interrogate import run_editor_safe
 
 from .load_styling import (
@@ -193,10 +192,11 @@ def echo_rules_table(controller, name, output_format):
         condec = ConfigDecorator.create_root_for_section(rule_name, ruleset)
         conf_objs = [condec]
         echo_config_decorator_table(
-            controller,
-            conf_objs,
-            output_format,
+            cfg_decors=conf_objs,
             exclude_section=False,
+            # Passed on to render_results:
+            controller=controller,
+            output_format=output_format,
         )
 
     _echo_rules_table()

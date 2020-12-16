@@ -21,10 +21,10 @@ from gettext import gettext as _
 
 from config_decorator.config_decorator import ConfigDecorator
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_config.dec_wrap import decorate_and_wrap
+from easy_as_pypi_config.fileboss import create_configobj, echo_config_obj
 
-from ..config.dec_wrap import decorate_and_wrap
-from ..config.fileboss import create_configobj, echo_config_obj
+from easy_as_pypi_termio.errors import dob_in_user_warning
 
 from .load_styling import (
     load_style_classes,

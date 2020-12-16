@@ -28,6 +28,8 @@ from nark.control import NarkControl
 from nark.helpers import logging as logging_helpers
 from nark.items.fact import Fact
 
+from easy_as_pypi_config.urable import ConfigUrable
+
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import dob_in_user_exit, dob_in_user_warning
 from easy_as_pypi_termio.style import disable_colors, enable_colors
@@ -35,7 +37,6 @@ from easy_as_pypi_termio.style import disable_colors, enable_colors
 from . import __arg0name__
 from . import help_newbs as help_strings
 from .config import ConfigRoot
-from .config.urable import ConfigUrable
 
 __all__ = (
     'Controller',
@@ -83,22 +84,16 @@ class Controller(NarkControl):
     def sqlite_db_path(self):
         if self.config['db.engine'] == 'sqlite':
             return self.config['db.path']
-        else:
-            # (lb): I don't super-like this. It's a weird side effect.
-            #   And it's knowledgeable about the CLI command API. Meh.
-            dob_in_user_exit(_(
-                'Not a SQLite database. Try `{} store url`'
-            ).format(self.arg0name))
+
+        # (lb): I don't super-like this. It's a weird side effect.
+        #   And it's knowledgeable about the CLI command API. Meh.
+        dob_in_user_exit(_(
+            'Not a SQLite database. Try `{} store url`'
+        ).format(self.arg0name))
 
     @property
     def is_germinated(self):
-        if (
-            (
-                self.configurable.cfgfile_exists
-                and self.configurable.cfgfile_sanity
-            )
-            and self.store_exists
-        ):
+        if self.looks_like_config and self.store_exists:
             return True
         return False
 
@@ -136,7 +131,7 @@ class Controller(NarkControl):
         def berate_user_files_unwell():
             if not self.configurable.cfgfile_exists:
                 oblige_user_create_config()
-            if not self.configurable.cfgfile_sanity:
+            elif not self.looks_like_config:
                 oblige_user_repair_config()
             if not self.store_exists:
                 oblige_user_create_store()
@@ -198,6 +193,31 @@ class Controller(NarkControl):
     def create_config(self, force):
         self.configurable.create_config(force=force)
         self.wire_configience()
+
+    @property
+    def looks_like_config(self):
+        def _looks_like_config():
+            if not self.configurable or not self.configurable.cfgfile_exists:
+                return False
+
+            return cfgfile_looks_like_config()
+
+        def cfgfile_looks_like_config():
+            # What's a reasonable expectation to see if the config file
+            # legitimately exists? Check that the file exists? Or parse it
+            # and verify one or more settings therein? Let's do the latter,
+            # seems more robust. We can check the `store` settings, seems
+            # like the most obvious setting to check. In any case, we do
+            # this just to tell the user if they need to create a config;
+            # the app will run just fine without a config file, because
+            # defaults!
+            try:
+                self.configurable.config_root.asobj.db.orm.value_from_config
+                return True
+            except AttributeError:
+                return False
+
+        return _looks_like_config()
 
     def round_out_config(self):
         self.configurable.round_out_config()

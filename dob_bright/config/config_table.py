@@ -15,9 +15,11 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
-from gettext import gettext as _
+from easy_as_pypi_config.echo_cfg import (
+    echo_config_decorator_table as _echo_config_decorator_table
+)
 
-from dob_bright.reports.render_results import render_results
+from ..reports.render_results import render_results
 
 __all__ = (
     'echo_config_decorator_table',
@@ -25,62 +27,22 @@ __all__ = (
 
 
 def echo_config_decorator_table(
-    controller,
     cfg_decors,
-    output_format='table',
-    table_type='texttable',
     exclude_section=False,
     include_hidden=False,
+    controller=None,
+    output_format='table',
+    table_type='texttable',
+    **kwargs,
 ):
-    sec_key_vals = []
-
-    def _echo_config_decorator_table():
-        for condec in cfg_decors:
-            condec.walk(visitor)
-        echo_table()
-
-    def visitor(condec, keyval):
-        # MAYBE: Option to show hidden config.
-        # MAYBE: Option to show generated config.
-        if keyval.hidden and not include_hidden:
-            return
-
-        val_def = str(keyval.value)
-        if val_def != str(keyval.default):
-            val_def += val_def and ' ' or ''
-            val_def += encode_default(str(keyval.default))
-        val_row = [
-            condec.section_path(sep='.')
-        ] if not exclude_section else []
-        val_row += [
-            keyval.name,
-            val_def,
-            keyval.doc,
-        ]
-        sec_key_vals.append(val_row)
-
-    def echo_table():
-        headers = [
-            _("Section")
-        ] if not exclude_section else []
-        headers += [
-            _("Name"),
-            _("Value {}").format(encode_default(_("Default"))),
-            _("Help"),
-        ]
-        render_results(
-            controller,
-            results=sec_key_vals,
-            headers=headers,
-            output_format=output_format,
-            table_type=table_type,
-        )
-
-    def encode_default(text):
-        # 2019-11-30: (lb): I switched from [square brackets] to <angle brackets>
-        # to avoid JSON-encoded lists being [[double bracketed]] (which triggered
-        # extra mental cycles upon sight).
-        return '<{}>'.format(text)
-
-    _echo_config_decorator_table()
+    _echo_config_decorator_table(
+        cfg_decors=cfg_decors,
+        exclude_section=exclude_section,
+        include_hidden=include_hidden,
+        render_results=render_results,
+        controller=controller,
+        output_format=output_format,
+        table_type=table_type,
+        **kwargs,
+    )
 

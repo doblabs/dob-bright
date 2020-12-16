@@ -25,11 +25,11 @@ from prompt_toolkit.layout.containers import Container
 from prompt_toolkit.widgets.base import Label
 from prompt_toolkit.widgets.base import TextArea
 
+from easy_as_pypi_config.fileboss import warn_user_config_errors
+
 # MAYBE/2019-12-02: (lb) Is using normal stdout to print errors okay?
 #                        Or should we use the Carousel (e.g., PPT modal)?
 from easy_as_pypi_termio.errors import dob_in_user_warning
-
-from ..config.fileboss import warn_user_config_errors
 
 from .rules_conf import create_style_rules_object
 
@@ -82,7 +82,7 @@ class StyleEngine(object):
 
         def warn_if_smelly_config(unconsumed, errs):
             basename = os.path.basename(rules_confobj.filename)
-            warn_user_config_errors(unconsumed, errs, which=basename)
+            warn_user_config_errors(errs, which=basename)
 
         return _consume_style_rules_conf()
 

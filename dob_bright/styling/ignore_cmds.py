@@ -19,11 +19,12 @@ import os
 
 from gettext import gettext as _
 
+from easy_as_pypi_apppth.exists_or_mkdirs import ensure_file_path_dirred
+
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import dob_in_user_exit
 from easy_as_pypi_termio.style import attr
 
-from ..config.fileboss import ensure_file_path_dirred
 from ..crud.interrogate import run_editor_safe
 from ..reports.render_results import render_results
 

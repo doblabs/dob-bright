@@ -18,37 +18,14 @@ from setuptools import find_packages, setup
 
 # *** Package requirements.
 
-# FIXME/2020-01-31: Cull this (and other split-packages') requirements.
-
 requirements = [
-    # Platform-specific directory magic.
-    #  https://github.com/ActiveState/appdirs
-    'appdirs >= 1.4.3, < 2',
-    # Enable Click color support (we don't use colorama directly, but it does),
-    #  "on Windows, this ... is only available if colorama is installed".
-    #  https://click.palletsprojects.com/en/5.x/utils/#ansi-colors
-    #  https://pypi.org/project/colorama/
-    'colorama >= 0.4.3, < 1',
-    # INI/config parser, even better (preserves comments and ordering).
-    #  https://github.com/DiffSK/configobj
-    #  https://configobj.readthedocs.io/en/latest/
-    'configobj >= 5.0.6, < 6',
-    # Vocabulary word pluralizer.
-    #  https://github.com/ixmatus/inflector
-    'Inflector >= 3.0.1, < 4',
-    # https://github.com/mnmelo/lazy_import
-    'lazy_import >= 0.2.2, < 1',
+    # Just Another EDITOR package.
+    #  https://github.com/fmoo/python-editor
+    # - Imports as `editor`.
+    'python-editor >= 1.0.4, < 2',
 
     # *** HOTH packages.
 
-    # "Very simple Python library for color and formatting in terminal."
-    # Forked (for italic "support") to:
-    #  https://github.com/hotoffthehamster/ansi-escape-room
-    # Forked from:
-    #  https://gitlab.com/dslackw/colored
-    # See wrapper file:
-    #  dob_bright/termio/style.py
-    'ansi-escape-room == 1.4.2',
     # (lb): Click may be the best optparser of any language I've used.
     #  https://github.com/pallets/click
     #    'click',
@@ -58,12 +35,19 @@ requirements = [
     # Pythonic config @decorator.
     #  https://github.com/hotoffthehamster/config-decorator
     'config-decorator > 2.0.14, < 2.0.16',  # I.e., release 2.0.15, or dev vers after.
+    # ActiveState/appdirs + Singleton (app-wide access w/out appname) + `mkdir -p`.
+    #  https://github.com/tallybark/easy-as-pypi-apppth#🛣
+    'easy-as-pypi-apppth',
+    # configobj + config-decorator helper.
+    #  https://github.com/tallybark/easy-as-pypi-config
+    'easy-as-pypi-config',
     # Get-package-or-Git-version helper.
     #  https://github.com/tallybark/easy-as-pypi-getver
     'easy-as-pypi-getver',
     # Click + ansi_escape_room (color) + convenience.
     #  https://github.com/tallybark/easy-as-pypi-termio
     'easy-as-pypi-termio',
+
     # The heart of Hamster. (Ye olde `hamster-lib`).
     #  https://github.com/tallybark/nark
     'nark > 3.2.3, < 3.2.5',  # I.e., release 3.2.4, or whatever dev's running.
