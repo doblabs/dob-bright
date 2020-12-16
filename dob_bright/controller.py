@@ -121,20 +121,34 @@ class Controller(NarkControl):
             if not self.configurable.cfgfile_exists and not self.store_exists:
                 help_newbie_onboard()
             else:
-                berate_user_files_unwell()
+                alert_user_if_config_files_unwell_or_store_absent()
             sys.exit(1)
 
         def help_newbie_onboard():
             message = help_strings.NEWBIE_HELP_ONBOARDING(self.ctx)
             click_echo(inspect.cleandoc(message), err=True)
 
-        def berate_user_files_unwell():
+        def alert_user_if_config_file_unwell_or_store_absent():
+            self.alert_user_if_config_file_unwell()
+            if not self.store_exists:
+                oblige_user_create_store()
+
+        def oblige_user_create_store():
+            message = help_strings.NEWBIE_HELP_CREATE_STORE(
+                self.ctx,
+                db_path=self.config['db.path'],
+                val_source=self.config.asobj.db.path.source,
+            )
+            click_echo(inspect.cleandoc(message), err=True)
+
+        _insist_germinated()
+
+    def alert_user_if_config_file_unwell(self):
+        def _alert_user_if_config_file_unwell():
             if not self.configurable.cfgfile_exists:
                 oblige_user_create_config()
             elif not self.looks_like_config:
                 oblige_user_repair_config()
-            if not self.store_exists:
-                oblige_user_create_store()
 
         def oblige_user_create_config():
             cfg_path = self.configurable.config_path
@@ -146,15 +160,7 @@ class Controller(NarkControl):
             message = help_strings.NEWBIE_HELP_REPAIR_CONFIG(self.ctx, cfg_path)
             click_echo(inspect.cleandoc(message), err=True)
 
-        def oblige_user_create_store():
-            message = help_strings.NEWBIE_HELP_CREATE_STORE(
-                self.ctx,
-                db_path=self.config['db.path'],
-                val_source=self.config.asobj.db.path.source,
-            )
-            click_echo(inspect.cleandoc(message), err=True)
-
-        _insist_germinated()
+        _alert_user_if_config_file_unwell()
 
     # ***
 
