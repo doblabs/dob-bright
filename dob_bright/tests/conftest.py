@@ -430,7 +430,7 @@ def test_fact_cls_ro():
     return Fact
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def controller(config_root, mocker, test_fact_cls):
     """Provide a pseudo controller instance."""
     controller = prepare_controller(config_root=config_root)
@@ -451,7 +451,7 @@ def _controller_with_logging(config_root, magic_mock, test_fact_cls):
     return controller
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def controller_with_logging(config_root, mocker, test_fact_cls):
     controller = _controller_with_logging(
         config_root, mocker.MagicMock, test_fact_cls,
@@ -460,7 +460,7 @@ def controller_with_logging(config_root, mocker, test_fact_cls):
     controller.store.cleanup()
 
 
-@pytest.yield_fixture(scope="session")
+@pytest.fixture(scope="session")
 def controller_with_logging_ro(config_root_ro, test_fact_cls_ro):
     controller = _controller_with_logging(
         config_root_ro, MagicMock, test_fact_cls_ro,
