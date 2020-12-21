@@ -15,23 +15,19 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
-import os
-
 from gettext import gettext as _
 
 from config_decorator.config_decorator import ConfigDecorator
 
-from easy_as_pypi_apppth.exists_or_mkdirs import ensure_file_path_dirred
-
 from easy_as_pypi_config.dec_wrap import decorate_and_wrap
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
-from easy_as_pypi_termio.errors import dob_in_user_exit
 from easy_as_pypi_termio.style import attr
 
 from ..config.config_table import echo_config_decorator_table
 from ..crud.interrogate import run_editor_safe
 
+from .create_conf import create_basic_conf
 from .load_styling import (
     load_style_classes,
     load_styles_conf,
@@ -60,24 +56,13 @@ def echo_styles_conf(controller, name, internal=False, complete=False):
 # *** [CREATE] STYLES
 
 def create_styles_conf(controller, name, force):
-
     def _create_styles_conf():
         # SIMILAR funcs: See also: ConfigUrable.create_config and
         #   reset_config; and styles_cmds.create_styles_conf;
         #                  and rules_cmds.create_rules_conf.
+        object_name = _('Styles file')
         styles_path = resolve_path_styles(controller.config)
-        exit_if_exists_unless_force(styles_path, force)
-        ensure_file_path_dirred(styles_path)
-        create_styles_file(styles_path)
-        echo_path_created(styles_path)
-
-    def exit_if_exists_unless_force(styles_path, force):
-        path_exists = os.path.exists(styles_path)
-        if path_exists and not force:
-            exit_path_exists(styles_path)
-
-    def exit_path_exists(styles_path):
-        dob_in_user_exit(_('Styles file already at {}').format(styles_path))
+        create_basic_conf(styles_path, object_name, create_styles_file, force)
 
     def create_styles_file(styles_path):
         # Load specified style, or DEFAULT_STYLE if not specified.
@@ -86,13 +71,6 @@ def create_styles_conf(controller, name, force):
         config_obj = decorate_and_wrap(style_name, style_classes, complete=True)
         config_obj.filename = styles_path
         config_obj.write()
-
-    def echo_path_created(styles_path):
-        click_echo(
-            _('Initialized basic styles file at {}').format(
-                highlight_value(styles_path),
-            )
-        )
 
     _create_styles_conf()
 

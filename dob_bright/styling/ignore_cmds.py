@@ -15,11 +15,7 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
-import os
-
 from gettext import gettext as _
-
-from easy_as_pypi_apppth.exists_or_mkdirs import ensure_file_path_dirred
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import dob_in_user_exit
@@ -28,6 +24,7 @@ from easy_as_pypi_termio.style import attr
 from ..crud.interrogate import run_editor_safe
 from ..reports.render_results import render_results
 
+from .create_conf import create_basic_conf
 from .load_ignore import ignore_file_path, load_no_completion
 
 __all__ = (
@@ -77,35 +74,17 @@ BASIC_IGNORE_FILE = _(
 
 
 def create_ignore_conf(controller, force):
-
     def _create_ignore_conf():
         # SIMILAR funcs: See also: ConfigUrable.create_config and
         #   reset_config; and styles_cmds.create_styles_conf;
         #                  and rules_cmds.create_rules_conf.
+        object_name = _('Ignore file')
         ignore_path = ignore_file_path(controller.config)
-        exit_if_exists_unless_force(ignore_path, force)
-        ensure_file_path_dirred(ignore_path)
-        create_ignore_file(ignore_path)
-        echo_path_created(ignore_path)
-
-    def exit_if_exists_unless_force(ignore_path, force):
-        path_exists = os.path.exists(ignore_path)
-        if path_exists and not force:
-            exit_path_exists(ignore_path)
-
-    def exit_path_exists(ignore_path):
-        dob_in_user_exit(_('Ignore file already at {}').format(ignore_path))
+        create_basic_conf(ignore_path, object_name, create_ignore_file, force)
 
     def create_ignore_file(ignore_path):
         with open(ignore_path, 'w') as ignore_f:
             ignore_f.write(BASIC_IGNORE_FILE)
-
-    def echo_path_created(ignore_path):
-        click_echo(
-            _('Initialized basic ignore file at {}').format(
-                highlight_value(ignore_path),
-            )
-        )
 
     _create_ignore_conf()
 

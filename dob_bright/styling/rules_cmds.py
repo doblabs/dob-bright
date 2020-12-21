@@ -15,13 +15,9 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
-import os
-
 from gettext import gettext as _
 
 from config_decorator.config_decorator import ConfigDecorator
-
-from easy_as_pypi_apppth.exists_or_mkdirs import ensure_file_path_dirred
 
 from easy_as_pypi_config.dec_wrap import decorate_and_wrap
 from easy_as_pypi_config.fileboss import create_configobj, echo_config_obj
@@ -33,6 +29,7 @@ from easy_as_pypi_termio.style import attr
 from ..config.config_table import echo_config_decorator_table
 from ..crud.interrogate import run_editor_safe
 
+from .create_conf import create_basic_conf
 from .load_styling import (
     load_rules_conf,
     load_style_rules,
@@ -101,24 +98,10 @@ def echo_rules_conf(controller, rule_name, complete=False):
 # *** [CREATE] RULES
 
 def create_rules_conf(controller, force):
-
     def _create_rules_conf():
-        # SIMILAR funcs: See also: ConfigUrable.create_config and
-        #   reset_config; and styles_cmds.create_styles_conf;
-        #                 and ignore_cmds.create_rules_conf.
+        object_name = _('Rules file')
         rules_path = resolve_path_rules(controller.config)
-        exit_if_exists_unless_force(rules_path, force)
-        ensure_file_path_dirred(rules_path)
-        create_rules_file(rules_path)
-        echo_path_created(rules_path)
-
-    def exit_if_exists_unless_force(rules_path, force):
-        path_exists = os.path.exists(rules_path)
-        if path_exists and not force:
-            exit_path_exists(rules_path)
-
-    def exit_path_exists(rules_path):
-        dob_in_user_exit(_('Rules file already at {}').format(rules_path))
+        create_basic_conf(rules_path, object_name, create_rules_file, force)
 
     def create_rules_file(rules_path):
         # Load specified style, or DEFAULT_STYLE if not specified.
@@ -127,13 +110,6 @@ def create_rules_conf(controller, force):
         config_obj = decorate_and_wrap(rule_name, ruleset, complete=True)
         config_obj.filename = rules_path
         config_obj.write()
-
-    def echo_path_created(rules_path):
-        click_echo(
-            _('Initialized basic rules file at {}').format(
-                highlight_value(rules_path),
-            )
-        )
 
     _create_rules_conf()
 
