@@ -23,7 +23,7 @@ from easy_as_pypi_config.dec_wrap import decorate_and_wrap
 from easy_as_pypi_config.fileboss import create_configobj, echo_config_obj
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
-from easy_as_pypi_termio.errors import dob_in_user_exit, echo_warning
+from easy_as_pypi_termio.errors import echo_warning, exit_warning
 from easy_as_pypi_termio.style import attr
 
 from ..config.config_table import echo_config_decorator_table
@@ -162,7 +162,7 @@ def echo_rules_table(controller, name, output_format):
         return name, ruleset
 
     def exit_rule_unknown(rule_name):
-        dob_in_user_exit(_('No rule named “{}”').format(rule_name))
+        exit_warning(_('No rule named “{}”').format(rule_name))
 
     def print_ruleset_table(rule_name, ruleset):
         condec = ConfigDecorator.create_root_for_section(rule_name, ruleset)

@@ -24,7 +24,7 @@ import os
 from easy_as_pypi_apppth.exists_or_mkdirs import must_ensure_file_path_dirred
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
-from easy_as_pypi_termio.errors import dob_in_user_exit
+from easy_as_pypi_termio.errors import exit_warning
 
 __all__ = (
     'create_basic_conf',
@@ -47,7 +47,7 @@ def create_basic_conf(object_path, object_name, create_object_file_f, force):
             exit_path_exists(object_path)
 
     def exit_path_exists(object_path):
-        dob_in_user_exit(_('{} already at {}').format(object_name, object_path))
+        exit_warning(_('{} already at {}').format(object_name, object_path))
 
     def must_ensure_file_path_dirred_or_exit(object_path):
         try:
@@ -56,7 +56,7 @@ def create_basic_conf(object_path, object_name, create_object_file_f, force):
             msg = _('Cannot create path to {} at {}: {}').format(
                 object_name, object_path, str(err),
             )
-            dob_in_user_exit(msg)
+            exit_warning(msg)
 
     def echo_path_created(object_path):
         click_echo(

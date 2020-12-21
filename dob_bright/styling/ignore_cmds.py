@@ -18,7 +18,7 @@
 from gettext import gettext as _
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
-from easy_as_pypi_termio.errors import dob_in_user_exit
+from easy_as_pypi_termio.errors import exit_warning
 from easy_as_pypi_termio.style import attr
 
 from ..crud.interrogate import run_editor_safe
@@ -132,7 +132,7 @@ def echo_ignore_table(controller, name, output_format):
         return section
 
     def exit_section_unknown(section_name):
-        dob_in_user_exit(_('No section named “{}”').format(section_name))
+        exit_warning(_('No section named “{}”').format(section_name))
 
     def print_ignore_table(sections):
         sec_key_vals = []

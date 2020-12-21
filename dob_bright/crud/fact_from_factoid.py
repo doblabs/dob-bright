@@ -21,7 +21,7 @@ from gettext import gettext as _
 
 from nark.helpers.parsing import ParserException
 
-from easy_as_pypi_termio.errors import dob_in_user_exit
+from easy_as_pypi_termio.errors import exit_warning
 
 from .fact_dressed import FactDressed
 from .fix_times import reduce_time_hint
@@ -53,7 +53,7 @@ def must_create_fact_from_factoid(
         except ParserException as err:
             msg = _('Oops! {}').format(err)
             controller.client_logger.error(msg)
-            dob_in_user_exit(msg)
+            exit_warning(msg)
         # This runs for verify_after, not verify_none/"blank time".
         fact_set_start_time_after_hack(fact, time_hint=use_hint)
         return fact
@@ -69,7 +69,7 @@ def must_create_fact_from_factoid(
                 "The 'separators' config value is not valid JSON: {}"
             ).format(err)
             controller.client_logger.error(msg)
-            dob_in_user_exit(msg)
+            exit_warning(msg)
         return separators
 
     # FIXME/DRY: See create.py/transcode.py (other places that use "+0").

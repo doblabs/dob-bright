@@ -31,7 +31,7 @@ from nark.items.fact import Fact
 from easy_as_pypi_config.urable import ConfigUrable
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
-from easy_as_pypi_termio.errors import dob_in_user_exit, echo_warning
+from easy_as_pypi_termio.errors import echo_warning, exit_warning
 from easy_as_pypi_termio.style import disable_colors, enable_colors
 
 from . import __arg0name__
@@ -87,7 +87,7 @@ class Controller(NarkControl):
 
         # (lb): I don't super-like this. It's a weird side effect.
         #   And it's knowledgeable about the CLI command API. Meh.
-        dob_in_user_exit(_(
+        exit_warning(_(
             'Not a SQLite database. Try `{} store url`'
         ).format(self.arg0name))
 
@@ -271,7 +271,7 @@ class Controller(NarkControl):
                 self._reset_data_store()
                 unlinked_db = True
             else:
-                dob_in_user_exit(self.data_store_exists_at)
+                exit_warning(self.data_store_exists_at)
         self._standup_and_version_store(fact_cls)
         if unlinked_db:
             self._announce_recreated_store()
@@ -310,7 +310,7 @@ class Controller(NarkControl):
                 self._standup_and_version_store(fact_cls)
 
         def exit_already_germinated():
-            dob_in_user_exit(_(
+            exit_warning(_(
                 'Dob is already setup. Run `{} details` for info.'
             ).format(self.arg0name))
 
@@ -327,7 +327,7 @@ class Controller(NarkControl):
     def _reset_data_store(self):
         if self.config['db.engine'] != 'sqlite':
             # raise NotImplementedError
-            dob_in_user_exit(_(
+            exit_warning(_(
                 'FIXME: Reset non-SQLite data store not supported (yet).'
             ))
         else:
@@ -338,11 +338,11 @@ class Controller(NarkControl):
         if not os.path.exists(db_path):
             return
         if not os.path.isfile(db_path):
-            dob_in_user_exit(_(
+            exit_warning(_(
                 'Data store exists but is not a file, so not overwriting {}'
             ).format(db_path))
         if not force:
-            dob_in_user_exit(self.data_store_exists_at)
+            exit_warning(self.data_store_exists_at)
         os.unlink(db_path)
 
     def _announce_recreated_store(self):

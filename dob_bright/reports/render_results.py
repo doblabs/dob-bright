@@ -25,7 +25,7 @@ from nark.reports.json_writer import JSONWriter
 from nark.reports.tsv_writer import TSVWriter
 from nark.reports.xml_writer import XMLWriter
 
-from easy_as_pypi_termio.errors import dob_in_user_exit
+from easy_as_pypi_termio.errors import exit_warning
 from easy_as_pypi_termio.paging import ClickEchoPager
 from easy_as_pypi_termio.style import stylize
 
@@ -92,7 +92,7 @@ def render_results(
             )
         except Exception as err:
             # I.e., FileNotFoundError, or PermissionError.
-            dob_in_user_exit(str(err))
+            exit_warning(str(err))
 
     def fetch_report_writer_cls(output_format, table_type):
         writer = None
