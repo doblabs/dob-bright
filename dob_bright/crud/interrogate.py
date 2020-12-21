@@ -23,7 +23,7 @@ from gettext import gettext as _
 
 import editor
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 
 __all__ = (
     'ask_edit_with_editor',
@@ -91,7 +91,7 @@ def run_editor_safe(filename, contents=None):
             return run_editor()
         except Exception as err:
             msg = _('Unable to run $EDITOR: {}').format(str(err))
-            dob_in_user_warning(msg)
+            echo_warning(msg)
             return ''
 
     def run_editor():

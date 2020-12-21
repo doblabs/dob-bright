@@ -29,7 +29,7 @@ from easy_as_pypi_config.fileboss import warn_user_config_errors
 
 # MAYBE/2019-12-02: (lb) Is using normal stdout to print errors okay?
 #                        Or should we use the Carousel (e.g., PPT modal)?
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 
 from .rules_conf import create_style_rules_object
 
@@ -265,7 +265,7 @@ class StyleEngine(object):
                 # MAYBE/2019-12-02: (lb): Show errors in Carousel?
                 # - Also one of few places where traverser imports ...helpers
                 #   (and I want to make traverser less dob-dependent (coupled)).
-                dob_in_user_warning(msg)
+                echo_warning(msg)
                 # Such that we never do this error dance again!
                 ruleset['__eval__'] = None
                 return False

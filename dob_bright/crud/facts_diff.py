@@ -22,7 +22,7 @@ import click_hotoffthehamster as click
 from nark.helpers.format_text import format_value_truncate
 from nark.helpers.objects import resolve_attr_or_method
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 from easy_as_pypi_termio.style import stylize, verify_colors_attrs
 
 __all__ = (
@@ -262,7 +262,7 @@ class FactsDiff(object):
             errs = ', '.join(verify_colors_attrs(*styles))
             if errs:
                 emsg = _('Unknown colors or attrs for “{}”: {}').format(part, errs)
-                dob_in_user_warning(emsg)
+                echo_warning(emsg)
         # Nonetheless, can still use even if some/all unknown colors/attrs.
         cls.FACTS_DIFF_STYLE = facts_diff_style or {}
 

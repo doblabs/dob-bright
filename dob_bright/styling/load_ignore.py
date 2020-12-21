@@ -22,7 +22,7 @@ import re
 
 from gettext import gettext as _
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 
 from ..crud.enc_actegory_re import RegExpActegory
 
@@ -111,7 +111,7 @@ def load_no_completion(controller):
             re_act, re_cat, re_tag = re_compiled_user_ignores()
         except Exception as err:
             # FIXME/2019-11-30: (lb): Better error message.
-            dob_in_user_warning(str(err))
+            echo_warning(str(err))
             re_act, re_cat, re_tag = nothing_matches
         no_completions = NoComplete(re_act, re_cat, re_tag)
         no_completions.raw = {
@@ -186,7 +186,7 @@ def load_no_completion(controller):
         else:
             # Haven't seen first section yet!
             # FIXME/2019-11-30: (lb): Better error message.
-            dob_in_user_warning(_(
+            echo_warning(_(
                 'Cannot discern no-completion rule seen before first section: ‘{}’'
             ).format(rule))
 

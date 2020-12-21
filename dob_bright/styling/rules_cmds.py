@@ -27,7 +27,7 @@ from easy_as_pypi_config.dec_wrap import decorate_and_wrap
 from easy_as_pypi_config.fileboss import create_configobj, echo_config_obj
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
-from easy_as_pypi_termio.errors import dob_in_user_exit, dob_in_user_warning
+from easy_as_pypi_termio.errors import dob_in_user_exit, echo_warning
 from easy_as_pypi_termio.style import attr
 
 from ..config.config_table import echo_config_decorator_table
@@ -83,14 +83,14 @@ def echo_rules_conf(controller, rule_name, complete=False):
 
     def echo_error_no_rules_conf():
         msg = _("No rules file at: {0}").format(resolve_path_rules(config))
-        dob_in_user_warning(msg)
+        echo_warning(msg)
         return None
 
     def echo_error_no_rules_section(rule_name):
         msg = _("No matching section “{0}” found in rules file at: {1}").format(
             rule_name, resolve_path_rules(config),
         )
-        dob_in_user_warning(msg)
+        echo_warning(msg)
         return None
 
     # ***

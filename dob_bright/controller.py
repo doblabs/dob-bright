@@ -31,7 +31,7 @@ from nark.items.fact import Fact
 from easy_as_pypi_config.urable import ConfigUrable
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
-from easy_as_pypi_termio.errors import dob_in_user_exit, dob_in_user_warning
+from easy_as_pypi_termio.errors import dob_in_user_exit, echo_warning
 from easy_as_pypi_termio.style import disable_colors, enable_colors
 
 from . import __arg0name__
@@ -532,7 +532,7 @@ class Controller(NarkControl):
             return self.facts.find_latest_fact(restrict=restrict)
         except Exception as err:
             # (lb): Unexpected! This could mean more than one ongoing Fact found!
-            dob_in_user_warning(str(err))
+            echo_warning(str(err))
 
     def find_oldest_fact(self):
         return self.facts.find_oldest_fact()

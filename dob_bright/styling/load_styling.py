@@ -23,7 +23,7 @@ import os
 
 from easy_as_pypi_config.fileboss import create_configobj
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 
 from . import load_obj_from_internal, style_conf
 
@@ -94,7 +94,7 @@ def load_style_classes(controller, style_name='', skip_default=False):
             msg = _("Failed to load style named “{0}”: {1}").format(
                 named_style, str(err),
             )
-            dob_in_user_warning(msg)
+            echo_warning(msg)
 
     def load_internal_style(named_style):
         # HARDCODED/DEFAULT: style_classes default: 'default' (Ha!).
@@ -178,7 +178,7 @@ def load_style_rules(controller):
                 msg = _("compile() failed on 'eval' from “{0}” in “{1}”: {2}").format(
                     section, rules_path, str(err),
                 )
-                dob_in_user_warning(msg)
+                echo_warning(msg)
 
     # ***
 

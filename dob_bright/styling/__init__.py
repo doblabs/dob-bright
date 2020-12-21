@@ -19,7 +19,7 @@
 
 from gettext import gettext as _
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 
 __all__ = (
     'load_obj_from_internal',
@@ -57,7 +57,7 @@ def load_obj_from_internal(
         msg = _('Nothing matches “{0}”, from config setting “{1}”, in “{2}”.').format(
             obj_name, config_key, internal.__name__,
         )
-        dob_in_user_warning(msg)  # Also blather to stdout.
+        echo_warning(msg)  # Also blather to stdout.
 
     return _load_obj_from_internal()
 

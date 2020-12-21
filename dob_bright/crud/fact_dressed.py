@@ -24,7 +24,7 @@ from collections import namedtuple
 from nark.items.activity import Activity
 from nark.items.fact import Fact
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 from easy_as_pypi_termio.style import stylize, set_coloring, verify_colors_attrs
 
 from ..styling.class_namilize import namilize
@@ -124,7 +124,7 @@ class FactDressed(Fact):
             errs = ', '.join(verify_colors_attrs(*styles))
             if errs:
                 emsg = _('Unknown colors or attrs for “{}”: {}').format(part, errs)
-                dob_in_user_warning(emsg)
+                echo_warning(emsg)
         # Nonetheless, can still use even if some/all unknown colors/attrs.
         cls.FACTOID_STYLE = factoid_style or {}
 

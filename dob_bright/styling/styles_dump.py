@@ -24,7 +24,7 @@ from config_decorator.config_decorator import ConfigDecorator
 from easy_as_pypi_config.dec_wrap import decorate_and_wrap
 from easy_as_pypi_config.fileboss import create_configobj, echo_config_obj
 
-from easy_as_pypi_termio.errors import dob_in_user_warning
+from easy_as_pypi_termio.errors import echo_warning
 
 from .load_styling import (
     load_style_classes,
@@ -76,14 +76,14 @@ def echo_styles_conf(controller, style_name='', internal=False, complete=False):
 
     def echo_error_no_styles_conf():
         msg = _("No styles file at: {0}").format(resolve_path_styles(config))
-        dob_in_user_warning(msg)
+        echo_warning(msg)
         return None
 
     def echo_error_no_styles_section():
         msg = _("No matching section “{0}” found in styles file at: {1}").format(
             style_name, resolve_path_styles(config),
         )
-        dob_in_user_warning(msg)
+        echo_warning(msg)
         return None
 
     # ***
