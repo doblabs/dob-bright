@@ -27,7 +27,7 @@ from datetime import datetime, time, timedelta
 from nark.helpers.parsing import parse_factoid
 
 from easy_as_pypi_termio.echoes import click_echo, echo_block_header
-from easy_as_pypi_termio.errors import barf_and_exit
+from easy_as_pypi_termio.errors import exit_warning_crude
 from easy_as_pypi_termio.style import attr, bg, fg
 
 from .fact_dressed import FactDressed
@@ -139,7 +139,7 @@ def parse_input(controller, file_in=None, progress=None):
             unprocessed_facts.append((current_fact_dict, accumulated_fact,))
         else:
             msg = _('What is this, an empty file?')
-            barf_and_exit(msg)
+            exit_warning_crude(msg)
 
         return unprocessed_facts
 
@@ -192,7 +192,7 @@ def parse_input(controller, file_in=None, progress=None):
                     attr('reset'),
                 )
             )
-            barf_and_exit(msg)
+            exit_warning_crude(msg)
 
     # FIXME/2019-01-21: Document all the different usage, both in test, and README.
     # E.g., "then: I did this" should be same as "at +0: I did this"
@@ -504,7 +504,7 @@ def parse_input(controller, file_in=None, progress=None):
             'Please fix your import data and try again.'
             ' Scroll up for details.'
         ))
-        barf_and_exit(msg)
+        exit_warning_crude(msg)
 
     # ***
 
@@ -682,7 +682,7 @@ def parse_input(controller, file_in=None, progress=None):
             'One or more new Facts would conflict with existing Facts.'
             ' This Is Not Allowed'
         )
-        barf_and_exit(msg)
+        exit_warning_crude(msg)
 
     def echo_saved_fact_conflict(fact, edited_fact, original):
         echo_block_header(_('Saved Fact Datetime Conflict!'))

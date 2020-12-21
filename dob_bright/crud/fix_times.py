@@ -39,7 +39,7 @@ from nark.helpers.facts_fit import antecedent_fact, subsequent_fact
 from nark.helpers.parse_time import parse_clock_time, parse_relative_minutes
 
 from easy_as_pypi_termio.echoes import click_echo, echo_block_header
-from easy_as_pypi_termio.errors import barf_and_exit
+from easy_as_pypi_termio.errors import exit_warning_crude
 
 from .fact_dressed import FactDressed
 from .parse_mistakes import conflict_prefix, prepare_log_msg
@@ -723,7 +723,7 @@ def must_complete_times(
             '\nScroll up for details.'
         )
         crude = len(new_facts) > 1
-        barf_and_exit(msg, crude=crude)
+        exit_warning_crude(msg, crude=crude)
 
     return _must_complete_times()
 
