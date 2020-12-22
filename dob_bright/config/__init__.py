@@ -46,6 +46,8 @@ __all__ = (
 # ***
 
 def _styling_file_path(basename):
+    if not AppDirs.is_ready:
+        return ''
     dirname = AppDirs().user_config_dir
     subdir = 'styling'
     # E.g., /home/user/config/.dob/styling/{basename}
