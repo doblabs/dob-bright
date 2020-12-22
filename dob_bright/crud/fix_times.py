@@ -323,7 +323,7 @@ def must_complete_times(
             cull_metaless_momentaneous(new_facts, conflicts)
 
         # One final start < end < start ... check.
-        verify_datetimes_sanity(new_facts, ante_fact, seqt_fact, conflicts)
+        validate_datetimes(new_facts, ante_fact, seqt_fact, conflicts)
 
         barf_on_overlapping_facts_new(conflicts)
 
@@ -624,9 +624,9 @@ def must_complete_times(
 
     # ...
 
-    def verify_datetimes_sanity(new_facts, ante_fact, seqt_fact, conflicts):
+    def validate_datetimes(new_facts, ante_fact, seqt_fact, conflicts):
         """"""
-        progress and progress.click_echo_current_task(_('Verifying sanity times...'))
+        progress and progress.click_echo_current_task(_('Validating times...'))
         prev_time, later_facts = prev_and_later(new_facts, ante_fact, seqt_fact)
         prev_fact = ante_fact
         for idx, fact in enumerate(new_facts):
