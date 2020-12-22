@@ -157,7 +157,7 @@ def _nark_config(tmpdir):
             #   'fact_min_delta': '60',
             'fact_min_delta': '0',
 
-            # FIXME/2019-02-20: (lb): Implement tzawareness/tz_aware/timezone sanity.
+            # FIXME/2019-02-20: (lb): Implement tzawareness/tz_aware/timezone feature.
             'tz_aware': False,
 
             # FIXME/2019-02-20: (lb): Needs testing, e.g.,
