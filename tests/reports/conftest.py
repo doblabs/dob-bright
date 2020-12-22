@@ -19,9 +19,9 @@
 
 # Note: Cannot use pytest_plugins here, e.g.,:
 #   pytest_plugins = (
-#       "nark.tests.backends.sqlalchemy.conftest",
+#       'nark.tests.backends.sqlalchemy.conftest',
 #       # Make sure fixtures required by fixtures available, e.g., 'base_config'.
-#       "nark.tests.conftest",
+#       'nark.tests.conftest',
 #   )
 # because:
 #   Defining 'pytest_plugins' in a non-top-level conftest is no longer supported.
