@@ -88,6 +88,7 @@ def reduce_time_hint(time_hint):
         'verify_end',
         'verify_then',
         'verify_still',
+        'verify_unset',
     ]:
         return time_hint
     assert False  # Unreachable.
