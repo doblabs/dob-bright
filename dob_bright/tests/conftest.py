@@ -44,7 +44,7 @@ from easy_as_pypi_termio.errors import dob_been_warned_reset
 from nark.config import decorate_config
 from nark.items.fact import Fact
 
-from dob_bright.controller import Controller
+from dob_bright.controllers.app_controller import Controller
 
 # Register fixtures: 'fact_factory', 'fact', 'activity', etc.
 # - (lb): Disabled for now, because not used in dob_bright, but if we

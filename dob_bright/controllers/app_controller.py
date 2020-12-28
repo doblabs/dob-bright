@@ -66,7 +66,12 @@ class Controller(
     Controller_ConfigManager,
 ):
     """
-    A custom controller that adds config handling (and more) on top of its regular functionality.
+    Organizes the Controller stack for dob, layering various functionality.
+
+    Nark provides a basic Controller, and then dob adds all the CLI/TUI
+    goodies, like config handling, logging, debugging capabilities,
+    coloring, a UX interface to the database store, and arbitrary dob
+    command post processing (that plugins use to add value to the app).
     """
 
     def __init__(self, config=None):
@@ -107,7 +112,6 @@ class Controller(
             click_echo(inspect.cleandoc(message), err=True)
 
         _insist_germinated()
-
 
     # ***
 
