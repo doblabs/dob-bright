@@ -28,14 +28,14 @@ from nark.items.fact import Fact
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import echo_warning, exit_warning
 
-from .controllers.config_manager import Controller_ConfigManager
-from .controllers.database_store import Controller_DatabaseStore
-from .controllers.logging_output import Controller_LoggingOutput
-from .controllers.pdb_subprocess import Controller_PdbSubprocess
-from .controllers.post_processor import Controller_PostProcessor
-from .controllers.setup_coloring import Controller_SetupColoring
+from .. import help_newbs as help_strings
 
-from . import help_newbs as help_strings
+from .config_manager import Controller_ConfigManager
+from .database_store import Controller_DatabaseStore
+from .logging_output import Controller_LoggingOutput
+from .pdb_subprocess import Controller_PdbSubprocess
+from .post_processor import Controller_PostProcessor
+from .setup_coloring import Controller_SetupColoring
 
 __all__ = (
     'Controller',
