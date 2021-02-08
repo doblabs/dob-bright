@@ -23,6 +23,7 @@ import copy
 import re
 import sys
 from datetime import datetime, time, timedelta
+from string import punctuation
 
 from nark.helpers.parsing import parse_factoid
 
@@ -172,14 +173,48 @@ def parse_input(controller, file_in=None, progress=None):
         return (blank_line_count, processed)
 
     def gobble_if_not_new_fact(line, accumulated_fact, blank_line_count):
-        fact_dict = dissect_meta_line(line)
-        if fact_dict is None:
-            # If not parsed, and first line we've seen, die.
-            missing_fact_must_come_early(line, blank_line_count)
-            # else, more content, or a Fact separator.
-            controller.client_logger.debug(_('- More desc.: ') + line.strip())
-            accumulated_fact.append(line)
+        fact_dict = None
+        if not line_starts_with_punctuation(line):
+            fact_dict = dissect_meta_line(line)
+        must_not_be_unparseable_first_line(
+            fact_dict, line, accumulated_fact, blank_line_count,
+        )
         return fact_dict
+
+    # Ignore lines that begin with most any punctuation, e.g.:
+    #   [2021-02-08: This line is not a meta_line, because leading bracket.]
+    # But we cannot just consider all punctuation:
+    #   re.compile(r'^\s*[{}]+'.format(re.escape(punctuation)))
+    # Because we must allow relative time punctuation, '-' and '+'.
+    RE_LEADS_WITH_PUNCTUATION = re.compile(
+        r'^\s*[{}]+'.format(
+            re.escape(
+                punctuation
+                .replace('-', '')
+                .replace('+', '')
+            )))
+
+    def line_starts_with_punctuation(line):
+        # The human-friendly dateparser ignores leading punctuation,
+        # e.g., it'll successfully parse "[to YYYY-MM-DD...", but a
+        # user might want to make comments in the description without
+        # meaning to indicate the start of a new Fact. Rather than
+        # plumb this logic down in the parser, seems reasonably to
+        # catch it here.
+        # MAYBE/2021-02-07: Also reject lines that start with whitespace?
+        return RE_LEADS_WITH_PUNCTUATION.match(line) is not None
+
+    def must_not_be_unparseable_first_line(
+        fact_dict, line, accumulated_fact, blank_line_count,
+    ):
+        if fact_dict is not None:
+            return
+
+        # If not parsed, and first line we've seen, die.
+        missing_fact_must_come_early(line, blank_line_count)
+        # else, more content, or a Fact separator.
+        controller.client_logger.debug(_('- More desc.: ') + line.strip())
+        accumulated_fact.append(line)
 
     def missing_fact_must_come_early(line, blank_line_count):
         if blank_line_count == -1:
