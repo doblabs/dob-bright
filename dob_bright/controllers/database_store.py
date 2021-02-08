@@ -108,6 +108,7 @@ class Controller_DatabaseStore(
     # ***
 
     def create_data_store(self, force, fact_cls=Fact):
+        unlinked_db = False
         skip_standup = self.check_sqlite_store_ready()
         if skip_standup:
             if force:
