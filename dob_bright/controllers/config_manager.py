@@ -87,7 +87,7 @@ class Controller_ConfigManager(
 
     # ***
 
-    def ensure_config(self, ctx, configfile_path=None, *keyvals):
+    def ensure_config(self, ctx, configfile_path, *keyvals):
         if self.configurable is not None:
             return
         # NOTE: This ctx.command.name == 'run', i.e., not the same context
@@ -98,12 +98,12 @@ class Controller_ConfigManager(
         self.setup_config(configfile_path, *keyvals)
         self.wire_configience()
 
-    def setup_config(self, configfile_path=None, *keyvals):
+    def setup_config(self, configfile_path, *keyvals):
         self.configurable = self.setup_config_from_file_and_cli(
-            configfile_path=configfile_path, *keyvals,
+            configfile_path, *keyvals,
         )
 
-    def setup_config_from_file_and_cli(self, configfile_path=None, *keyvals):
+    def setup_config_from_file_and_cli(self, configfile_path, *keyvals):
         configurable = ConfigUrable(
             config_root=ConfigRoot,
             configfile_envkey=Controller_ConfigManager.DOB_CONFIGFILE_ENVKEY,
