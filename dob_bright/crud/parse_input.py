@@ -291,6 +291,22 @@ def parse_input(controller, file_in=None, progress=None):
             ))
         return fact_dict
 
+    # 2021-02-08: This function had been defaulting `time_hint` to 'verify_start',
+    # but the new 'verify_unset' now lets parsing.py know whether this higher-up
+    # parser found an 'at' or 'to' preceding the datetime, which would indicate
+    # higher confidence that the beginning of the input line is meant to be the
+    # start time. That is, differentiating 'verify_start' with 'verify_unset'
+    # allows the lower level parser to be a little more strict on the input, and
+    # to not assume so easily-quickly that a potential datetime input is valid.
+    # - Currently, this new feature is only used to reject a line that starts with
+    #   a bare number but otherwise has no indication the user means for the number
+    #   to be the start time.
+    #   - E.g., '123 friends showed up' does not contain a start time, whereas
+    #     'at 1:23: friends showed up' definitely indicates a start time.
+    #   - But without the 'at' or the ':' after the time, it's a wee more ambiguous.
+    #     E.g., '1:23 friends showed up' or '123: friends showed up' are not as
+    #     obvious as 'at 1:23: friends showed up'. But they still seem like start
+    #     times, and not part of a description, unlike '123 friends showed up'.
     def suss_the_time_format(line):
         sussed_hint = ''
         match = RE_TIME_HINT.match(line)
@@ -301,7 +317,8 @@ def parse_input(controller, file_in=None, progress=None):
                     sussed_hint = hint
                     # Remove the time hint prefix.
                     line = RE_TIME_HINT.sub('', line).lstrip()
-        time_hint = sussed_hint or 'verify_start'
+        # 2021-02-08: See comment above describing newly added 'verify_unset'.
+        time_hint = sussed_hint or 'verify_unset'
         controller.client_logger.debug(_(
             'time_hint: {}{}'.format(
                 time_hint, ' [sussed]' if sussed_hint else ' [default]',
