@@ -248,6 +248,7 @@ def parse_input(controller, file_in=None, progress=None):
         #   We don't have a Click alias for it, so
         #   there's a `dob from` command, but not `dob between`,
         #   so maybe we want to remove "between" from here.
+        # FIXME/2021-02-07: i18n/l10n this.
         '(?P<verify_both>from|between)'
         '|(?P<verify_start>at)'  # noqa: E131
         '|(?P<verify_end>to|until)'
