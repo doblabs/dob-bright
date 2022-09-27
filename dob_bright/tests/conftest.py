@@ -36,8 +36,8 @@ import fauxfactory
 import pytest
 from unittest.mock import MagicMock
 
-from easy_as_pypi_apppth import app_dirs  # Import module that contains AppDirsWithMkdir (AppDirs).
-from easy_as_pypi_apppth.expand_and_mkdirs import ensure_directory_exists
+from easy_as_pypi_appdirs import app_dirs  # Import module that contains AppDirsWithMkdir (AppDirs).
+from easy_as_pypi_appdirs.expand_and_mkdirs import ensure_directory_exists
 
 from easy_as_pypi_termio.errors import dob_been_warned_reset
 

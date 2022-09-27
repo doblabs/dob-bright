@@ -20,7 +20,7 @@ import os
 
 from gettext import gettext as _
 
-from easy_as_pypi_apppth import AppDirs
+from easy_as_pypi_appdirs import AppDirs
 
 from nark.config import ConfigRoot
 from nark.config.log_levels import (
