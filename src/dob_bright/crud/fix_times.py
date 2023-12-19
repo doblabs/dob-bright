@@ -45,56 +45,58 @@ from .fact_dressed import FactDressed
 from .parse_mistakes import conflict_prefix, prepare_log_msg
 
 __all__ = (
-    'mend_fact_timey_wimey',
-    'mend_facts_times',
-    'must_complete_times',
-    'reduce_time_hint',
-    'then_extend_fact',
-    'unite_and_stretch',
+    "mend_fact_timey_wimey",
+    "mend_facts_times",
+    "must_complete_times",
+    "reduce_time_hint",
+    "then_extend_fact",
+    "unite_and_stretch",
     # Private:
     #   'insert_forcefully',
     #   'resolve_overlapping',
 )
 
 
-DEFAULT_SQUASH_SEP = '\n\n--\n\n'
+DEFAULT_SQUASH_SEP = "\n\n--\n\n"
 
 
 TIME_ERROR_ZEROTH_FACT_MUST_START = _(
-    'Please specify `start` for Fact being added before time existed.'
+    "Please specify `start` for Fact being added before time existed."
 )
 
 
 # ***
 
+
 def reduce_time_hint(time_hint):
     if time_hint in [
-        'verify_none',
-        'verify_after',
-        'verify_then_none',
-        'verify_then_some',
-        'verify_still_none',
-        'verify_still_some',
+        "verify_none",
+        "verify_after",
+        "verify_then_none",
+        "verify_then_some",
+        "verify_still_none",
+        "verify_still_some",
     ]:
-        return 'verify_none'
+        return "verify_none"
     elif time_hint in [
-        'verify_start',
-        'verify_then_start',
-        'verify_still_start',
+        "verify_start",
+        "verify_then_start",
+        "verify_still_start",
     ]:
-        return 'verify_start'
+        return "verify_start"
     elif time_hint in [
-        'verify_both',
-        'verify_end',
-        'verify_then',
-        'verify_still',
-        'verify_unset',
+        "verify_both",
+        "verify_end",
+        "verify_then",
+        "verify_still",
+        "verify_unset",
     ]:
         return time_hint
     assert False  # Unreachable.
 
 
 # ***
+
 
 def then_extend_fact(controller, new_fact):
     return FactDressed(
@@ -108,6 +110,7 @@ def then_extend_fact(controller, new_fact):
 
 # ***
 
+
 # unite_and_stretch is called on create, not transcode nor edit.
 def unite_and_stretch(
     controller,
@@ -117,15 +120,16 @@ def unite_and_stretch(
     squash_sep=DEFAULT_SQUASH_SEP,
 ):
     """"""
+
     def _unite_and_stretch():
         if time_hint not in [
-            'verify_end',  # Use prev's fact end if set; or squash facts.
-            'verify_then',  # Like `at`, but back-fill gap, start is time-spec or now.
-            'verify_after',  # Like `then` w/o time-spec; sets start to final's end.
-            'verify_still',  # Like `then`, but copy prev fact's meta; time optional.
+            "verify_end",  # Use prev's fact end if set; or squash facts.
+            "verify_then",  # Like `at`, but back-fill gap, start is time-spec or now.
+            "verify_after",  # Like `then` w/o time-spec; sets start to final's end.
+            "verify_still",  # Like `then`, but copy prev fact's meta; time optional.
         ]:
             return [new_fact]
-        ongoing = find_ongoing_to_stretch() if time_hint == 'verify_end' else None
+        ongoing = find_ongoing_to_stretch() if time_hint == "verify_end" else None
         if ongoing is not None:
             return squash_or_not(ongoing)
         return extend_or_not()
@@ -140,12 +144,12 @@ def unite_and_stretch(
         controller.affirm(new_fact.pk is None)
         # conflicts is (edited, original) tuples.
         # One conflict is marked 'stopped' if it was ongoing Fact.
-        ongoings = [con for con in conflicts if 'stopped' in con[0].dirty_reasons]
+        ongoings = [con for con in conflicts if "stopped" in con[0].dirty_reasons]
         controller.affirm(len(ongoings) <= 1)
         return ongoings[0] if ongoings else None
 
     def squash_or_not(ongoing):
-        if time_hint == 'verify_end':
+        if time_hint == "verify_end":
             ongoing.squash(new_fact, squash_sep)
             return [ongoing]
         else:
@@ -161,10 +165,10 @@ def unite_and_stretch(
             return [new_fact]
         new_fact_or_two = [new_fact]
 
-        if time_hint == 'verify_end':
+        if time_hint == "verify_end":
             controller.affirm(final_fact.end is not None)
             new_fact.start = final_fact.end
-        elif time_hint in ['verify_then', 'verify_still']:
+        elif time_hint in ["verify_then", "verify_still"]:
             if new_fact.start is None:
                 # User did not specify then- or still-time. Use previous end.
                 controller.affirm(final_fact.end is not None)
@@ -177,10 +181,10 @@ def unite_and_stretch(
                 fill_fact.end = new_fact.start
                 new_fact_or_two.insert(0, fill_fact)
             # else, start == end, so nothing to fill.
-            if time_hint == 'verify_still':
+            if time_hint == "verify_still":
                 new_fact.activity = final_fact.activity
                 new_fact.tags = list(final_fact.tags)
-        elif time_hint == 'verify_after':
+        elif time_hint == "verify_after":
             new_fact.start = final_fact.end
         return new_fact_or_two
 
@@ -188,6 +192,7 @@ def unite_and_stretch(
 
 
 # ***
+
 
 def mend_facts_times(controller, fact, time_hint, skip_store=False):
     """"""
@@ -217,29 +222,29 @@ def mend_facts_times(controller, fact, time_hint, skip_store=False):
         open_start = False
         open_end = False
 
-        if time_hint == 'verify_none':
+        if time_hint == "verify_none":
             controller.affirm(not fact.start)
             controller.affirm(not fact.end)
             fact.start = now
             open_end = True
-        elif time_hint == 'verify_after':
+        elif time_hint == "verify_after":
             controller.affirm(fact.start)
             controller.affirm(not fact.end)
             open_end = True
-        elif time_hint == 'verify_both':
+        elif time_hint == "verify_both":
             controller.affirm(fact.start and fact.end)
-        elif time_hint == 'verify_last':
+        elif time_hint == "verify_last":
             # The end time is optional on the latest Fact.
             open_end = not fact.end
             if not fact.start:
                 fact.start = now
-        elif time_hint in ['verify_start', 'verify_then', 'verify_still']:
+        elif time_hint in ["verify_start", "verify_then", "verify_still"]:
             controller.affirm(not fact.end)
             open_end = True
             if not fact.start:
                 fact.start = now
         else:
-            controller.affirm(time_hint == 'verify_end')
+            controller.affirm(time_hint == "verify_end")
             controller.affirm(not fact.start)
             open_start = True
             if not fact.end:
@@ -253,6 +258,7 @@ def mend_facts_times(controller, fact, time_hint, skip_store=False):
 
 
 # ***
+
 
 def must_complete_times(
     controller,
@@ -359,9 +365,9 @@ def must_complete_times(
                 return later_facts
             if not seqt_fact.start:
                 controller.affirm(False)  # Caught earlier by: backend_integrity().
-                raise Exception(_(
-                    'Found saved fact without start time: {}'.format(seqt_fact)
-                ))
+                raise Exception(
+                    _("Found saved fact without start time: {}".format(seqt_fact))
+                )
             controller.affirm(isinstance(seqt_fact.start, datetime))
             later_facts += [seqt_fact]
             return later_facts
@@ -388,16 +394,16 @@ def must_complete_times(
     # ...
 
     def fix_clock_times_relative(new_facts, ante_fact, seqt_fact, conflicts):
-        progress and progress.click_echo_current_task(_('Fixing relative times...'))
+        progress and progress.click_echo_current_task(_("Fixing relative times..."))
         prev_time, later_facts = prev_and_later(new_facts, ante_fact, seqt_fact)
         for fact in new_facts:
             controller.affirm(fact is later_facts[0])
             later_facts.pop(0)
             prev_time = fix_clock_time_relative(
-                fact, 'start', prev_time, later_facts, conflicts
+                fact, "start", prev_time, later_facts, conflicts
             )
             prev_time = fix_clock_time_relative(
-                fact, 'end', prev_time, later_facts, conflicts
+                fact, "end", prev_time, later_facts, conflicts
             )
 
     def fix_clock_time_relative(fact, which, prev_time, later_facts, conflicts):
@@ -415,15 +421,20 @@ def must_complete_times(
         return prev_time
 
     def infer_datetime_from_clock(
-        clock_time, fact, which, prev_time, later_facts, conflicts,
+        clock_time,
+        fact,
+        which,
+        prev_time,
+        later_facts,
+        conflicts,
     ):
         dt_suss = None
 
-        at_oppo = 'end' if which == 'start' else 'start'
+        at_oppo = "end" if which == "start" else "start"
         dt_oppo = getattr(fact, at_oppo)
         if isinstance(dt_oppo, datetime):
             # Prefer relative to fact's other time.
-            if which == 'start':
+            if which == "start":
                 dt_suss, err = infer_from_clock_prior(fact, dt_oppo, clock_time)
             else:
                 dt_suss, err = infer_from_clock_after(fact, dt_oppo, clock_time)
@@ -451,11 +462,17 @@ def must_complete_times(
             setattr(fact, which, dt_suss)
             prev_time = dt_suss
         else:
-            msg_content = _(
-                'Could not decipher clock time “{}” for {}'
-            ).format(clock_time, which)
+            msg_content = _("Could not decipher clock time “{}” for {}").format(
+                clock_time, which
+            )
             conflict_msg = conflict_message(fact, msg_content)
-            conflicts.append((fact, None, conflict_msg, ))
+            conflicts.append(
+                (
+                    fact,
+                    None,
+                    conflict_msg,
+                )
+            )
         return prev_time
 
     def infer_from_clock_prior(fact, dt_oppo, clock_time):
@@ -479,16 +496,16 @@ def must_complete_times(
     # ...
 
     def fix_delta_times_relative(new_facts, ante_fact, seqt_fact, conflicts):
-        progress and progress.click_echo_current_task(_('Fixing relative deltas...'))
+        progress and progress.click_echo_current_task(_("Fixing relative deltas..."))
         prev_time, later_facts = prev_and_later(new_facts, ante_fact, seqt_fact)
         for fact in new_facts:
             controller.affirm(fact is later_facts[0])
             later_facts.pop(0)
             prev_time = fix_delta_time_relative(
-                fact, 'start', prev_time, later_facts, conflicts
+                fact, "start", prev_time, later_facts, conflicts
             )
             prev_time = fix_delta_time_relative(
-                fact, 'end', prev_time, later_facts, conflicts
+                fact, "end", prev_time, later_facts, conflicts
             )
 
     def fix_delta_time_relative(fact, which, prev_time, later_facts, conflicts):
@@ -512,7 +529,13 @@ def must_complete_times(
         return prev_time
 
     def infer_datetime_from_delta(
-        delta_mins, delta_minus, fact, which, prev_time, later_facts, conflicts,
+        delta_mins,
+        delta_minus,
+        fact,
+        which,
+        prev_time,
+        later_facts,
+        conflicts,
     ):
         # If -delta, relative to *next* time; if +delta, relative to *prev* time.
         dt_suss = None
@@ -520,7 +543,7 @@ def must_complete_times(
             if prev_time is not None:
                 dt_suss = prev_time + timedelta(minutes=delta_mins)
             # else, we'll add a conflict below.
-        elif which == 'start' and isinstance(fact.end, datetime):
+        elif which == "start" and isinstance(fact.end, datetime):
             # NOTE: delta_mins < 0, so add the delta (to subtract it).
             dt_suss = fact.end + timedelta(minutes=delta_mins)
         else:
@@ -533,17 +556,23 @@ def must_complete_times(
             setattr(fact, which, dt_suss)
             prev_time = dt_suss
         else:
-            msg_content = _(
-                'Could not interpret delta time “{}” for {}'
-            ).format(delta_mins, which)
+            msg_content = _("Could not interpret delta time “{}” for {}").format(
+                delta_mins, which
+            )
             conflict_msg = conflict_message(fact, msg_content)
-            conflicts.append((fact, None, conflict_msg, ))
+            conflicts.append(
+                (
+                    fact,
+                    None,
+                    conflict_msg,
+                )
+            )
         return prev_time
 
     # ...
 
     def fix_blank_times_relative(new_facts, ante_fact, seqt_fact, conflicts):
-        progress and progress.click_echo_current_task(_('Fixing blank times...'))
+        progress and progress.click_echo_current_task(_("Fixing blank times..."))
         prev_time, later_facts = prev_and_later(new_facts, ante_fact, seqt_fact)
         for idx, fact in enumerate(new_facts):
             controller.affirm(fact is later_facts[0])
@@ -551,14 +580,29 @@ def must_complete_times(
             controller.affirm(fact.start or fact.end)
             first_fact = idx == 0
             prev_time = fix_blank_time_relative(
-                fact, 'start', prev_time, later_facts, conflicts, first_fact,
+                fact,
+                "start",
+                prev_time,
+                later_facts,
+                conflicts,
+                first_fact,
             )
             prev_time = fix_blank_time_relative(
-                fact, 'end', prev_time, later_facts, conflicts, first_fact,
+                fact,
+                "end",
+                prev_time,
+                later_facts,
+                conflicts,
+                first_fact,
             )
 
     def fix_blank_time_relative(
-        fact, which, prev_time, later_facts, conflicts, first_fact,
+        fact,
+        which,
+        prev_time,
+        later_facts,
+        conflicts,
+        first_fact,
     ):
         dt_fact = getattr(fact, which)
         if isinstance(dt_fact, datetime):
@@ -578,47 +622,62 @@ def must_complete_times(
 
     def suss_datetime(which, prev_time, later_facts):
         dt_suss = None
-        if which == 'start':
+        if which == "start":
             dt_suss = prev_time
-        elif which == 'end':
+        elif which == "end":
             dt_suss, _next_fact = find_next_datetime(later_facts)
             if dt_suss is None:
                 dt_suss = controller.now
         return dt_suss
 
     def conflicts_add_unresolved_relative(fact, which, conflicts, dt_fact):
-        msg_content = _(
-            'Could not translate relative time “{}” for {}'
-        ).format(dt_fact, which)
+        msg_content = _("Could not translate relative time “{}” for {}").format(
+            dt_fact, which
+        )
         conflict_msg = conflict_message(fact, msg_content)
-        conflicts.append((fact, None, conflict_msg, ))
+        conflicts.append(
+            (
+                fact,
+                None,
+                conflict_msg,
+            )
+        )
 
     def conflicts_add_unsussed_relative(fact, which, conflicts, first_fact):
-        if which == 'start' and first_fact:
+        if which == "start" and first_fact:
             # Caller will (should) call mend_facts_times later...
             return
-        msg_content = _(
-            'Could not infer time left blank for {}'
-        ).format(which)
+        msg_content = _("Could not infer time left blank for {}").format(which)
         conflict_msg = conflict_message(fact, msg_content)
-        conflicts.append((fact, None, conflict_msg, ))
+        conflicts.append(
+            (
+                fact,
+                None,
+                conflict_msg,
+            )
+        )
 
     # ...
 
     def cull_metaless_momentaneous(new_facts, conflicts):
-        allow_momentaneous = controller.config['time.allow_momentaneous']
+        allow_momentaneous = controller.config["time.allow_momentaneous"]
         new_culled = []
         for idx, fact in enumerate(new_facts):
-            if (
-                (fact.start == fact.end)
-                and ((not fact.description) or (not allow_momentaneous))
+            if (fact.start == fact.end) and (
+                (not fact.description) or (not allow_momentaneous)
             ):
                 if fact.description:
                     msg_content = _(
                         "Momentaneous Fact found, but allow_momentaneous=False"
                     )
                     conflict_msg = conflict_message(fact, msg_content)
-                    conflicts.append((fact, None, conflict_msg, ))
+                    conflicts.append(
+                        (
+                            fact,
+                            None,
+                            conflict_msg,
+                        )
+                    )
                 continue
             new_culled.append(fact)
         new_facts[:] = new_culled
@@ -627,7 +686,7 @@ def must_complete_times(
 
     def validate_datetimes(new_facts, ante_fact, seqt_fact, conflicts):
         """"""
-        progress and progress.click_echo_current_task(_('Validating times...'))
+        progress and progress.click_echo_current_task(_("Validating times..."))
         prev_time, later_facts = prev_and_later(new_facts, ante_fact, seqt_fact)
         prev_fact = ante_fact
         for idx, fact in enumerate(new_facts):
@@ -645,9 +704,15 @@ def must_complete_times(
                 affirm_datetimes_missing_already_caught(fact, conflicts, is_edge_fact)
             elif isinstance(fact.start, datetime):
                 if prev_time and fact.start < prev_time:
-                    msg_content = _('New fact starts before previous fact ends')
+                    msg_content = _("New fact starts before previous fact ends")
                     conflict_msg = conflict_message(fact, msg_content)
-                    conflicts.append((fact, prev_fact, conflict_msg, ))
+                    conflicts.append(
+                        (
+                            fact,
+                            prev_fact,
+                            conflict_msg,
+                        )
+                    )
                 prev_time = fact.start
                 n_datetimes += 1
             # else, a string that was unparsed; and conflict already added.
@@ -658,17 +723,29 @@ def must_complete_times(
             elif isinstance(fact.end, datetime):
                 next_time, next_fact = find_next_datetime(later_facts, fact.pk)
                 if next_time and fact.end > next_time:
-                    msg_content = _('New fact ends after next fact starts')
+                    msg_content = _("New fact ends after next fact starts")
                     conflict_msg = conflict_message(fact, msg_content)
-                    conflicts.append((fact, next_fact, conflict_msg, ))
+                    conflicts.append(
+                        (
+                            fact,
+                            next_fact,
+                            conflict_msg,
+                        )
+                    )
                 prev_time = fact.end
                 n_datetimes += 1
             # else, a string that was unparsed; and conflict already added.
 
             if n_datetimes == 2 and fact.start > fact.end:
-                msg_content = _('New fact starts after it ends/ends before it starts')
+                msg_content = _("New fact starts after it ends/ends before it starts")
                 conflict_msg = conflict_message(fact, msg_content)
-                conflicts.append((fact, None, conflict_msg, ))
+                conflicts.append(
+                    (
+                        fact,
+                        None,
+                        conflict_msg,
+                    )
+                )
 
             prev_fact = fact
 
@@ -684,18 +761,18 @@ def must_complete_times(
         if (not conflicts) or (suppress_barf):
             return
 
-        colorful = controller.config['term.use_color']
+        colorful = controller.config["term.use_color"]
 
         for fact, other, reason in conflicts:
             # other might be None, another new Fact, or ante_fact or seqt_fact.
             if other and other.pk:
-                prefix = 'Saved'
-                other_pk = '#{}: '.format(other.pk)
+                prefix = "Saved"
+                other_pk = "#{}: ".format(other.pk)
             else:
-                prefix = 'New'
-                other_pk = ''
+                prefix = "New"
+                other_pk = ""
             echo_block_header(
-                _('{} Fact Datetime Conflict!'.format(prefix)),
+                _("{} Fact Datetime Conflict!".format(prefix)),
                 full_width=True,
             )
             click_echo()
@@ -709,19 +786,21 @@ def must_complete_times(
                 # test, so not really sure status of "subtract edges" request.
                 cut_width = click.get_terminal_size()[0]
 
-                click_echo('\n{}: {}{}'.format(
-                    conflict_prefix(_('Compare')),
-                    other_pk,
-                    other.friendly_str(
-                        colorful=colorful,
-                        cut_width_complete=cut_width,
-                    ),
-                ))
+                click_echo(
+                    "\n{}: {}{}".format(
+                        conflict_prefix(_("Compare")),
+                        other_pk,
+                        other.friendly_str(
+                            colorful=colorful,
+                            cut_width_complete=cut_width,
+                        ),
+                    )
+                )
             click_echo()
         msg = _(
-            'Could not determine, or did not validate, start and/or stop'
-            ' for one or more new Facts.'
-            '\nScroll up for details.'
+            "Could not determine, or did not validate, start and/or stop"
+            " for one or more new Facts."
+            "\nScroll up for details."
         )
         crude = len(new_facts) > 1
         exit_warning_crude(msg, crude=crude)
@@ -750,7 +829,8 @@ def must_complete_times(
 #   it die-complains if *any* Fact conflicts, so its use of this
 #   function is only in the context of a single Fact vs. the db.
 
-def insert_forcefully(controller, fact, squash_sep=''):
+
+def insert_forcefully(controller, fact, squash_sep=""):
     """
     Insert the possibly open-ended Fact into the set of logical
     (chronological) Facts, possibly changing the time frames of,
@@ -767,7 +847,7 @@ def insert_forcefully(controller, fact, squash_sep=''):
         ValueError: If start or end time is not specified and cannot be
             deduced by other Facts in the system.
     """
-    allow_momentaneous = controller.config['time.allow_momentaneous']
+    allow_momentaneous = controller.config["time.allow_momentaneous"]
 
     def _insert_forcefully(facts, fact):
         # Steps:
@@ -777,12 +857,15 @@ def insert_forcefully(controller, fact, squash_sep=''):
         #   Return unique set of facts indicating edits and deletions.
 
         conflicts = []
-        conflicts += find_conflict_at_edge(facts, fact, 'start')
-        conflicts += find_conflict_at_edge(facts, fact, 'end')
+        conflicts += find_conflict_at_edge(facts, fact, "start")
+        conflicts += find_conflict_at_edge(facts, fact, "end")
         conflicts += find_conflicts_during(facts, fact)
 
         edited_conflicts = resolve_overlapping(
-            fact, conflicts, squash_sep, allow_momentaneous,
+            fact,
+            conflicts,
+            squash_sep,
+            allow_momentaneous,
         )
 
         return edited_conflicts
@@ -798,8 +881,9 @@ def insert_forcefully(controller, fact, squash_sep=''):
             if conflicts:
                 if len(conflicts) != 1:
                     controller.client_logger.warning(
-                        "Found more than one Fact ({} total) at: '{}'"
-                        .format(len(conflicts), fact_time)
+                        "Found more than one Fact ({} total) at: '{}'".format(
+                            len(conflicts), fact_time
+                        )
                     )
             else:
                 find_edge = True
@@ -812,7 +896,7 @@ def insert_forcefully(controller, fact, squash_sep=''):
 
     def inspect_time_boundary(facts, fact, ref_time):
         conflict = None
-        if ref_time == 'start':
+        if ref_time == "start":
             if fact.start is None:
                 # MAYBE/SIMPLIFY/2019-01-22: Lots of comments in insert_forcefully
                 #   about perhaps being redundant, and using just must_complete_times.
@@ -832,7 +916,7 @@ def insert_forcefully(controller, fact, squash_sep=''):
             else:
                 conflict = facts.starting_at(fact)
         else:
-            assert ref_time == 'end'
+            assert ref_time == "end"
             if fact.end is None:
                 # This use case will get you here, because no end time:
                 #   echo "2020-01-28 15:38: hello" | dob import
@@ -933,8 +1017,10 @@ def insert_forcefully(controller, fact, squash_sep=''):
 
 # ***
 
-def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False):
+
+def resolve_overlapping(fact, conflicts, squash_sep="", allow_momentaneous=False):
     """"""
+
     def _resolve_overlapping(fact, conflicts):
         seen = set()
         resolved = []
@@ -949,7 +1035,12 @@ def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False
             original = conflict.copy()
             edited_conflicts = resolve_fact_conflict(fact, conflict)
             for edited in edited_conflicts:
-                resolved.append((edited, original,))
+                resolved.append(
+                    (
+                        edited,
+                        original,
+                    )
+                )
         return resolved
 
     def resolve_fact_conflict(fact, conflict):
@@ -986,7 +1077,7 @@ def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False
                 #   As they say in Futurama, I'm going to allow this.
                 return
             conflict.deleted = True
-            conflict.dirty_reasons.add('deleted-starts_before')
+            conflict.dirty_reasons.add("deleted-starts_before")
         else:
             # This is either the last Fact in the database, which is still
             # open (if conflict.end is None); or fact ends before conflict
@@ -994,7 +1085,7 @@ def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False
             # so move conflict's start to no longer conflict.
             assert conflict.start < fact.end
             conflict.start = fact.end
-            conflict.dirty_reasons.add('start')
+            conflict.dirty_reasons.add("start")
         resolved.append(conflict)
 
     def resolve_fact_ends_after(fact, conflict, resolved):
@@ -1010,16 +1101,16 @@ def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False
                 # 0-length Fact is not surrounded by new Fact; I'll allow it.
                 return
             conflict.deleted = True
-            conflict.dirty_reasons.add('deleted-ends_after')
+            conflict.dirty_reasons.add("deleted-ends_after")
         else:
             # (lb): Here's where we might stop an ongoing fact
             # when adding a new fact.
             assert conflict.end is None or conflict.end > fact.start
             # A little hack: signal the caller if this is/was ongoing fact.
             if conflict.end is None:
-                conflict.dirty_reasons.add('stopped')
+                conflict.dirty_reasons.add("stopped")
             conflict.end = fact.start
-            conflict.dirty_reasons.add('end')
+            conflict.dirty_reasons.add("end")
         resolved.append(conflict)
 
     def resolve_fact_is_inside(fact, conflict, resolved):
@@ -1032,7 +1123,7 @@ def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False
         lconflict.split_from = conflict.pk
         # Leave lconflict.pk set so the old fact is marked deleted.
         lconflict.end = fact.start
-        lconflict.dirty_reasons.add('lsplit')
+        lconflict.dirty_reasons.add("lsplit")
         resolved.append(lconflict)
 
     def resolve_fact_split_after(fact, conflict, resolved):
@@ -1040,7 +1131,7 @@ def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False
         rconflict.split_from = conflict.pk
         rconflict.pk = None
         rconflict.start = fact.end
-        rconflict.dirty_reasons.add('rsplit')
+        rconflict.dirty_reasons.add("rsplit")
         resolved.append(rconflict)
 
     def cull_duplicates(resolved):
@@ -1060,9 +1151,11 @@ def resolve_overlapping(fact, conflicts, squash_sep='', allow_momentaneous=False
 
 # ***
 
+
 # (lb): This fcn. could be moved to dob or dob-bright; only dob uses it.
 def mend_fact_timey_wimey(controller, fact, time_hint, other_edits={}):
     """"""
+
     def _mend_fact_timey_wimey():
         must_complete_time(controller, fact, other_edits)
         # Fill in the start and, or, end times, maybe.
@@ -1086,7 +1179,9 @@ def mend_fact_timey_wimey(controller, fact, time_hint, other_edits={}):
         reset_end = fact.end is None
         if fact.end is None:
             fact.end = controller.now
-        new_facts = [fact, ]
+        new_facts = [
+            fact,
+        ]
         must_complete_times(
             controller,
             new_facts,
@@ -1141,10 +1236,12 @@ def mend_fact_timey_wimey(controller, fact, time_hint, other_edits={}):
             # Both facts complete, neither is momentaneous, and ranges are distinct.
             return None
         # If we made it here, whoa! Unexpected time conflict after using carousel?
-        new_conflict = (edit_fact, orig_fact, )
+        new_conflict = (
+            edit_fact,
+            orig_fact,
+        )
         return new_conflict
 
     # ***
 
     return _mend_fact_timey_wimey()
-

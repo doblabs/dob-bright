@@ -18,7 +18,7 @@
 import re
 
 __all__ = (
-    'namilize',
+    "namilize",
     # Private:
     #  'CLASS_NAME_NOTSET',
 )
@@ -29,7 +29,7 @@ __all__ = (
 # - (lb): Also, drop the \s, because we're forming a single classname.
 #   - I think technically classnames may contain spaces, but if we don't replace
 #     spaces, PTK parsing raises (at ValueError("Wrong color format %r" % text)).
-CLASS_NAME_NOTSET = re.compile(r'[^a-z0-9._-]')
+CLASS_NAME_NOTSET = re.compile(r"[^a-z0-9._-]")
 
 # MAYBE/2020-03-31: Behave like, say, PyPI.org, and condense multiple dashes into one?
 # - Would this make writing the styling config simpler? Or more restrictive?
@@ -39,10 +39,8 @@ CLASS_NAME_NOTSET = re.compile(r'[^a-z0-9._-]')
 
 
 def namilize(name):
-    """Normalizes a string so it can be used as a prompt_toolkit (PPT) classname.
-    """
-    classname = CLASS_NAME_NOTSET.sub('-', name.lower())
+    """Normalizes a string so it can be used as a prompt_toolkit (PPT) classname."""
+    classname = CLASS_NAME_NOTSET.sub("-", name.lower())
     # See comment above: To condense dashes, or not. For now, not!
     #  classname = COMPRESS_DASHES.sub('-', classname)
     return classname
-

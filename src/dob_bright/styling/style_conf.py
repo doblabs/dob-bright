@@ -26,18 +26,18 @@ from config_decorator import section
 from .class_namilize import namilize
 
 __all__ = (
-    'color',
-    'default',
-    'light',
-    'night',
-    'KNOWN_STYLES',
+    "color",
+    "default",
+    "light",
+    "night",
+    "KNOWN_STYLES",
     # PRIVATE:
     # '_create_style_object',
     # '_stylize_all_one',
 )
 
 
-KNOWN_STYLES = ['default', 'night', 'light', 'color']
+KNOWN_STYLES = ["default", "night", "light", "color"]
 
 
 def _create_style_object():
@@ -61,16 +61,18 @@ def _create_style_object():
         @classmethod
         def setting_wrap(cls, *args, not_a_style=False, **kwargs):
             def decorator(func):
-                name = kwargs.get('name', func.__name__)
+                name = kwargs.get("name", func.__name__)
                 if not_a_style:
                     cls.NOT_STYLE_CLASSES.add(name)
                 return StylesRoot.setting(*args, **kwargs)(func)
+
             return decorator
 
         @classmethod
         def collect_tups(cls):
             style_classes = [
-                (namilize(key), val.value) for key, val in StylesRoot._key_vals.items()
+                (namilize(key), val.value)
+                for key, val in StylesRoot._key_vals.items()
                 if key not in cls.NOT_STYLE_CLASSES
             ]
             return style_classes
@@ -120,7 +122,7 @@ def _create_style_object():
         term_width, term_height = click.get_terminal_size()
         # E.g., = value.replace('term_width', str(term_width))
         evalable = value.replace(dim, str(locals()[dim]))
-        compiled = compile(evalable, filename='<string>', mode='eval')
+        compiled = compile(evalable, filename="<string>", mode="eval")
         executed = eval(compiled)
         return int(executed)
 
@@ -147,38 +149,40 @@ def _create_style_object():
         @property
         @setting(
             _("Name of the style to use for default values."),
-            choices=['', 'default', 'night', 'light', 'color'],
-            name='base-style',
+            choices=["", "default", "night", "light", "color"],
+            name="base-style",
             not_a_style=True,
         )
         def base_style(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
-            _("JUSTIFY/CENTER UX in terminal, or position LEFT or RIGHT."
-              " See also: content-width."),
-            choices=['LEFT', 'CENTER', 'RIGHT', 'JUSTIFY'],
-            name='editor-align',
+            _(
+                "JUSTIFY/CENTER UX in terminal, or position LEFT or RIGHT."
+                " See also: content-width."
+            ),
+            choices=["LEFT", "CENTER", "RIGHT", "JUSTIFY"],
+            name="editor-align",
             not_a_style=True,
         )
         def editor_align(self):
             # (lb): AFAICT, 'CENTER' is equivalent to 'JUSTIFY'.
-            return 'CENTER'
+            return "CENTER"
 
         # ***
 
         def evaluate_content_height(value):
-            return evaluate_content_dimension(value, 'term_height')
+            return evaluate_content_dimension(value, "term_height")
 
         @property
         @setting(
             # NOTE: If content-height is set to None, the content height changes
             #       every time the user switches between Facts in the editor.
             _("Sizes content area height; may ref. term, e.g., “term_height - 15”."),
-            name='content-height',
+            name="content-height",
             not_a_style=True,
             # Use conform to change value used internally, but to keep the user's
             # input, e.g., when writing config to file, be sure to return, say,
@@ -229,12 +233,12 @@ def _create_style_object():
 
             # FIXME/2019-12-05: (lb): I bet this clips for Facts w/ 2+ lines of #tags.
 
-            return 'term_height - 15'
+            return "term_height - 15"
 
         # ***
 
         def evaluate_content_width(value):
-            return evaluate_content_dimension(value, 'term_width')
+            return evaluate_content_dimension(value, "term_width")
 
         @property
         @setting(
@@ -248,7 +252,7 @@ def _create_style_object():
             #         content-width = 'min(term_width * 0.62432, term_height * 3.35988)'
             #         content-height = 'max(term_height - 22, 10)'
             _("Specifies UX width; may ref. curr. dims., e.g., “term_width - 3”."),
-            name='content-width',
+            name="content-width",
             not_a_style=True,
             # Use conform to change value used internally, but to keep the user's
             # input, e.g., when writing config to file, be sure to return, say,
@@ -260,14 +264,14 @@ def _create_style_object():
             # We could return None and PPT would default to terminal width.
             # But let's use the magic string value, so when the user dumps
             # the styling config, they get a better idea what the default is.
-            return 'term_width'
+            return "term_width"
 
         # ***
 
         @property
         @setting(
             _("If True, wraps the content area text; otherwise, scrolls horizontally."),
-            name='content-wrap',
+            name="content-wrap",
             not_a_style=True,
         )
         def content_wrap(self):
@@ -332,10 +336,12 @@ def _create_style_object():
 
         @property
         @setting(
-            _("Shared style set on every widget (aka how to set the background color)."),
+            _(
+                "Shared style set on every widget (aka how to set the background color)."
+            ),
         )
         def label(self):
-            return ''
+            return ""
 
         # ***
 
@@ -344,49 +350,49 @@ def _create_style_object():
             _("Styles the streamer UX banner (topmost UX)."),
         )
         def streamer(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the streamer UX banner (topmost UX) including empty lines."),
-            name='streamer-line',
+            name="streamer-line",
         )
         def streamer_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Styles the header titles."),
-            name='title-normal',
+            name="title-normal",
         )
         def title_normal(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the header titles, including adjacent whitespacing."),
-            name='title-normal-line',
+            name="title-normal-line",
         )
         def title_normal_line(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the header title whose value has focus and is editable."),
-            name='title-focus',
+            name="title-focus",
         )
         def title_focus(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the header title and its whitespacing, when its value focused."),
-            name='title-focus-line',
+            name="title-focus-line",
         )
         def title_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
@@ -397,131 +403,131 @@ def _create_style_object():
         @property
         @setting(
             _("Styles the header value text."),
-            name='value-normal',
+            name="value-normal",
         )
         def value_normal(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the header value line (text and the whitespace right of it)."),
-            name='value-normal-line',
+            name="value-normal-line",
         )
         def value_normal_line(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the header value text when it has focus and is editable."),
-            name='value-focus',
+            name="value-focus",
         )
         def value_focus(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the header value line of the editable value with focus."),
-            name='value-focus-line',
+            name="value-focus-line",
         )
         def value_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
         # The remaining title-* settings: title-duration through title-tags-line.
         # And remaining value-* settings: value-duration through value-tags-line.
 
-        for prefix in ('title', 'value'):
+        for prefix in ("title", "value"):
             for part in (
-                'duration',
-                'start',
-                'start-focus',
-                'end',
-                'end-focus',
-                'activity',
-                'category',
-                'tags',
+                "duration",
+                "start",
+                "start-focus",
+                "end",
+                "end-focus",
+                "activity",
+                "category",
+                "tags",
             ):
-                for suffix in ('', '-line'):
-                    class_name = '{}-{}{}'.format(prefix, part, suffix)
+                for suffix in ("", "-line"):
+                    class_name = "{}-{}{}".format(prefix, part, suffix)
 
-                    is_line = suffix == '-line'
-                    is_focus = part.endswith('-focus')
-                    help_l = is_line and _(', including adjacent whitspace') or ''
-                    help_f = is_focus and _(', when value focused') or ''
+                    is_line = suffix == "-line"
+                    is_focus = part.endswith("-focus")
+                    help_l = is_line and _(", including adjacent whitspace") or ""
+                    help_f = is_focus and _(", when value focused") or ""
                     doc = _("{} {} style{}{}.").format(part, prefix, help_l, help_f)
 
                     @setting(doc, name=class_name)
                     def _title_setting(self):
-                        return ''
+                        return ""
 
         # ***
 
         @property
         @setting(
             _("Styles the empty line between the tags and the content area."),
-            name='blank-line',
+            name="blank-line",
         )
         def blank_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style the content area when showing the Fact description."),
-            name='content-fact',
+            name="content-fact",
         )
         def content_fact(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Styles the content area when showing the one-page help."),
-            name='content-help',
+            name="content-help",
         )
         def content_help(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Styles the content area when showing a generated, unsaved gap Fact."),
-            name='interval-gap',
+            name="interval-gap",
         )
         def interval_gap(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Styles the content area when showing an edited, unsaved Fact."),
-            name='unsaved-fact',
+            name="unsaved-fact",
         )
         def unsaved_fact(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Styles of footer section of the UX (bottommost line)."),
-            name='footer',
+            name="footer",
         )
         def footer_normal(self):
-            return ''
+            return ""
 
         @property
         @setting(
             _("Styles the Fact ID or Hot Notif text in the UX footer."),
-            name='footer-fact-id',
+            name="footer-fact-id",
         )
         def footer_fact_id(self):
-            return ''
+            return ""
 
         # ***
 
@@ -554,22 +560,22 @@ def _create_style_object():
         @property
         @setting(
             _("Default style to apply to tag hashmarks in editor header."),
-            name='value-tag-#',
+            name="value-tag-#",
             not_a_style=True,
         )
         def header_value_hash(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Default style to apply to tag labels in editor header."),
-            name='value-tag-label',
+            name="value-tag-label",
             not_a_style=True,
         )
         def header_value_tag(self):
-            return ''
+            return ""
 
     # ***
 
@@ -585,44 +591,44 @@ def _create_style_object():
         @property
         @setting(
             _("Style to apply to old Fact parts when not running editor."),
-            name='value-diff-old-raw',
+            name="value-diff-old-raw",
             not_a_style=True,
         )
         def value_diff_old_raw(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to old Fact parts in the editor header."),
-            name='value-diff-old-ptk',
+            name="value-diff-old-ptk",
             not_a_style=True,
         )
         def value_diff_old_ptk(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to new Fact parts when not running editor."),
-            name='value-diff-new-raw',
+            name="value-diff-new-raw",
             not_a_style=True,
         )
         def value_diff_new_raw(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to new Fact parts in the editor header."),
-            name='value-diff-new-ptk',
+            name="value-diff-new-ptk",
             not_a_style=True,
         )
         def value_diff_new_ptk(self):
-            return ''
+            return ""
 
     # ***
 
@@ -638,110 +644,110 @@ def _create_style_object():
         @property
         @setting(
             _("Style to apply to Fact ID in Factoid output (e.g., `dob show`)."),
-            name='factoid-pk',
+            name="factoid-pk",
             not_a_style=True,
         )
         def factoid_pk(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to act@gory in Factoid output (e.g., `dob show`)."),
-            name='factoid-act@gory',
+            name="factoid-act@gory",
             not_a_style=True,
         )
         def factoid_actegory(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to # symbol in Factoid output (e.g., `dob show`)."),
-            name='factoid-#',
+            name="factoid-#",
             not_a_style=True,
         )
         def factoid_hash(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to Tag in Factoid output (e.g., `dob show`)."),
-            name='factoid-tag',
+            name="factoid-tag",
             not_a_style=True,
         )
         def factoid_tag(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to #tag in Factoid output (e.g., `dob show`)."),
-            name='factoid-#tag',
+            name="factoid-#tag",
             not_a_style=True,
         )
         def factoid_hashtag(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to start time in Factoid output (e.g., `dob show`)."),
-            name='factoid-start',
+            name="factoid-start",
             not_a_style=True,
         )
         def factoid_start(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to end time in Factoid output (e.g., `dob show`)."),
-            name='factoid-end',
+            name="factoid-end",
             not_a_style=True,
         )
         def factoid_end(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to ‘at’ in Factoid output (e.g., `dob show`)."),
-            name='factoid-at',
+            name="factoid-at",
             not_a_style=True,
         )
         def factoid_at(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to ‘to’ in Factoid output (e.g., `dob show`)."),
-            name='factoid-to',
+            name="factoid-to",
             not_a_style=True,
         )
         def factoid_to(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @setting(
             _("Style to apply to duration in Factoid output (e.g., `dob show`)."),
-            name='factoid-duration',
+            name="factoid-duration",
             not_a_style=True,
         )
         def factoid_duration(self):
-            return ''
+            return ""
 
         # ***
 
@@ -749,6 +755,7 @@ def _create_style_object():
 
 
 # ***
+
 
 def default():
     """Default defines all options so tweaked stylings may omit any."""
@@ -762,6 +769,7 @@ def default():
 
 
 # ***
+
 
 def _stylize_all_one(styling, style):
     """"""
@@ -784,43 +792,44 @@ def _stylize_all_one(styling, style):
     # me a few releases, then I'll probably nix this.
     assert False  # Abandoned!
 
-    styling['streamer'] = style
+    styling["streamer"] = style
     # (lb): I cannot decide if I like the streamer bold or not.
-    styling['streamer'] += ' bold'
+    styling["streamer"] += " bold"
 
-    styling['streamer-line'] = style
+    styling["streamer-line"] = style
 
     # Set all the title-* and value-* values,
     #   title-normal through value-tags-line.
-    for prefix in ('title', 'value'):
+    for prefix in ("title", "value"):
         for part in (
-            'normal',
-            'focus',
-            'duration',
-            'start',
-            'start-focus',
-            'end',
-            'end-focus',
-            'activity',
-            'category',
-            'tags',
+            "normal",
+            "focus",
+            "duration",
+            "start",
+            "start-focus",
+            "end",
+            "end-focus",
+            "activity",
+            "category",
+            "tags",
         ):
-            for suffix in ('', '-line'):
-                class_name = '{}-{}{}'.format(prefix, part, suffix)
+            for suffix in ("", "-line"):
+                class_name = "{}-{}{}".format(prefix, part, suffix)
                 styling[class_name] = style
 
-    styling['blank-line'] = style
+    styling["blank-line"] = style
 
-    styling['content-fact'] = style
-    styling['content-help'] = style
-    styling['interval-gap'] = style
-    styling['unsaved-fact'] = style
+    styling["content-fact"] = style
+    styling["content-help"] = style
+    styling["interval-gap"] = style
+    styling["unsaved-fact"] = style
 
-    styling['footer'] = style
-    styling['footer-fact-id'] = style
+    styling["footer"] = style
+    styling["footer-fact-id"] = style
 
 
 # ***
+
 
 def light():
     styling = default()
@@ -828,7 +837,7 @@ def light():
     # difficult and tedious. So use the lowest-ordered, most universal class
     # of them all, and set class:label to the base color for this style.
     #   NOPE: _stylize_all_one(styling, 'bg:#FFFFFF #000000')
-    styling['label'] = 'bg:#FFFFFF #000000'
+    styling["label"] = "bg:#FFFFFF #000000"
 
     # FIXME/2020-04-21: See night(): Add some default colors for things.
     #  set_header_tag_parts_style(styling)
@@ -840,19 +849,20 @@ def light():
 
 # ***
 
+
 def night():
     def _night():
         styling = default()
         # See comment in light(). Use lowest-ordered class to set common style color.
         #   NOPE: _stylize_all_one(styling, 'bg:#000000 #FFFFFF')
-        styling['label'] = 'bg:#000000 #FFFFFF'
+        styling["label"] = "bg:#000000 #FFFFFF"
         set_header_tag_parts_style(styling)
         set_header_facts_diff_style(styling)
         set_factoid_parts_style(styling)
 
         # Fact.description background when showing help.
         # https://en.wikipedia.org/wiki/International_orange
-        styling['content-help'] = 'bg:#F04A00 #000000'
+        styling["content-help"] = "bg:#F04A00 #000000"
 
         return styling
 
@@ -871,7 +881,7 @@ def night():
         #   styling['value-tags'] = 'fg:#0000FF bold italic'
         #   styling['value-tag-#'] = 'fg:#C6C6C6 underline'
         #   styling['value-tag-label'] = 'fg:#D7FF87 underline'
-        styling['value-tags'] = 'fg:#D7FF87 underline'
+        styling["value-tags"] = "fg:#D7FF87 underline"
 
     def set_header_facts_diff_style(styling):
         # The *-raw styles are sent to ansi_escape_room's color() and attr() lookups.
@@ -879,37 +889,38 @@ def night():
         # The *-ptk styles are inserted into Python Prompt Toolkit (style, tuples, ).
         # - These styles are used in the interactive editor's header area.
         # Styles for the 'before' Fact parts -- from before user edited it.
-        styling['value-diff-old-raw'] = 'spring_green_3a'
-        spring_green_3a = '00AF5F'
-        styling['value-diff-old-ptk'] = (
-            'fg:#{} nobold noitalic nounderline'.format(spring_green_3a)
+        styling["value-diff-old-raw"] = "spring_green_3a"
+        spring_green_3a = "00AF5F"
+        styling["value-diff-old-ptk"] = "fg:#{} nobold noitalic nounderline".format(
+            spring_green_3a
         )
         # Styles for the 'after' Fact parts -- edits ready to be saved.
-        styling['value-diff-new-raw'] = 'light_salmon_3b, bold, underlined'
-        light_salmon_3b = 'D7875F'
-        styling['value-diff-new-ptk'] = 'fg:#{} bold underline'.format(light_salmon_3b)
+        styling["value-diff-new-raw"] = "light_salmon_3b, bold, underlined"
+        light_salmon_3b = "D7875F"
+        styling["value-diff-new-ptk"] = "fg:#{} bold underline".format(light_salmon_3b)
 
     def set_factoid_parts_style(styling):
-        styling['factoid-pk'] = 'grey_78'
-        styling['factoid-act@gory'] = 'cornflower_blue, bold, underlined'
-        styling['factoid-#'] = 'grey_78'
-        styling['factoid-tag'] = 'dark_olive_green_1b'
-        styling['factoid-#tag'] = 'underlined'
-        styling['factoid-start'] = 'sandy_brown'
-        styling['factoid-end'] = 'sandy_brown'
-        styling['factoid-at'] = 'grey_85'
-        styling['factoid-to'] = 'grey_85'
-        styling['factoid-duration'] = 'grey_78'
+        styling["factoid-pk"] = "grey_78"
+        styling["factoid-act@gory"] = "cornflower_blue, bold, underlined"
+        styling["factoid-#"] = "grey_78"
+        styling["factoid-tag"] = "dark_olive_green_1b"
+        styling["factoid-#tag"] = "underlined"
+        styling["factoid-start"] = "sandy_brown"
+        styling["factoid-end"] = "sandy_brown"
+        styling["factoid-at"] = "grey_85"
+        styling["factoid-to"] = "grey_85"
+        styling["factoid-duration"] = "grey_78"
 
     return _night()
 
 
 # ***
 
+
 def color():
     styling = night()
 
-    styling['streamer'] = 'fg:#5F5FFF bold'
+    styling["streamer"] = "fg:#5F5FFF bold"
     # styling['streamer-line'] = ...
 
     # styling['title-normal'] = ...
@@ -919,15 +930,14 @@ def color():
     # styling['blank-line'] = ...
 
     # Default Fact.description frame background.
-    styling['content-fact'] = 'bg:#9BC2C2 #000000'
+    styling["content-fact"] = "bg:#9BC2C2 #000000"
     # Fact.description background when showing help.
-    styling['content-help'] = 'bg:#66AAAA #000000'
+    styling["content-help"] = "bg:#66AAAA #000000"
     # Other contextual Fact.description background colors.
-    styling['interval-gap'] = 'bg:#AA6C39 #000000'
-    styling['unsaved-fact'] = 'bg:#D0EB9A #000000'
+    styling["interval-gap"] = "bg:#AA6C39 #000000"
+    styling["unsaved-fact"] = "bg:#D0EB9A #000000"
 
     # styling['footer'] = ...
     # styling['footer-fact-id'] = ...
 
     return styling
-

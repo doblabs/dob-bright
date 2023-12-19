@@ -26,19 +26,21 @@ from easy_as_pypi_termio.errors import exit_warning
 from .fact_dressed import FactDressed
 from .fix_times import reduce_time_hint
 
-__all__ = (
-    'must_create_fact_from_factoid',
-)
+__all__ = ("must_create_fact_from_factoid",)
 
 
 # ***
 
-def must_create_fact_from_factoid(
-    controller, factoid, time_hint,
-):
 
+def must_create_fact_from_factoid(
+    controller,
+    factoid,
+    time_hint,
+):
     def _must_create_fact_from_factoid(
-        controller, factoid, time_hint,
+        controller,
+        factoid,
+        time_hint,
     ):
         separators = must_prepare_factoid_item_separators(controller)
         use_hint = reduce_time_hint(time_hint)
@@ -51,7 +53,7 @@ def must_create_fact_from_factoid(
             )
             controller.client_logger.info(str(err)) if err else None
         except ParserException as err:
-            msg = _('Oops! {}').format(err)
+            msg = _("Oops! {}").format(err)
             controller.client_logger.error(msg)
             exit_warning(msg)
         # This runs for verify_after, not verify_none/"blank time".
@@ -59,15 +61,13 @@ def must_create_fact_from_factoid(
         return fact
 
     def must_prepare_factoid_item_separators(controller):
-        sep_string = controller.config['fact.separators']
+        sep_string = controller.config["fact.separators"]
         if not sep_string:
             return None
         try:
             separators = json.loads(sep_string)
         except json.decoder.JSONDecodeError as err:
-            msg = _(
-                "The 'separators' config value is not valid JSON: {}"
-            ).format(err)
+            msg = _("The 'separators' config value is not valid JSON: {}").format(err)
             controller.client_logger.error(msg)
             exit_warning(msg)
         return separators
@@ -89,4 +89,3 @@ def must_create_fact_from_factoid(
     # ***
 
     return _must_create_fact_from_factoid(controller, factoid, time_hint)
-

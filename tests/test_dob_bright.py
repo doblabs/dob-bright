@@ -41,19 +41,15 @@ class TestSetupLogging(object):
         """
         controller.setup_logging()
         assert controller.lib_logger.level == (
-            logging_helpers.resolve_log_level(
-                controller.config['dev.lib_log_level']
-            )[0]
+            logging_helpers.resolve_log_level(controller.config["dev.lib_log_level"])[0]
         )
         assert controller.client_logger.level == (
-            logging_helpers.resolve_log_level(
-                controller.config['dev.cli_log_level']
-            )[0]
+            logging_helpers.resolve_log_level(controller.config["dev.cli_log_level"])[0]
         )
 
     def test_setup_logging_log_console_true(self, controller):
         """Ensure if console logging, lib and client have streamhandlers."""
-        controller.config['log.use_console'] = True
+        controller.config["log.use_console"] = True
         controller.setup_logging()
         assert isinstance(
             controller.client_logger.handlers[0],
@@ -86,8 +82,9 @@ class TestSetupLogging(object):
         """
         Make sure that if we enable logfile_path, both loggers receive ``FileHandler``.
         """
-        controller.config['log.filepath'] = os.path.join(
-            appdirs.user_log_dir, 'foobar.log',
+        controller.config["log.filepath"] = os.path.join(
+            appdirs.user_log_dir,
+            "foobar.log",
         )
         controller.setup_logging()
         assert isinstance(
@@ -103,38 +100,39 @@ class TestSetupLogging(object):
 class TestGetConfig(object):
     """Make sure that turning a config instance into proper config dictionaries works."""
 
-    @pytest.mark.parametrize('cli_log_level', ['debug'])
+    @pytest.mark.parametrize("cli_log_level", ["debug"])
     def test_log_levels_valid(self, cli_log_level, config_instance):
         """
         Make sure *string loglevels* translates to their respective integers properly.
         """
         config_obj = config_instance(cli_log_level=cli_log_level)
-        assert config_obj['dev']['cli_log_level'] == cli_log_level
+        assert config_obj["dev"]["cli_log_level"] == cli_log_level
         config = decorate_config(config_obj)
-        assert config['dev']['cli_log_level'] == 10
-        assert config['dev.cli_log_level'] == 10
+        assert config["dev"]["cli_log_level"] == 10
+        assert config["dev.cli_log_level"] == 10
         assert config.asobj.dev.cli_log_level.value == 10
 
-    @pytest.mark.parametrize('cli_log_level', ['foobar'])
+    @pytest.mark.parametrize("cli_log_level", ["foobar"])
     def test_log_levels_invalid(self, cli_log_level, config_instance, capsys):
         """Test that invalid *string loglevels* raise ``ValueError``."""
         config_obj = config_instance(cli_log_level=cli_log_level)
         with pytest.raises(
             ValueError,
-            match=r"^Unrecognized value for setting ‘cli_log_level’: “foobar”.*"
+            match=r"^Unrecognized value for setting ‘cli_log_level’: “foobar”.*",
         ):
             _config = decorate_config(config_obj)  # noqa: F841 unused local
         out, err = capsys.readouterr()
-        assert out == ''
-        assert err == ''
+        assert out == ""
+        assert err == ""
 
     def test_invalid_store(self, config_instance):
         """Make sure that passing an ORM other than 'sqlalchemy' raises an exception."""
-        config_obj = config_instance(orm='foobar')
-        match_former = r'Unrecognized value for setting ‘orm’'
-        match_latter = r'“foobar” \(Choose from: ‘sqlalchemy’\)'
+        config_obj = config_instance(orm="foobar")
+        match_former = r"Unrecognized value for setting ‘orm’"
+        match_latter = r"“foobar” \(Choose from: ‘sqlalchemy’\)"
         with pytest.raises(
-            ValueError, match=r"^{}: {}$".format(match_former, match_latter),
+            ValueError,
+            match=r"^{}: {}$".format(match_former, match_latter),
         ):
             _config = decorate_config(config_obj)  # noqa: F841 unused local
 
@@ -142,13 +140,13 @@ class TestGetConfig(object):
         """Make sure that passing a postgres config works.
 
         Albeit actual postgres connections not tested."""
-        confnstnc = config_instance(engine='postgres')
+        confnstnc = config_instance(engine="postgres")
         config = decorate_config(confnstnc)
-        assert config['db.host'] == confnstnc['db']['host']
-        assert config['db.port'] == confnstnc['db']['port']
-        assert config['db.name'] == confnstnc['db']['name']
-        assert config['db.user'] == confnstnc['db']['user']
-        assert config['db.password'] == confnstnc['db']['password']
+        assert config["db.host"] == confnstnc["db"]["host"]
+        assert config["db.port"] == confnstnc["db"]["port"]
+        assert config["db.name"] == confnstnc["db"]["name"]
+        assert config["db.user"] == confnstnc["db"]["user"]
+        assert config["db.password"] == confnstnc["db"]["password"]
 
 
 class TestGetConfigInstance(object):
@@ -164,9 +162,11 @@ class TestGetConfigInstance(object):
         # NOTE: AppDirs is a module-scope object with immutable attributes, so we
         # need to mock the entire object (i.e., cannot just patch attribute itself).
         app_dirs_mock = mock.Mock()
-        app_dirs_mock.configure_mock(user_config_dir='/XXX')
-        app_dirs_mock.configure_mock(user_data_dir='/XXX')
-        mocker.patch.object(app_dirs_with_mkdir, 'AppDirsWithMkdir', return_value=app_dirs_mock)
+        app_dirs_mock.configure_mock(user_config_dir="/XXX")
+        app_dirs_mock.configure_mock(user_data_dir="/XXX")
+        mocker.patch.object(
+            app_dirs_with_mkdir, "AppDirsWithMkdir", return_value=app_dirs_mock
+        )
         self.configurable = self.get_configurable()
         self.configurable.load_config(configfile_path=None)
         assert len(list(self.configurable.config_root.items())) > 0
@@ -176,17 +176,16 @@ class TestGetConfigInstance(object):
         """Make sure we try parsing a found config file."""
         self.configurable = self.get_configurable()
         self.configurable.load_config(configfile_path=None)
-        cfg_val = self.configurable.config_root['db']['orm']
-        assert cfg_val == config_instance()['db']['orm']
+        cfg_val = self.configurable.config_root["db"]["orm"]
+        assert cfg_val == config_instance()["db"]["orm"]
         assert config_instance() is not self.configurable.config_root
 
     def test_config_path_getter(self, appdirs, mocker):
         """Make sure the config target path is constructed to our expectations."""
-        mocker.patch('easy_as_pypi_config.fileboss.load_config_obj')
+        mocker.patch("easy_as_pypi_config.fileboss.load_config_obj")
         # DRY?/2020-01-09: (lb): Perhaps move repeated ConfigUrable code to fixture.
         self.configurable = self.get_configurable()
         self.configurable.load_config(configfile_path=None)
         # 'dob.conf' defined and used in dob_bright.config.fileboss.default_config_path.
-        expectation = os.path.join(appdirs.user_config_dir, 'dob.conf')
+        expectation = os.path.join(appdirs.user_config_dir, "dob.conf")
         assert fileboss.load_config_obj.called_with(expectation)
-

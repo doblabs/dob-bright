@@ -17,19 +17,17 @@
 
 import os
 
-__all__ = (
-    'touch',
-)
+__all__ = ("touch",)
 
 
 def touch(filepath):
     try:
         import pathlib
+
         pathlib.Path(filepath).touch()
     except ImportError:
         # Python <3.4 [2020-01-27: now unreachable!]
         # MAYBE/2020-01-27: Move pathlib import to module level...
         #   or leave here in method, to be lazy-loaded.
         if not os.path.exists(filepath):
-            open(filepath, 'w').close()
-
+            open(filepath, "w").close()

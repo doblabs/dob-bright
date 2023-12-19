@@ -16,14 +16,12 @@
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
 from easy_as_pypi_config.echo_cfg import (
-    echo_config_decorator_table as _echo_config_decorator_table
+    echo_config_decorator_table as _echo_config_decorator_table,
 )
 
 from ..reports.render_results import render_results
 
-__all__ = (
-    'echo_config_decorator_table',
-)
+__all__ = ("echo_config_decorator_table",)
 
 
 def echo_config_decorator_table(
@@ -31,8 +29,8 @@ def echo_config_decorator_table(
     exclude_section=False,
     include_hidden=False,
     controller=None,
-    output_format='table',
-    table_type='texttable',
+    output_format="table",
+    table_type="texttable",
     **kwargs,
 ):
     _echo_config_decorator_table(
@@ -45,4 +43,3 @@ def echo_config_decorator_table(
         table_type=table_type,
         **kwargs,
     )
-

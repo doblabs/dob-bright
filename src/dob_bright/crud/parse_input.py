@@ -37,13 +37,11 @@ from .fix_times import (
     mend_facts_times,
     must_complete_times,
     reduce_time_hint,
-    then_extend_fact
+    then_extend_fact,
 )
 from .parse_mistakes import prepare_log_msg
 
-__all__ = (
-    'parse_input',
-)
+__all__ = ("parse_input",)
 
 
 # (lb): This fcn. could be moved to dob or dob-bright; only dob uses it.
@@ -101,11 +99,12 @@ def parse_input(controller, file_in=None, progress=None):
         accumulated_fact = []
         unprocessed_facts = []
 
-        progress and progress.click_echo_current_task(_('Parsing factoids...'))
+        progress and progress.click_echo_current_task(_("Parsing factoids..."))
         for line in input_f:
             line_num += 1
             (
-                bl_count, processed,
+                bl_count,
+                processed,
             ) = gobble_blank_or_continued(line, accumulated_fact, bl_count)
             if processed:
                 continue
@@ -113,8 +112,8 @@ def parse_input(controller, file_in=None, progress=None):
             if fact_dict is None:
                 bl_count = 0
                 continue
-            fact_dict['parsed_source.line_num'] = line_num
-            fact_dict['parsed_source.line_raw'] = line
+            fact_dict["parsed_source.line_num"] = line_num
+            fact_dict["parsed_source.line_raw"] = line
             if not accumulated_fact:
                 # First Fact.
                 assert current_fact_dict is None
@@ -129,17 +128,29 @@ def parse_input(controller, file_in=None, progress=None):
 
             # Woot, woot! We parsed a complete Fact.
             if current_fact_dict:
-                unprocessed_facts.append((current_fact_dict, accumulated_fact,))
+                unprocessed_facts.append(
+                    (
+                        current_fact_dict,
+                        accumulated_fact,
+                    )
+                )
             current_fact_dict = fact_dict
-            accumulated_fact = [line, ]
+            accumulated_fact = [
+                line,
+            ]
             bl_count = 0
 
         # end: for
 
         if accumulated_fact:
-            unprocessed_facts.append((current_fact_dict, accumulated_fact,))
+            unprocessed_facts.append(
+                (
+                    current_fact_dict,
+                    accumulated_fact,
+                )
+            )
         else:
-            msg = _('What is this, an empty file?')
+            msg = _("What is this, an empty file?")
             exit_warning_crude(msg)
 
         return unprocessed_facts
@@ -150,22 +161,22 @@ def parse_input(controller, file_in=None, progress=None):
             # Start of file.
             assert blank_line_count == -1
             if not line.strip():
-                controller.client_logger.debug(_('Skip premature blank line'))
+                controller.client_logger.debug(_("Skip premature blank line"))
                 # Skip blank lines pre-Facts.
                 processed = True
             # else, we found the first non-blank line. We now
             #   expect to find the date:time & meta, or death.
         elif not line.strip():  # remove trailing newline
-            controller.client_logger.debug(_('- Blank line in desc.'))
+            controller.client_logger.debug(_("- Blank line in desc."))
             accumulated_fact.append(line)
             blank_line_count += 1
             processed = True
         elif blank_line_count == 0:
-            controller.client_logger.debug(_('- Part of desc.:\n') + line.strip())
+            controller.client_logger.debug(_("- Part of desc.:\n") + line.strip())
             accumulated_fact.append(line)
             processed = True
-        elif re.match(r'^\s', line):
-            controller.client_logger.debug(_('- Leading whitesp.:\n') + line.strip())
+        elif re.match(r"^\s", line):
+            controller.client_logger.debug(_("- Leading whitesp.:\n") + line.strip())
             accumulated_fact.append(line)
             processed = True
         # else, any content that follows blank line(s) is either:
@@ -177,7 +188,10 @@ def parse_input(controller, file_in=None, progress=None):
         if not line_starts_with_punctuation(line):
             fact_dict = dissect_meta_line(line)
         must_not_be_unparseable_first_line(
-            fact_dict, line, accumulated_fact, blank_line_count,
+            fact_dict,
+            line,
+            accumulated_fact,
+            blank_line_count,
         )
         return fact_dict
 
@@ -187,12 +201,8 @@ def parse_input(controller, file_in=None, progress=None):
     #   re.compile(r'^\s*[{}]+'.format(re.escape(punctuation)))
     # Because we must allow relative time punctuation, '-' and '+'.
     RE_LEADS_WITH_PUNCTUATION = re.compile(
-        r'^\s*[{}]+'.format(
-            re.escape(
-                punctuation
-                .replace('-', '')
-                .replace('+', '')
-            )))
+        r"^\s*[{}]+".format(re.escape(punctuation.replace("-", "").replace("+", "")))
+    )
 
     def line_starts_with_punctuation(line):
         # The human-friendly dateparser ignores leading punctuation,
@@ -205,7 +215,10 @@ def parse_input(controller, file_in=None, progress=None):
         return RE_LEADS_WITH_PUNCTUATION.match(line) is not None
 
     def must_not_be_unparseable_first_line(
-        fact_dict, line, accumulated_fact, blank_line_count,
+        fact_dict,
+        line,
+        accumulated_fact,
+        blank_line_count,
     ):
         if fact_dict is not None:
             return
@@ -213,19 +226,18 @@ def parse_input(controller, file_in=None, progress=None):
         # If not parsed, and first line we've seen, die.
         missing_fact_must_come_early(line, blank_line_count)
         # else, more content, or a Fact separator.
-        controller.client_logger.debug(_('- More desc.: ') + line.strip())
+        controller.client_logger.debug(_("- More desc.: ") + line.strip())
         accumulated_fact.append(line)
 
     def missing_fact_must_come_early(line, blank_line_count):
         if blank_line_count == -1:
-            msg = (
-                '{}: {}{}{}{}{}\n'
-                .format(
-                    _('The first nonempty line is not a recognized Fact.'),
-                    bg('white'), fg('black'), attr('underlined'),
-                    line.strip(),
-                    attr('reset'),
-                )
+            msg = "{}: {}{}{}{}{}\n".format(
+                _("The first nonempty line is not a recognized Fact."),
+                bg("white"),
+                fg("black"),
+                attr("underlined"),
+                line.strip(),
+                attr("reset"),
             )
             exit_warning_crude(msg)
 
@@ -241,54 +253,55 @@ def parse_input(controller, file_in=None, progress=None):
     #       vs. ``still blah``
     RE_TIME_HINT = re.compile(
         # SYNC_ME: RE_TIME_HINT, TIME_HINT_MAP, and @generate_add_fact_command's.
-        r'^('
-
+        r"^("
         # Skipping: Doesn't make sense: '(?P<verify_none>on|now)'
         # MAYBE/2019-01-22: Is "between" okay here?
         #   We don't have a Click alias for it, so
         #   there's a `dob from` command, but not `dob between`,
         #   so maybe we want to remove "between" from here.
         # FIXME/2021-02-07: i18n/l10n this.
-        '(?P<verify_both>from|between)'
-        '|(?P<verify_start>at)'  # noqa: E131
-        '|(?P<verify_end>to|until)'
-        '|(?P<verify_then_none>then:)'
-        '|(?P<verify_then_some>then)'
-        '|(?P<verify_still_none>still:)'
-        '|(?P<verify_still_some>still)'
+        "(?P<verify_both>from|between)"
+        "|(?P<verify_start>at)"  # noqa: E131
+        "|(?P<verify_end>to|until)"
+        "|(?P<verify_then_none>then:)"
+        "|(?P<verify_then_some>then)"
+        "|(?P<verify_still_none>still:)"
+        "|(?P<verify_still_some>still)"
         # NOTE: Require colon postfix for options w/o time component.
         # NOTE: 'now' would be confusing and conflict with other usage,
         #       (at least I think it would?). E.g., do not do this:
         #         '|(?P<verify_after>after:|since:|next:|now:)'
-        '|(?P<verify_after>after:|since:|next:)'
-
-        ' )',  # NOTE The SPACE CHARACTER following THE DIRECTIVE!
+        "|(?P<verify_after>after:|since:|next:)"
+        " )",  # NOTE The SPACE CHARACTER following THE DIRECTIVE!
         re.IGNORECASE,
     )
 
     def dissect_meta_line(line):
         sussed_hint, time_hint, line = suss_the_time_format(line)
         fact_dict, err = run_parser(line, time_hint)
-        if not fact_dict['start'] and not fact_dict['end']:
-            controller.client_logger.debug(_('unmeta: {}'.format(err)))
+        if not fact_dict["start"] and not fact_dict["end"]:
+            controller.client_logger.debug(_("unmeta: {}".format(err)))
             fact_dict = None
         else:
             # The user could specify, e.g., just a single datetime (followed
             # by a description), and we can fill in the other datetime and
             # ask the user for more details about the fact.
             #   Not always True:  assert not err
-            controller.client_logger.debug(_(
-                # Including the description is too verbose:
-                #   'new fact_dict: {}'.format(fact_dict)
-                # so let's make a complicated dictionary comprehension instead.
-                'new fact_dict: {}'.format(
-                    {
-                        key: val if key != 'description'
-                        else val[:10] + ((len(val) > 10) and '...' or '')
-                        for key, val in fact_dict.items()
-                    }
+            controller.client_logger.debug(
+                _(
+                    # Including the description is too verbose:
+                    #   'new fact_dict: {}'.format(fact_dict)
+                    # so let's make a complicated dictionary comprehension instead.
+                    "new fact_dict: {}".format(
+                        {
+                            key: val
+                            if key != "description"
+                            else val[:10] + ((len(val) > 10) and "..." or "")
+                            for key, val in fact_dict.items()
+                        }
+                    )
                 )
-            ))
+            )
         return fact_dict
 
     # 2021-02-08: This function had been defaulting `time_hint` to 'verify_start',
@@ -308,7 +321,7 @@ def parse_input(controller, file_in=None, progress=None):
     #     obvious as 'at 1:23: friends showed up'. But they still seem like start
     #     times, and not part of a description, unlike '123 friends showed up'.
     def suss_the_time_format(line):
-        sussed_hint = ''
+        sussed_hint = ""
         match = RE_TIME_HINT.match(line)
         if match is not None:
             for hint, matched in match.groupdict().items():
@@ -316,14 +329,17 @@ def parse_input(controller, file_in=None, progress=None):
                     assert not sussed_hint
                     sussed_hint = hint
                     # Remove the time hint prefix.
-                    line = RE_TIME_HINT.sub('', line).lstrip()
+                    line = RE_TIME_HINT.sub("", line).lstrip()
         # 2021-02-08: See comment above describing newly added 'verify_unset'.
-        time_hint = sussed_hint or 'verify_unset'
-        controller.client_logger.debug(_(
-            'time_hint: {}{}'.format(
-                time_hint, ' [sussed]' if sussed_hint else ' [default]',
+        time_hint = sussed_hint or "verify_unset"
+        controller.client_logger.debug(
+            _(
+                "time_hint: {}{}".format(
+                    time_hint,
+                    " [sussed]" if sussed_hint else " [default]",
+                )
             )
-        ))
+        )
         return sussed_hint, time_hint, line
 
     def run_parser(line, time_hint):
@@ -343,7 +359,7 @@ def parse_input(controller, file_in=None, progress=None):
             # MEH: (lb): Should we leave hash_stamps='#@' ?
             #   I sorta like using the proper tag symbol
             #   when not worried about shell interpolation.
-            hash_stamps='#',
+            hash_stamps="#",
             # We'll handle errors ourselves, later, in bulk, either
             # `--ask`'ing the user for more Fact details, or barfing
             # all the errors and exiting.
@@ -356,11 +372,11 @@ def parse_input(controller, file_in=None, progress=None):
 
     # FIXME/DRY: See create.py/transcode.py (places that use "+0").
     def fact_dict_set_time_hint(fact_dict, time_hint):
-        fact_dict['time_hint'] = time_hint
-        if time_hint in ('verify_after', 'verify_then_none', 'verify_still_none'):
-            assert not fact_dict['start'] and not fact_dict['end']
+        fact_dict["time_hint"] = time_hint
+        if time_hint in ("verify_after", "verify_then_none", "verify_still_none"):
+            assert not fact_dict["start"] and not fact_dict["end"]
             # (lb): How's this for a hack!?
-            fact_dict['start'] = "+0"
+            fact_dict["start"] = "+0"
 
     # ***
 
@@ -373,14 +389,14 @@ def parse_input(controller, file_in=None, progress=None):
         new_facts = []
         hydrate_errs = []
         temp_id = -1
-        progress and progress.click_echo_current_task(_('Hydrating Facts...'))
+        progress and progress.click_echo_current_task(_("Hydrating Facts..."))
         for fact_dict, accumulated_fact in raw_facts:
             add_hydration_warnings(fact_dict, hydrate_errs)
             hydrate_description(fact_dict, accumulated_fact)
             new_fact, err_msg = create_fact_from_parsed_dict(fact_dict)
             if new_fact:
                 assert not err_msg
-                time_hint = fact_dict['time_hint']
+                time_hint = fact_dict["time_hint"]
                 temp_id = add_new_fact(new_fact, time_hint, temp_id, new_facts)
             else:
                 assert not new_fact
@@ -388,33 +404,33 @@ def parse_input(controller, file_in=None, progress=None):
         return new_facts, hydrate_errs
 
     def add_hydration_warnings(fact_dict, hydrate_errs):
-        if not fact_dict['warnings']:
+        if not fact_dict["warnings"]:
             return
-        fact_warnings = '\n  '.join(fact_dict['warnings'])
+        fact_warnings = "\n  ".join(fact_dict["warnings"])
         display_dict = copy.copy(fact_dict)
-        del display_dict['warnings']
+        del display_dict["warnings"]
         err_msg = prepare_log_msg(display_dict, fact_warnings)
         hydrate_errs.append(err_msg)
 
     # Horizontal rule separator matches same character repeated at least thrice.
     # FIXME/2018-05-18: (lb): Document: HR is any repeated one of -, =, #, |.
-    FACT_SEP_HR = re.compile(r'^([-=#|])\1{2}\1*$')
+    FACT_SEP_HR = re.compile(r"^([-=#|])\1{2}\1*$")
 
     def hydrate_description(fact_dict, accumulated_fact):
         # The first entry is the meta line, so ignore it.
         desc_lines = accumulated_fact[1:]
         # However, the user is allowed to start the description
         # on the meta line.
-        if fact_dict['description']:
+        if fact_dict["description"]:
             # Don't forget the newline -- it got culled (strip()ped) on parse.
-            desc_lines.insert(0, fact_dict['description'] + "\n")
+            desc_lines.insert(0, fact_dict["description"] + "\n")
 
         cull_factless_fact_separator(desc_lines)
 
         # desc_lines are already newlined.
-        desc = ''.join(desc_lines).strip()
+        desc = "".join(desc_lines).strip()
 
-        fact_dict['description'] = desc
+        fact_dict["description"] = desc
 
     def cull_factless_fact_separator(desc_lines):
         # To make import file more readable, user can add
@@ -441,8 +457,8 @@ def parse_input(controller, file_in=None, progress=None):
             new_fact = FactDressed.create_from_parsed_fact(
                 fact_dict,
                 lenient=True,
-                line_num=fact_dict['parsed_source.line_num'],
-                line_raw=fact_dict['parsed_source.line_raw'],
+                line_num=fact_dict["parsed_source.line_num"],
+                line_raw=fact_dict["parsed_source.line_raw"],
             )
         except ValueError as err:
             err_msg = prepare_log_msg(fact_dict, str(err))
@@ -459,11 +475,11 @@ def parse_input(controller, file_in=None, progress=None):
 
     def maybe_squash_extend_prev(new_fact, time_hint, new_facts):
         if time_hint not in [
-            'verify_end',
-            'verify_then_none',
-            'verify_then_some',
-            'verify_still_none',
-            'verify_still_some',
+            "verify_end",
+            "verify_then_none",
+            "verify_then_some",
+            "verify_still_none",
+            "verify_still_some",
         ]:
             return [new_fact]
         return squash_extend_if_prev(new_fact, time_hint, new_facts)
@@ -481,7 +497,9 @@ def parse_input(controller, file_in=None, progress=None):
             return [new_fact]
         elif prev_fact.end is not None:
             return maybe_set_start_maybe_extend_prev(
-                prev_fact, new_fact, time_hint,
+                prev_fact,
+                new_fact,
+                time_hint,
             )
         elif prev_fact.start is None:
             return [new_fact]
@@ -506,19 +524,19 @@ def parse_input(controller, file_in=None, progress=None):
 
     def maybe_set_start_maybe_extend_prev(prev_fact, new_fact, time_hint):
         if time_hint in [
-            'verify_then_none',
-            'verify_then_some',
-            'verify_still_none',
-            'verify_still_some',
+            "verify_then_none",
+            "verify_then_some",
+            "verify_still_none",
+            "verify_still_some",
         ]:
             extended_fact = then_extend_fact(controller, prev_fact)
             extended_fact.end = new_fact.start
-            if time_hint in ['verify_still_none', 'verify_still_some']:
+            if time_hint in ["verify_still_none", "verify_still_some"]:
                 new_fact.activity = prev_fact.activity
                 new_fact.tags = list(prev_fact.tags)
             return [extended_fact, new_fact]
         else:
-            assert time_hint == 'verify_end'  # ``to``
+            assert time_hint == "verify_end"  # ``to``
             assert new_fact.start is None
             # Fix it in post, er, fix_delta_time_relative.
             new_fact.start = "+0"
@@ -532,7 +550,7 @@ def parse_input(controller, file_in=None, progress=None):
         new_fact.pk = None
 
     def maybe_extend_fact(controller, new_fact, time_hint):
-        if time_hint not in ['verify_then_none', 'verify_then_some']:
+        if time_hint not in ["verify_then_none", "verify_then_some"]:
             return new_fact
         return then_extend_fact(controller, new_fact)
 
@@ -553,10 +571,7 @@ def parse_input(controller, file_in=None, progress=None):
             click_echo()
             click_echo(err_msg)
             click_echo()
-        msg = (_(
-            'Please fix your import data and try again.'
-            ' Scroll up for details.'
-        ))
+        msg = _("Please fix your import data and try again." " Scroll up for details.")
         exit_warning_crude(msg)
 
     # ***
@@ -581,11 +596,11 @@ def parse_input(controller, file_in=None, progress=None):
             new_facts[0].start = datetime.combine(new_facts[0].end, time.min)
             if new_facts[0].start == new_facts[0].end:
                 new_facts[0].start = new_facts[0].end - timedelta(days=1)
-        elif not raw_facts[0][0]['start']:
+        elif not raw_facts[0][0]["start"]:
             new_facts[0].start = None
 
         controller.affirm(new_facts[-1].end)
-        if not raw_facts[-1][0]['end']:
+        if not raw_facts[-1][0]["end"]:
             new_facts[-1].end = None
 
     # ***
@@ -593,7 +608,7 @@ def parse_input(controller, file_in=None, progress=None):
     def must_not_conflict_existing(new_facts):
         # (lb): Yuck. Sorry about this. Totally polluting what was a small
         # function with lots of progress-output overhead.
-        task_descrip = _('Verifying times nonconflicting')
+        task_descrip = _("Verifying times nonconflicting")
         if progress is not None:
             term_width, dot_count, fact_sep = progress.start_crude_progressor(
                 task_descrip,
@@ -605,15 +620,18 @@ def parse_input(controller, file_in=None, progress=None):
         for idx, fact in enumerate(new_facts):
             if progress is not None:
                 term_width, dot_count, fact_sep = progress.step_crude_progressor(
-                    task_descrip, term_width, dot_count, fact_sep,
+                    task_descrip,
+                    term_width,
+                    dot_count,
+                    fact_sep,
                 )
 
             if idx == len(new_facts) - 1:
-                time_hint = 'verify_last'
+                time_hint = "verify_last"
             elif idx == 0 and not fact.start:
-                time_hint = 'verify_end'
+                time_hint = "verify_end"
             else:
-                time_hint = 'verify_both'
+                time_hint = "verify_both"
 
             conflicts = mend_facts_times(
                 controller,
@@ -624,9 +642,14 @@ def parse_input(controller, file_in=None, progress=None):
             assert not fact.deleted  # Only on squash, which shouldn't happen.
 
             if conflicts:
-                all_conflicts.append((fact, conflicts,))
+                all_conflicts.append(
+                    (
+                        fact,
+                        conflicts,
+                    )
+                )
 
-        progress and progress.click_echo_current_task('')
+        progress and progress.click_echo_current_task("")
 
         # Handling anything other than the ongoing (active) fact seems
         # beyond the scope of the import function. dob is not a conflict
@@ -639,6 +662,7 @@ def parse_input(controller, file_in=None, progress=None):
         Returns True if time range overlaps with any existing facts.
         The active fact overlaps if it starts during the time range.
         """
+
         def _fix_range_conflicts_easy():
             first_time = new_facts[0].start or new_facts[0].end
             final_time = new_facts[-1].end or new_facts[-1].start
@@ -679,7 +703,7 @@ def parse_input(controller, file_in=None, progress=None):
                     seqt_fact.squash(new_facts[-1], DEFAULT_SQUASH_SEP)
                     new_facts[-1] = seqt_fact
                     return check_all
-                if not controller.config['time.allow_momentaneous']:
+                if not controller.config["time.allow_momentaneous"]:
                     # User is not allowing momentaneous Facts, so disallow.
                     # Return True and we'll run thorough conflict check
                     # (and exit on error instead of continuing import).
@@ -732,24 +756,23 @@ def parse_input(controller, file_in=None, progress=None):
             for edited_fact, original in resolved_edits:
                 echo_saved_fact_conflict(fact, edited_fact, original)
         msg = _(
-            'One or more new Facts would conflict with existing Facts.'
-            ' This Is Not Allowed'
+            "One or more new Facts would conflict with existing Facts."
+            " This Is Not Allowed"
         )
         exit_warning_crude(msg)
 
     def echo_saved_fact_conflict(fact, edited_fact, original):
-        echo_block_header(_('Saved Fact Datetime Conflict!'))
+        echo_block_header(_("Saved Fact Datetime Conflict!"))
         click_echo()
-        click_echo(_('  Fact being imported:'))
-        click_echo(_('  ───────────────────'))
+        click_echo(_("  Fact being imported:"))
+        click_echo(_("  ───────────────────"))
         click_echo(fact.friendly_diff(fact, truncate=True))
         click_echo()
-        click_echo(_('  Impact on saved Fact:'))
-        click_echo(_('  ────────────────────'))
+        click_echo(_("  Impact on saved Fact:"))
+        click_echo(_("  ────────────────────"))
         click_echo(original.friendly_diff(edited_fact))
         click_echo()
 
     # ***
 
     return _parse_input()
-

@@ -21,9 +21,7 @@ from click_hotoffthehamster._compat import term_len
 
 from .line_writer import LineWriter
 
-__all__ = (
-    'JournalWriter',
-)
+__all__ = ("JournalWriter",)
 
 
 class JournalWriter(LineWriter):
@@ -40,7 +38,7 @@ class JournalWriter(LineWriter):
         return super(JournalWriter, self).write_report(table, headers, tabulation)
 
     def _write_result(self, row, headers, tabulation=None):
-        line = ''
+        line = ""
 
         next_section = self.curr_section
         if self.curr_section is None or row[0] != self.curr_section:
@@ -50,14 +48,14 @@ class JournalWriter(LineWriter):
                 self.output_write()
 
             line += row[0]
-            line += ' ' * (tabulation.max_widths[0] - term_len(row[0]))
+            line += " " * (tabulation.max_widths[0] - term_len(row[0]))
         else:
             # Omit the first column value when it's the same as the previous row's.
             # Strip Unicode/ASNI control characters to compute whitespace to fill.
-            line += ' ' * tabulation.max_widths[0]
+            line += " " * tabulation.max_widths[0]
 
         i_remainder = 1
-        line += '  ' + '  '.join([str(val) for val in row[i_remainder:]])
+        line += "  " + "  ".join([str(val) for val in row[i_remainder:]])
 
         # LATER/2020-06-03: Print formatted text.
         #  from prompt_toolkit import print_formatted_text
@@ -66,4 +64,3 @@ class JournalWriter(LineWriter):
         self.output_write(line)
 
         self.curr_section = next_section
-

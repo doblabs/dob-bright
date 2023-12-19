@@ -29,8 +29,8 @@ from nark.items.tag import Tag
 from nark.managers.query_terms import QueryTerms
 
 __all__ = (
-    'report_table_columns',
-    'tabulate_results',
+    "report_table_columns",
+    "tabulate_results",
     # Private:
     #  '_GrossTotals',
     #  '_ReportColumn',
@@ -41,44 +41,44 @@ __all__ = (
 # ***
 
 _ReportColumn = namedtuple(
-    '_ReportColumn',
-    ('column', 'header', 'align', 'option'),
+    "_ReportColumn",
+    ("column", "header", "align", "option"),
 )
 
 REPORT_COLUMNS = {
     # Fact attributes.
-    _ReportColumn('key', _("Key"), 'l', True),
-    _ReportColumn('start', _("Start"), 'l', True),
-    _ReportColumn('end', _("End"), 'l', True),
-    _ReportColumn('activity', _("Activity"), 'l', True),
-    _ReportColumn('category', _("Category"), 'l', True),
-    _ReportColumn('tags', _("Tags"), 'l', True),
-    _ReportColumn('description', _("Description"), 'l', True),
+    _ReportColumn("key", _("Key"), "l", True),
+    _ReportColumn("start", _("Start"), "l", True),
+    _ReportColumn("end", _("End"), "l", True),
+    _ReportColumn("activity", _("Activity"), "l", True),
+    _ReportColumn("category", _("Category"), "l", True),
+    _ReportColumn("tags", _("Tags"), "l", True),
+    _ReportColumn("description", _("Description"), "l", True),
     # Group-by aggregates. See: FactManager.RESULT_GRP_INDEX.
     # MAYBE/2020-06-02: Append units to header, e.g., "Duration (mins.)"
     # NOTE: Because we right-pad duration with spaces, use left-align,
     #       otherwise the texttable format will strip right whitespace.
-    _ReportColumn('duration', _("Duration"), 'l', True),
+    _ReportColumn("duration", _("Duration"), "l", True),
     # The journal format shows a sparkline.
     # MAYBE/2020-05-18: Add sparkline option to ASCII table formats.
-    _ReportColumn('sparkline', _("Sparkline"), 'l', True),
-    _ReportColumn('group_count', _("Uses"), 'r', True),
+    _ReportColumn("sparkline", _("Sparkline"), "l", True),
+    _ReportColumn("group_count", _("Uses"), "r", True),
     # MAYBE/2020-05-18: Format first_start and final_end per user --option.
     # - For now, ASCII table formatter is just str()'ifying.
-    _ReportColumn('first_start', _("First Start"), 'l', True),
-    _ReportColumn('final_end', _("Final End"), 'l', True),
-    _ReportColumn('activities', _("Activities"), 'l', True),
-    _ReportColumn('actegories', _("Actegories"), 'l', True),
-    _ReportColumn('categories', _("Categories"), 'l', True),
+    _ReportColumn("first_start", _("First Start"), "l", True),
+    _ReportColumn("final_end", _("Final End"), "l", True),
+    _ReportColumn("activities", _("Activities"), "l", True),
+    _ReportColumn("actegories", _("Actegories"), "l", True),
+    _ReportColumn("categories", _("Categories"), "l", True),
     # The actegory is used for the journal format.
-    _ReportColumn('actegory', _("Actegory"), 'l', True),
+    _ReportColumn("actegory", _("Actegory"), "l", True),
     # A singular 'tag' column happens when Act@Cat aggregated b/c group_tags.
-    _ReportColumn('tag', _("Tag"), 'l', True),
+    _ReportColumn("tag", _("Tag"), "l", True),
     # More options for the journal format:
-    _ReportColumn('start_date', _("Start date"), 'l', True),
-    _ReportColumn('start_date_cmp', _("Startdate"), 'l', False),
-    _ReportColumn('start_time', _("Start time"), 'l', True),
-    _ReportColumn('end_date', _("End date"), 'l', True),
+    _ReportColumn("start_date", _("Start date"), "l", True),
+    _ReportColumn("start_date_cmp", _("Startdate"), "l", False),
+    _ReportColumn("start_time", _("Start time"), "l", True),
+    _ReportColumn("end_date", _("End date"), "l", True),
 }
 
 
@@ -102,12 +102,11 @@ def report_table_columns():
 # (Is this too explain-y? I figured I should at least rationalize why I started
 # scoping functions within functions this past year, as opposed to my earlier
 # hacking-development efforts where I tended toward writing classes instead.)
-ResultsTabulation = namedtuple(
-    'ResultsTabulation', ('table', 'repcols', 'max_widths')
-)
+ResultsTabulation = namedtuple("ResultsTabulation", ("table", "repcols", "max_widths"))
 
 
 # ***
+
 
 class _GrossTotals(object):
     def __init__(self):
@@ -157,6 +156,7 @@ class _GrossTotals(object):
 
 # ***
 
+
 def tabulate_results(
     controller,
     results,
@@ -204,7 +204,7 @@ def tabulate_results(
     """
     qt = query_terms if query_terms is not None else QueryTerms()
 
-    for_journal = output_format == 'journal'
+    for_journal = output_format == "journal"
     track_widths = True if for_journal else track_widths
 
     columns = []
@@ -219,39 +219,39 @@ def tabulate_results(
         include_description = show_description
         include_deleted = show_deleted
     else:
-        include_usage = 'group_count' in custom_columns
-        include_duration = 'duration' in custom_columns
-        include_description = 'description' in custom_columns
-        include_deleted = 'deleted' in custom_columns
+        include_usage = "group_count" in custom_columns
+        include_duration = "duration" in custom_columns
+        include_description = "description" in custom_columns
+        include_deleted = "deleted" in custom_columns
 
     if datetime_format is None:
         if for_journal or qt.include_stats:
             # For Journal or when including stats, simply report by excluding seconds.
-            datetime_format = '%Y-%m-%d %H:%M'
+            datetime_format = "%Y-%m-%d %H:%M"
         else:
             # For single facts, export is often to CSV, etc., so include seconds.
-            datetime_format = '%Y-%m-%d %H:%M:%S'
+            datetime_format = "%Y-%m-%d %H:%M:%S"
 
     if duration_fmt is None:
         if for_journal or qt.include_stats:
             # Use pedantic_timedelta to format the duration.
-            duration_fmt = ''
+            duration_fmt = ""
         else:
             # Show duration as minutes. (lb): Though not sure what best default is.
             # - Another option: duration_fmt = '%H:%M'
             # - Another option: duration_fmt = '%S'
-            duration_fmt = '%M'
+            duration_fmt = "%M"
     # A tracking variable to pad 'duration' so decimal points align in table view.
-    col_adjust = {'duration_apres_dot': -1}
+    col_adjust = {"duration_apres_dot": -1}
 
-    i_cum_duration = FactManager.RESULT_GRP_INDEX['duration']
-    i_group_count = FactManager.RESULT_GRP_INDEX['group_count']
-    i_first_start = FactManager.RESULT_GRP_INDEX['first_start']
-    i_final_end = FactManager.RESULT_GRP_INDEX['final_end']
-    i_activities = FactManager.RESULT_GRP_INDEX['activities']
-    i_actegories = FactManager.RESULT_GRP_INDEX['actegories']
-    i_categories = FactManager.RESULT_GRP_INDEX['categories']
-    i_start_date = FactManager.RESULT_GRP_INDEX['start_date']
+    i_cum_duration = FactManager.RESULT_GRP_INDEX["duration"]
+    i_group_count = FactManager.RESULT_GRP_INDEX["group_count"]
+    i_first_start = FactManager.RESULT_GRP_INDEX["first_start"]
+    i_final_end = FactManager.RESULT_GRP_INDEX["final_end"]
+    i_activities = FactManager.RESULT_GRP_INDEX["activities"]
+    i_actegories = FactManager.RESULT_GRP_INDEX["actegories"]
+    i_categories = FactManager.RESULT_GRP_INDEX["categories"]
+    i_start_date = FactManager.RESULT_GRP_INDEX["start_date"]
 
     def _generate_facts_table():
         test_result = results[0] if results else None
@@ -280,7 +280,7 @@ def tabulate_results(
 
         table_row = produce_gross(gross_totals)
         if table_row is not None:
-            empty_row = {key: '' for key in columns}
+            empty_row = {key: "" for key in columns}
             table_rows.append(empty_row)
             table_rows.append(table_row)
 
@@ -296,10 +296,10 @@ def tabulate_results(
     def prepare_columns(test_result):
         # REMINDER: Use sneaky [:] slice trick to mutate outer-scoped 'columns' var.
         columns[:], sortref_cols = assemble_columns(test_result)
-        repcols.update({
-            key: val for key, val in FACT_TABLE_HEADERS.items() if key in columns
-        })
-        TableRow = namedtuple('TableRow', columns)
+        repcols.update(
+            {key: val for key, val in FACT_TABLE_HEADERS.items() if key in columns}
+        )
+        TableRow = namedtuple("TableRow", columns)
         return TableRow, sortref_cols
 
     # +++
@@ -322,32 +322,33 @@ def tabulate_results(
         # Cull list of duplicates, retaining order.
         seen = set()
         seen_add = seen.add
-        return [
-            col for col in custom_columns
-            if not (col in seen or seen_add(col))
-        ]
+        return [col for col in custom_columns if not (col in seen or seen_add(col))]
 
     def assemble_columns_report_custom_sanitize(custom_cols):
         if qt.is_grouped:
-            disallow = set([
-                'key',
-                'start',
-                'end',
-                'description',
-            ])
+            disallow = set(
+                [
+                    "key",
+                    "start",
+                    "end",
+                    "description",
+                ]
+            )
             # MAYBE/2020-05-20: Should we disallow 'activity' if not group_activity?
             # - Disallow 'category' if not group_category.
             # - Disallow 'tags' if group_tags (and disallow 'tag' otherwise).
             # - What about 'activities', 'actegories', 'categories', 'actegory'?
         else:
             # Not is_grouped.
-            disallow = set([
-                'activities',
-                'actegories',
-                'categories',
-                'actegory',
-                'tag',
-            ])
+            disallow = set(
+                [
+                    "activities",
+                    "actegories",
+                    "categories",
+                    "actegory",
+                    "tag",
+                ]
+            )
         return [col for col in custom_columns if col not in disallow]
 
     def assemble_columns_report_deduce(test_result):
@@ -379,18 +380,18 @@ def tabulate_results(
         # which depends on sorting and grouping.
         time_cols = []
         if qt.group_days:
-            first_cols = ['start_date']
+            first_cols = ["start_date"]
         else:
             sort_attr = attr_for_sort_col()
             first_cols = journal_first_columns(aggregate_cols, sort_attr)
             if not first_cols:
                 # first_cols = ['start_date', 'start_time']
-                first_cols = ['end_date', 'start_time']
+                first_cols = ["end_date", "start_time"]
             elif qt.is_grouped:
                 # FIXME: make date format Fri Jun 29  9:30am but let user change...
-                time_cols = ['first_start', 'final_end']
+                time_cols = ["first_start", "final_end"]
             else:
-                time_cols = ['start', 'end']
+                time_cols = ["start", "end"]
 
         # Gather the Fact attribute columns to display, which depends on
         # which aggregate columns were used in the query. We also add the
@@ -408,8 +409,8 @@ def tabulate_results(
         # and then the remaining attribute columns (not already shown).
         _columns = []
         _columns.extend(first_cols)
-        _columns.append('duration')
-        _columns.append('sparkline')
+        _columns.append("duration")
+        _columns.append("sparkline")
         _columns.extend(time_cols)
         _columns.extend(meta_cols)
         # If qt.group_days, may add 'start_date_cmp', per sort_col_actual(),
@@ -419,43 +420,43 @@ def tabulate_results(
 
     def attr_for_sort_col():
         # --sort [name|activity|category|tag|fact|start|usage|time|day]
-        sort_col = qt.sort_cols[0] if qt.sort_cols else ''
-        if sort_col in ('activity', 'category', 'tag'):
+        sort_col = qt.sort_cols[0] if qt.sort_cols else ""
+        if sort_col in ("activity", "category", "tag"):
             return sort_col
-        return ''
+        return ""
 
     def journal_first_columns(aggregate_cols, sort_attr):
         # The special value used is 0, but cannot hurt to check None, too.
         if aggregate_cols[i_activities] not in [0, None]:
             # group_category (and maybe group_tags, too).
-            if sort_attr == 'category':
-                return ['category']
-            elif sort_attr == 'activity':
-                return ['activities']
-            elif sort_attr == 'tag':
-                return ['tags']
+            if sort_attr == "category":
+                return ["category"]
+            elif sort_attr == "activity":
+                return ["activities"]
+            elif sort_attr == "tag":
+                return ["tags"]
         elif aggregate_cols[i_actegories] not in [0, None]:
             # group_tags (but neither group_category or group_activity).
-            if sort_attr == 'tag':
+            if sort_attr == "tag":
                 if qt.group_days:
-                    return ['tags']
+                    return ["tags"]
                 else:
-                    return ['tag']
-            elif sort_attr == 'activity' or sort_attr == 'category':
-                return ['actegories']
+                    return ["tag"]
+            elif sort_attr == "activity" or sort_attr == "category":
+                return ["actegories"]
         elif aggregate_cols[i_categories] not in [0, None]:
             # group_activity (and maybe group_tags, too).
-            if sort_attr == 'activity':
-                return ['activity']
-            elif sort_attr == 'category':
-                return ['categories']
-            elif sort_attr == 'tag':
-                return ['tags']
+            if sort_attr == "activity":
+                return ["activity"]
+            elif sort_attr == "category":
+                return ["categories"]
+            elif sort_attr == "tag":
+                return ["tags"]
         elif qt.group_days:
             return None
         elif qt.is_grouped:
             # group_activity and group_category.
-            return ['actegory']
+            return ["actegory"]
         # else, nothing grouped, and not sorting on Fact attribute.
         # - So. --sort either not specified, or: [name|fact|start|usage|time]
         return None
@@ -464,19 +465,19 @@ def tabulate_results(
 
     def assemble_columns_single_fact():
         _columns = [
-            'key',
-            'start',
-            'end',
-            'activity',
-            'category',
-            'tags',
+            "key",
+            "start",
+            "end",
+            "activity",
+            "category",
+            "tags",
         ]
         if include_description:
-            _columns.append('description')
+            _columns.append("description")
         if include_duration:
-            _columns.append('duration')
+            _columns.append("duration")
         if include_deleted:
-            _columns.append('deleted')
+            _columns.append("deleted")
         return _columns
 
     # +++
@@ -493,44 +494,44 @@ def tabulate_results(
         # The special value used is 0, but cannot hurt to check None, too.
         if aggregate_cols[i_activities] not in [0, None]:
             # group_category (and maybe group_tags, too).
-            meta_cols.append('category')
-            meta_cols.append('activities')
-            meta_cols.append('tags')
+            meta_cols.append("category")
+            meta_cols.append("activities")
+            meta_cols.append("tags")
         elif aggregate_cols[i_actegories] not in [0, None]:
             # group_tags (but neither group_category or group_activity).
             if qt.group_days:
-                meta_cols.append('tags')
+                meta_cols.append("tags")
             else:
-                meta_cols.append('tag')
-            meta_cols.append('actegories')
+                meta_cols.append("tag")
+            meta_cols.append("actegories")
         elif aggregate_cols[i_categories] not in [0, None]:
             # group_activity (and maybe group_tags, too).
-            meta_cols.append('activity')
-            meta_cols.append('categories')
-            meta_cols.append('tags')
+            meta_cols.append("activity")
+            meta_cols.append("categories")
+            meta_cols.append("tags")
         else:
             # group_activity and group_category, or nothing grouped.
             if not for_journal:
-                meta_cols.append('activity')
-                meta_cols.append('category')
+                meta_cols.append("activity")
+                meta_cols.append("category")
             else:
-                meta_cols.append('actegory')
-            meta_cols.append('tags')
+                meta_cols.append("actegory")
+            meta_cols.append("tags")
         return meta_cols
 
     def assemble_columns_fact_and_aggs_duration(aggregate_cols, _columns):
         if not include_duration:
             return
 
-        _columns.append('duration')
+        _columns.append("duration")
 
     def assemble_columns_fact_and_aggs_usage(aggregate_cols, _columns):
         if not include_usage:
             return
 
-        _columns.append('group_count')
-        _columns.append('first_start')
-        _columns.append('final_end')
+        _columns.append("group_count")
+        _columns.append("first_start")
+        _columns.append("final_end")
 
     # +++
 
@@ -588,10 +589,18 @@ def tabulate_results(
         prepare_key(table_row, fact)
 
         prepare_starts_and_end(
-            table_row, fact, first_start, final_end, start_date,
+            table_row,
+            fact,
+            first_start,
+            final_end,
+            start_date,
         )
         prepare_activity_and_category(
-            table_row, fact, activities, actegories, categories,
+            table_row,
+            fact,
+            activities,
+            actegories,
+            categories,
         )
         prepare_duration(table_row, fact, duration, max_widths)
         prepare_group_count(table_row, group_count)
@@ -607,10 +616,10 @@ def tabulate_results(
     # ***
 
     def prepare_key(table_row, fact):
-        if 'key' not in repcols:
+        if "key" not in repcols:
             return
 
-        table_row['key'] = fact.pk
+        table_row["key"] = fact.pk
 
     # +++
 
@@ -623,46 +632,46 @@ def tabulate_results(
         prepare_end(table_row, fact)
 
     def prepare_start_date(table_row, fact, first_start):
-        if 'start_date' not in repcols:
+        if "start_date" not in repcols:
             return
 
         # MAYBE/2020-05-18: Make this and other strftime formats --option'able.
-        start_date = first_start.strftime('%a %b %d') if first_start else ''
-        table_row['start_date'] = start_date
+        start_date = first_start.strftime("%a %b %d") if first_start else ""
+        table_row["start_date"] = start_date
 
     def prepare_start_date_cmp(table_row, fact, first_start, start_date):
-        if 'start_date_cmp' not in repcols:
+        if "start_date_cmp" not in repcols:
             return
 
         # The SQLite date(col) produces, e.g., '2020-05-14'.
         if start_date:
             start_date_cmp = start_date
         else:
-            start_date_cmp = first_start.strftime('%Y-%m-%d') if first_start else ''
-        table_row['start_date_cmp'] = start_date_cmp
+            start_date_cmp = first_start.strftime("%Y-%m-%d") if first_start else ""
+        table_row["start_date_cmp"] = start_date_cmp
 
     def prepare_start_time(table_row, fact, first_start):
-        if 'start_time' not in repcols:
+        if "start_time" not in repcols:
             return
 
-        start_time = first_start.strftime(datetime_format) if first_start else ''
-        table_row['start_time'] = start_time
+        start_time = first_start.strftime(datetime_format) if first_start else ""
+        table_row["start_time"] = start_time
 
     def prepare_end_date(table_row, fact, final_end):
-        if 'end_date' not in repcols:
+        if "end_date" not in repcols:
             return
 
-        end_date = final_end.strftime('%a %b %d') if final_end else ''
-        table_row['end_date'] = end_date
+        end_date = final_end.strftime("%a %b %d") if final_end else ""
+        table_row["end_date"] = end_date
 
     def prepare_start(table_row, fact):
-        if 'start' not in repcols:
+        if "start" not in repcols:
             return
 
-        table_row['start'] = fact.start_fmt(datetime_format)
+        table_row["start"] = fact.start_fmt(datetime_format)
 
     def prepare_end(table_row, fact):
-        if 'end' not in repcols:
+        if "end" not in repcols:
             return
 
         if fact.end:
@@ -670,19 +679,23 @@ def tabulate_results(
         else:
             # FIXME: This is just the start of supporting open ended Fact in db.
             if for_journal or qt.include_stats:
-                fact_end = _('<active>')
+                fact_end = _("<active>")
             else:
-                fact_end = ''
+                fact_end = ""
             # Replace None with 'now', so that fact.delta() returns something
             # (that is, if we don't use the 'duration' from the results, which was
             # calculated by the SQL query (using the computed 'endornow' column)).
             fact.end = controller.now
-        table_row['end'] = fact_end
+        table_row["end"] = fact_end
 
     # +++
 
     def prepare_activity_and_category(
-        table_row, fact, activities, actegories, categories,
+        table_row,
+        fact,
+        activities,
+        actegories,
+        categories,
     ):
         # The special value used is 0, but cannot hurt to check None, too.
         if activities not in [None, 0]:
@@ -713,87 +726,87 @@ def tabulate_results(
             prepare_tagnames(table_row, fact)
 
     def prepare_activity(table_row, fact):
-        if 'activity' not in repcols:
+        if "activity" not in repcols:
             return
 
-        table_row['activity'] = fact.activity_name + actcatsep()
+        table_row["activity"] = fact.activity_name + actcatsep()
 
-    def prepare_activities(table_row, activities, sep=_(', ')):
-        if 'activities' not in repcols:
+    def prepare_activities(table_row, activities, sep=_(", ")):
+        if "activities" not in repcols:
             return
 
-        table_row['activities'] = sep.join(
+        table_row["activities"] = sep.join(
             [activity + actcatsep() for activity in sorted(activities)]
         )
 
-    def prepare_actegories(table_row, actegories, sep=_(', ')):
-        if 'actegories' not in repcols:
+    def prepare_actegories(table_row, actegories, sep=_(", ")):
+        if "actegories" not in repcols:
             return
 
-        table_row['actegories'] = sep.join(sorted(actegories))
+        table_row["actegories"] = sep.join(sorted(actegories))
 
-    def prepare_categories(table_row, categories, sep=_(', ')):
-        if 'categories' not in repcols:
+    def prepare_categories(table_row, categories, sep=_(", ")):
+        if "categories" not in repcols:
             return
 
-        table_row['categories'] = sep.join(
+        table_row["categories"] = sep.join(
             [actcatsep() + category for category in sorted(categories)]
         )
 
     def prepare_category(table_row, fact):
-        if 'category' not in repcols:
+        if "category" not in repcols:
             return
 
-        table_row['category'] = actcatsep() + fact.category_name
+        table_row["category"] = actcatsep() + fact.category_name
 
     def prepare_actegory(table_row, fact):
-        if 'actegory' not in repcols:
+        if "actegory" not in repcols:
             return
 
-        table_row['actegory'] = fact.oid_actegory()
+        table_row["actegory"] = fact.oid_actegory()
 
     # MAYBE/2020-05-18: Make the '@' symbol configable.
-    def actcatsep(sep=_('@')):
+    def actcatsep(sep=_("@")):
         if for_journal:
             return sep
-        return ''
+        return ""
 
     # +++
 
     def prepare_tagnames(table_row, fact):
-        if 'tags' not in repcols:
+        if "tags" not in repcols:
             return
 
-        table_row['tags'] = assemble_tags(fact.tags)
+        table_row["tags"] = assemble_tags(fact.tags)
 
     def prepare_tagname(table_row, fact):
-        if 'tag' not in repcols:
+        if "tag" not in repcols:
             return
 
-        table_row['tag'] = assemble_tags(fact.tags)
+        table_row["tag"] = assemble_tags(fact.tags)
 
     def assemble_tags(fact_tags):
         tag_names = []
         for tag in fact_tags:
             if tag.freq == 1:
-                tag_name = '#{}'.format(tag.name)
+                tag_name = "#{}".format(tag.name)
             else:
-                tag_name = '#{}({})'.format(tag.name, tag.freq)
+                tag_name = "#{}({})".format(tag.name, tag.freq)
             tag_names.append(tag_name)
 
-        tags = ' '.join(sorted(tag_names))
+        tags = " ".join(sorted(tag_names))
         return tags
 
     # +++
 
     def prepare_duration(table_row, fact, duration, max_widths):
-        if 'duration' not in repcols:
+        if "duration" not in repcols:
             return
 
         # Note that the 'duration' will be similar to fact.format_delta()
         # unless is_grouped, in which case 'duration' is an aggregate value.
         # But in either case, the 'duration' in the results is expressed in days.
-        if 'sparkline' not in columns:
+        if "sparkline" not in columns:
             # Finalize the duration as a string value.
             duration = format_fact_or_query_duration(fact, duration)
             prepare_row_duration(table_row, duration, max_widths)
@@ -804,7 +817,7 @@ def tabulate_results(
                 duration = fact.delta().total_seconds()
             else:
                 duration = convert_duration_days_to_secs(duration)
-            table_row['duration'] = duration
+            table_row["duration"] = duration
 
     def format_fact_or_query_duration(fact, duration):
         if not duration:
@@ -835,7 +848,7 @@ def tabulate_results(
 
     def format_duration_secs(durasecs):
         # Default to using pedantic_timedelta to format the duration.
-        style = '' if duration_fmt is None else duration_fmt
+        style = "" if duration_fmt is None else duration_fmt
         # MAGIC_NUMBERS: Specify the formatted field width and precision.
         # - Use a field width so the column values align --
         #   a field_width of 4 will align most values, e.g.,
@@ -849,13 +862,16 @@ def tabulate_results(
         #     pauses longer to digest the hundredths place, but the extra
         #     information is of no value to me.
         fmt_duration = format_delta(
-            durasecs, style=style, field_width=4, precision=1,
+            durasecs,
+            style=style,
+            field_width=4,
+            precision=1,
         )
         return fmt_duration
 
     def prepare_row_duration(table_row, duration, max_widths):
-        table_row['duration'] = duration
-        update_max_widths_column(table_row, 'duration', max_widths)
+        table_row["duration"] = duration
+        update_max_widths_column(table_row, "duration", max_widths)
         update_duration_apres_dot(duration)
 
     def update_max_widths_column(table_row, column, max_widths):
@@ -865,13 +881,13 @@ def tabulate_results(
         max_widths[column] = max(term_len(table_row[column]), max_widths[column])
 
     def update_duration_apres_dot(duration):
-        if output_format not in ('table', 'journal'):
+        if output_format not in ("table", "journal"):
             return
 
         try:
-            col_adjust['duration_apres_dot'] = max(
-                term_len(duration) - duration.index('.'),
-                col_adjust['duration_apres_dot'],
+            col_adjust["duration_apres_dot"] = max(
+                term_len(duration) - duration.index("."),
+                col_adjust["duration_apres_dot"],
             )
         except ValueError:
             pass
@@ -879,16 +895,16 @@ def tabulate_results(
     # +++
 
     def create_sparklines(table_rows, gross_totals, max_widths):
-        if 'sparkline' not in columns:
+        if "sparkline" not in columns:
             return
 
         # REMINDER: These values are in days.
         cum_duration = convert_duration_days_to_secs(gross_totals.cum_duration)
         max_duration = convert_duration_days_to_secs(gross_totals.max_duration)
 
-        if not spark_total or spark_total == 'max':
+        if not spark_total or spark_total == "max":
             spark_max_value = max_duration
-        elif spark_total == 'net':
+        elif spark_total == "net":
             spark_max_value = cum_duration
         else:
             # The user directly specified some number of seconds.
@@ -915,10 +931,10 @@ def tabulate_results(
 
         def prepare_sparkline(table_row):
             # We stashed the duration as seconds.
-            dur_seconds = table_row['duration']
+            dur_seconds = table_row["duration"]
             sparkline = spark_up(dur_seconds, spark_chunk_secs)
-            table_row['sparkline'] = sparkline
-            update_max_widths_column(table_row, 'sparkline', max_widths)
+            table_row["sparkline"] = sparkline
+            update_max_widths_column(table_row, "sparkline", max_widths)
 
             # We've used the seconds value, so now we can format the duration.
             duration = format_duration_secs(dur_seconds)
@@ -932,19 +948,19 @@ def tabulate_results(
             n_chunks, remainder = divmod(dur_seconds, spark_chunk_secs)
             n_eighths = int(8 * (remainder / spark_chunk_secs))
             # Start with the full-width block elements.
-            sparkline = '█' * int(n_chunks)
+            sparkline = "█" * int(n_chunks)
             # Add the fractional block element. Note that the Unicode
             # code points for block elements are decreasingly ordered,
             # (8/8), (7/8), (6/8), etc., so subtract the number of eighths.
             if n_eighths > 0:
                 # MAGIC_NUMBER: The Block Element code points are sequential,
                 #   and there are 9 of them (1 full width + 8 eighths).
-                sparkline += chr(ord('█') + (8 - n_eighths))
+                sparkline += chr(ord("█") + (8 - n_eighths))
             # If the sparkline is empty, show at least a little something.
             # - Add a left one-eighth block.
-            sparkline = sparkline or '▏'
+            sparkline = sparkline or "▏"
             # Pad the result.
-            sparkline = '{:{}s}'.format(sparkline, spark_chunk_width)
+            sparkline = "{:{}s}".format(sparkline, spark_chunk_width)
             return sparkline
 
         # +++
@@ -955,40 +971,40 @@ def tabulate_results(
     # +++
 
     def prepare_group_count(table_row, group_count):
-        if 'group_count' not in repcols:
+        if "group_count" not in repcols:
             return
 
-        table_row['group_count'] = str(group_count)
+        table_row["group_count"] = str(group_count)
 
     def prepare_first_start(table_row, first_start):
-        if 'first_start' not in repcols:
+        if "first_start" not in repcols:
             return
 
-        first_start = first_start.strftime(datetime_format) if first_start else ''
-        table_row['first_start'] = first_start
+        first_start = first_start.strftime(datetime_format) if first_start else ""
+        table_row["first_start"] = first_start
 
     def prepare_final_end(table_row, final_end):
-        if 'final_end' not in repcols:
+        if "final_end" not in repcols:
             return
 
-        final_end = final_end.strftime(datetime_format) if final_end else ''
-        table_row['final_end'] = final_end
+        final_end = final_end.strftime(datetime_format) if final_end else ""
+        table_row["final_end"] = final_end
 
     # +++
 
     def prepare_description(table_row, fact):
-        if 'description' not in repcols:
+        if "description" not in repcols:
             return
 
-        table_row['description'] = fact.description or ''
+        table_row["description"] = fact.description or ""
 
     # +++
 
     def prepare_deleted(table_row, fact):
-        if 'deleted' not in repcols:
+        if "deleted" not in repcols:
             return
 
-        table_row['deleted'] = str(fact.deleted)
+        table_row["deleted"] = str(fact.deleted)
 
     # ***
 
@@ -1002,9 +1018,7 @@ def tabulate_results(
         # Rebuild the table row, but exclude excluded columns.
         # (lb): We could add `'column' not in columns` to every prepare_*
         # function, but that'd be noisy. Seems better to rebuild the dict.
-        row_slice = {
-            key: val for key, val in table_row.items() if key in columns
-        }
+        row_slice = {key: val for key, val in table_row.items() if key in columns}
 
         # Add any columns the user specified that are missing, e.g.,
         # if the user added, say, 'description' to an aggregate query.
@@ -1012,7 +1026,7 @@ def tabulate_results(
         # the user specified a "weird" combination of CLI options.)
         missing = [key for key in columns if key not in row_slice]
         for key in missing:
-            row_slice[key] = ''
+            row_slice[key] = ""
 
         # +++
 
@@ -1024,8 +1038,9 @@ def tabulate_results(
         # should not have extraneous columns to remove.
         if row_slice != table_row:
             controller.client_logger.warning(
-                'Unexpected: row_slice != table_row / row_slice: {} / table_row: {}'
-                .format(row_slice, table_row)
+                "Unexpected: row_slice != table_row / row_slice: {} / table_row: {}".format(
+                    row_slice, table_row
+                )
             )
 
         return row_slice
@@ -1053,13 +1068,15 @@ def tabulate_results(
 
         for column in columns:
             try:
-                max_widths[column] = max(term_len(table_row[column]), max_widths[column])
+                max_widths[column] = max(
+                    term_len(table_row[column]), max_widths[column]
+                )
             except TypeError:
                 # Not a string, e.g., an int or float.
                 pass
             except KeyError:
                 # 'sparkline' not computed until end so in columns but not in table_row.
-                assert column == 'sparkline'
+                assert column == "sparkline"
                 pass
 
     # +++
@@ -1084,7 +1101,7 @@ def tabulate_results(
         #     I.e., don't just blindly write 'TOTAL' in each cell,
         #     but figure out the first non-gross_totals column (from
         #     'columns') and write 'TOTAL' to just that one cell.
-        table_row = {name: _('TOTAL') for name in columns}
+        table_row = {name: _("TOTAL") for name in columns}
 
         # Now set values for appropriate columns.
         produce_gross_duration(gross_totals, table_row)
@@ -1099,42 +1116,42 @@ def tabulate_results(
         return row_slice
 
     def produce_gross_duration(gross_totals, table_row):
-        if 'duration' not in repcols:
+        if "duration" not in repcols:
             return
 
         # The SQLite aggregate result is in (julian)days, but the
         # timedelta is specified in seconds, so convert to the latter.
         fmt_duration = format_duration_days(gross_totals.cum_duration)
-        table_row['duration'] = fmt_duration
+        table_row["duration"] = fmt_duration
         return fmt_duration
 
     def produce_gross_group_count(gross_totals, table_row):
-        if 'group_count' not in repcols:
+        if "group_count" not in repcols:
             return
 
-        table_row['group_count'] = str(gross_totals.group_count)
+        table_row["group_count"] = str(gross_totals.group_count)
 
     def produce_gross_first_start(gross_totals, table_row):
-        if 'first_start' not in repcols:
+        if "first_start" not in repcols:
             return
 
         first_start = gross_totals.first_start
-        first_start = first_start.strftime(datetime_format) if first_start else ''
-        table_row['first_start'] = first_start
+        first_start = first_start.strftime(datetime_format) if first_start else ""
+        table_row["first_start"] = first_start
 
     def produce_gross_final_end(gross_totals, table_row):
-        if 'final_end' not in repcols:
+        if "final_end" not in repcols:
             return
 
         final_end = gross_totals.final_end
-        final_end = final_end.strftime(datetime_format) if final_end else ''
-        table_row['final_end'] = final_end
+        final_end = final_end.strftime(datetime_format) if final_end else ""
+        table_row["final_end"] = final_end
 
     def produce_gross_amassed_tags(gross_totals, table_row):
-        if 'tags' not in repcols:
+        if "tags" not in repcols:
             return
 
-        table_row['tags'] = assemble_tags(gross_totals.amassed_tags.values())
+        table_row["tags"] = assemble_tags(gross_totals.amassed_tags.values())
 
     # ***
 
@@ -1143,16 +1160,16 @@ def tabulate_results(
         return row
 
     def finalize_row_duration(row):
-        if 'duration' not in row or col_adjust['duration_apres_dot'] < 0:
+        if "duration" not in row or col_adjust["duration_apres_dot"] < 0:
             return
 
         try:
-            apres_dot = term_len(row['duration']) - row['duration'].index('.')
+            apres_dot = term_len(row["duration"]) - row["duration"].index(".")
         except ValueError:
             pass
         else:
-            if apres_dot < col_adjust['duration_apres_dot']:
-                row['duration'] += ' ' * (col_adjust['duration_apres_dot'] - apres_dot)
+            if apres_dot < col_adjust["duration_apres_dot"]:
+                row["duration"] += " " * (col_adjust["duration_apres_dot"] - apres_dot)
 
     # ***
 
@@ -1164,15 +1181,14 @@ def tabulate_results(
         # able to sort on that value in the SQL statement. First check
         # lazily, that is, only indicate which sort cols are ones that
         # did not work in the SQL statement.
-        needs_sort = any([
-            sort_attrs_for_col(sort_col, lazy=True)
-            for sort_col in qt.sort_cols
-        ])
+        needs_sort = any(
+            [sort_attrs_for_col(sort_col, lazy=True) for sort_col in qt.sort_cols]
+        )
 
         if not needs_sort and not re_sort:
-            controller.client_logger.warning('Skipping re-sort.')
+            controller.client_logger.warning("Skipping re-sort.")
             return
-        controller.client_logger.warning('Post Processing: Re-SORTing.')
+        controller.client_logger.warning("Post Processing: Re-SORTing.")
 
         expect_cols = sorting_columns.copy()
         for idx, sort_col in reversed(list(enumerate(qt.sort_cols))):
@@ -1185,7 +1201,7 @@ def tabulate_results(
         verify_available_sort_cols_match_anticipated(sort_attrs, expect_cols)
         sort_attrs.reverse()
         for sort_attr in sort_attrs:
-            reverse = sort_order == 'desc'
+            reverse = sort_order == "desc"
             table.sort(key=attrgetter(sort_attr), reverse=reverse)
 
         return table
@@ -1204,46 +1220,46 @@ def tabulate_results(
         #   see: verify_available_sort_cols_match_anticipated.
         sort_attrs = []
 
-        if sort_col == 'activity':
-            if 'activities' in repcols:
+        if sort_col == "activity":
+            if "activities" in repcols:
                 # group_category on its own; SQL could not sort.
-                sort_attrs = ['activities']
+                sort_attrs = ["activities"]
             elif not lazy:
                 # Both of these cases can be sorted by SQL (hence not lazy).
-                if 'actegory' in repcols:
+                if "actegory" in repcols:
                     # group_activity and group_category.
-                    sort_attrs = ['actegory']
-                elif 'activity' in repcols:
-                    sort_attrs = ['activity']
+                    sort_attrs = ["actegory"]
+                elif "activity" in repcols:
+                    sort_attrs = ["activity"]
                 else:
                     controller.client_logger.warning(
                         "Did not identify sort column for --sort activity!"
                     )
 
-        elif sort_col == 'category':
-            if 'categories' in repcols:
-                sort_attrs = ['categories']
+        elif sort_col == "category":
+            if "categories" in repcols:
+                sort_attrs = ["categories"]
             # else, if hasattr(row_cls, 'actegory'), category information
             # is missing. We could make a special case in the get_all
             # query, but doesn't seem like a big priority to handle.
             elif not lazy:
-                if 'category' in repcols:
+                if "category" in repcols:
                     # FIXME/2020-05-20: This a thing?
-                    sort_attrs = ['category']
+                    sort_attrs = ["category"]
                 else:
                     controller.client_logger.warning(
                         "Did not identify sort column for --sort category!"
                     )
 
-        elif sort_col == 'tag':
-            if 'tag' in repcols:
-                sort_attrs = ['tag']
-            elif 'tags' in repcols:
-                sort_attrs = ['tags']
+        elif sort_col == "tag":
+            if "tag" in repcols:
+                sort_attrs = ["tag"]
+            elif "tags" in repcols:
+                sort_attrs = ["tags"]
             # elif not lazy:
-                # FIXME/2020-05-20 06:03: What path is this??
-                # sort_attrs = '???'
-                # In get_all, it sorts on Tag.name itself.
+            # FIXME/2020-05-20 06:03: What path is this??
+            # sort_attrs = '???'
+            # In get_all, it sorts on Tag.name itself.
             else:
                 controller.client_logger.warning(
                     "Did not identify sort column for --sort tag!"
@@ -1255,24 +1271,24 @@ def tabulate_results(
             # Should be a programming error, anyway, the code checks
             # the sort columns before processing results, and ensures
             # the necessary sort columns are ready for us here.
-            if sort_col == 'start':
+            if sort_col == "start":
                 if not qt.is_grouped:
-                    sort_attrs = ['start', 'end', 'key']
+                    sort_attrs = ["start", "end", "key"]
                 else:
-                    sort_attrs = ['first_start', 'final_end']
-            elif sort_col == 'time':
-                sort_attrs = ['duration']
-            elif sort_col == 'day':
+                    sort_attrs = ["first_start", "final_end"]
+            elif sort_col == "time":
+                sort_attrs = ["duration"]
+            elif sort_col == "day":
                 # FIXME/2020-05-20: Should we auto-add start_date_cmp sort option when
                 #   --group-days? Or should we require user to specify `-o days`?
                 #   Another option: `dob journal` command with sort_cols default, etc.
-                sort_attrs = ['start_date_cmp']
-            elif sort_col == 'usage':
-                sort_attrs = ['group_count']
-            elif sort_col == 'name':
-                sort_attrs = ['description']
-            elif sort_col == 'fact':
-                sort_attrs = ['key']
+                sort_attrs = ["start_date_cmp"]
+            elif sort_col == "usage":
+                sort_attrs = ["group_count"]
+            elif sort_col == "name":
+                sort_attrs = ["description"]
+            elif sort_col == "fact":
+                sort_attrs = ["key"]
             else:
                 # If this fires, you probably added a --sort choice that you did
                 # not wire herein.
@@ -1294,16 +1310,17 @@ def tabulate_results(
         # After processing results, we called sort_attrs_for_col to see what
         # columns were actually populated that we can sort on.
         # - The two should match, and if they don't, log a complaint.
-        subexpect = expect_cols[-len(sort_attrs):]
+        subexpect = expect_cols[-len(sort_attrs) :]
         if subexpect != sort_attrs:
             controller.client_logger.warning(
-                "Sort discrepency: sort_attrs: {} / expect_cols: {} (subexpect: {})"
-                .format(sort_attrs, expect_cols, subexpect)
+                "Sort discrepency: sort_attrs: {} / expect_cols: {} (subexpect: {})".format(
+                    sort_attrs, expect_cols, subexpect
+                )
             )
             controller.affirm(False)
         else:
             # Remove the trailing, verified items from the expecting list.
-            expect_cols[:] = expect_cols[:-len(sort_attrs)]
+            expect_cols[:] = expect_cols[: -len(sort_attrs)]
 
     # ***
 
@@ -1322,59 +1339,59 @@ def tabulate_results(
     def sort_col_actual(sort_col):
         must_sort_later = False
 
-        if sort_col == 'start' or not sort_col:
+        if sort_col == "start" or not sort_col:
             if not qt.is_grouped:
-                sort_attrs = ['start', 'end', 'key']
+                sort_attrs = ["start", "end", "key"]
             else:
-                sort_attrs = ['first_start', 'final_end']
-        elif sort_col == 'time':
-            sort_attrs = ['duration']
-        elif sort_col == 'day':
-            sort_attrs = ['start_date_cmp']
-        elif sort_col == 'activity':
+                sort_attrs = ["first_start", "final_end"]
+        elif sort_col == "time":
+            sort_attrs = ["duration"]
+        elif sort_col == "day":
+            sort_attrs = ["start_date_cmp"]
+        elif sort_col == "activity":
             if not qt.is_grouped or (qt.group_activity and qt.group_category):
                 if not for_journal:
-                    sort_attrs = ['activity']
+                    sort_attrs = ["activity"]
                 else:
-                    sort_attrs = ['actegory']
+                    sort_attrs = ["actegory"]
             elif qt.group_activity:
-                sort_attrs = ['activity']
+                sort_attrs = ["activity"]
             elif qt.group_tags or qt.group_days:
                 must_sort_later = True
-                sort_attrs = ['actegories']
+                sort_attrs = ["actegories"]
             else:
                 # group_category (by PK).
                 must_sort_later = True
-                sort_attrs = ['activities']
-        elif sort_col == 'category':
+                sort_attrs = ["activities"]
+        elif sort_col == "category":
             if not qt.is_grouped or (qt.group_activity and qt.group_category):
                 if not for_journal:
-                    sort_attrs = ['category']
+                    sort_attrs = ["category"]
                 else:
                     # The journal generally use just actegory,
                     #   sort_attrs = ['actegory']
                     # but user did request sorting by category.
-                    sort_attrs = ['category']
+                    sort_attrs = ["category"]
             elif qt.group_category:
-                sort_attrs = ['category']
+                sort_attrs = ["category"]
             elif qt.group_tags or qt.group_days:
                 must_sort_later = True
-                sort_attrs = ['actegories']
+                sort_attrs = ["actegories"]
             else:
                 # group_activity (by name, not PK).
                 must_sort_later = True
-                sort_attrs = ['categories']
-        elif sort_col == 'tag':
+                sort_attrs = ["categories"]
+        elif sort_col == "tag":
             if not qt.is_grouped or not qt.group_tags:
-                sort_attrs = ['tags']
+                sort_attrs = ["tags"]
             else:
-                sort_attrs = ['tag']
-        elif sort_col == 'usage':
-            sort_attrs = ['group_count']
-        elif sort_col == 'name':
-            sort_attrs = ['description']
-        elif sort_col == 'fact':
-            sort_attrs = ['key']
+                sort_attrs = ["tag"]
+        elif sort_col == "usage":
+            sort_attrs = ["group_count"]
+        elif sort_col == "name":
+            sort_attrs = ["description"]
+        elif sort_col == "fact":
+            sort_attrs = ["key"]
         else:
             controller.client_logger.warning("Unknown sort_col: {}".format(sort_col))
 
@@ -1395,4 +1412,3 @@ def tabulate_results(
     sorting_columns = sort_on_cols_later()
 
     return _generate_facts_table()
-

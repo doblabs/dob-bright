@@ -26,21 +26,22 @@ import editor
 from easy_as_pypi_termio.errors import echo_warning
 
 __all__ = (
-    'ask_edit_with_editor',
-    'run_editor_safe',
+    "ask_edit_with_editor",
+    "run_editor_safe",
 )
 
 
 # ***
 
-def ask_edit_with_editor(controller, fact=None, content=''):
+
+def ask_edit_with_editor(controller, fact=None, content=""):
     def _ask_edit_with_editor():
         contents = prepare_contents(content)
         filename = temp_filename()
         return run_editor_safe(filename, contents)
 
     def prepare_contents(content):
-        content = content if content else ''
+        content = content if content else ""
         # # FIXME: py2 compatible? Or need to six.b()?
         # #contents = six.b(str(content))  # NOPE: Has problems with Unicode, like: ½
         # contents = text_type(content).encode()
@@ -66,7 +67,7 @@ def ask_edit_with_editor(controller, fact=None, content=''):
             # (lb): Reminder that colon is not acceptable for Windows paths.
             #   (I originally had a ':' in the clock time here.)
             # E.g., "2018_04_07_1733_"
-            timefmt = '%Y_%m_%d_%H%M_'
+            timefmt = "%Y_%m_%d_%H%M_"
             if fact.start:
                 prefix = fact.start.strftime(timefmt)
             elif fact.end:
@@ -77,7 +78,7 @@ def ask_edit_with_editor(controller, fact=None, content=''):
         # User can set a suffix, which can be useful so, e.g., Vim
         # sees the extension and set filetype appropriately.
         # (lb): I like my Hamster logs to look like reST documents!
-        suffix = controller.config['term.editor_suffix'] or None
+        suffix = controller.config["term.editor_suffix"] or None
         return suffix
 
     return _ask_edit_with_editor()
@@ -85,14 +86,15 @@ def ask_edit_with_editor(controller, fact=None, content=''):
 
 # ***
 
+
 def run_editor_safe(filename, contents=None):
     def _run_editor_safe():
         try:
             return run_editor()
         except Exception as err:
-            msg = _('Unable to run $EDITOR: {}').format(str(err))
+            msg = _("Unable to run $EDITOR: {}").format(str(err))
             echo_warning(msg)
-            return ''
+            return ""
 
     def run_editor():
         if is_editor_set() or not running_windows():
@@ -103,12 +105,12 @@ def run_editor_safe(filename, contents=None):
 
     def is_editor_set():
         try:
-            return bool(os.environ['EDITOR'])
+            return bool(os.environ["EDITOR"])
         except KeyError:
             return False
 
     def running_windows():
-        return platform.system() == 'Windows'
+        return platform.system() == "Windows"
 
     def run_editor_normal():
         # NOTE: You'll find EDITOR features in multiple libraries.
@@ -161,13 +163,13 @@ def run_editor_safe(filename, contents=None):
         #           os.startfile(filename, 'open')
         #       so just default to notepad, which will be installed. User should set
         #       EDITOR if they want to use a different text editor on Windows.
-        with open(filename, 'wb') as temp_f:
+        with open(filename, "wb") as temp_f:
             temp_f.write(contents)
         import subprocess
-        subprocess.call(['notepad.exe', filename])
-        with open(filename, 'r') as temp_f:
+
+        subprocess.call(["notepad.exe", filename])
+        with open(filename, "r") as temp_f:
             edited = temp_f.read()
         return edited
 
     return _run_editor_safe()
-

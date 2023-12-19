@@ -19,9 +19,7 @@
 
 from .line_writer import LineWriter
 
-__all__ = (
-    'FactoidWriter',
-)
+__all__ = ("FactoidWriter",)
 
 
 class FactoidWriter(LineWriter):
@@ -34,7 +32,7 @@ class FactoidWriter(LineWriter):
         *args,
         colorful=False,
         cut_width_complete=None,
-        factoid_sep='',
+        factoid_sep="",
         show_duration=False,
         **kwargs,
     ):
@@ -47,7 +45,7 @@ class FactoidWriter(LineWriter):
 
     def _write_fact(self, idx, fact):
         one_liners = self.cut_width_complete is not None and self.cut_width_complete > 0
-        description_sep = '\n\n' if not one_liners else ': '
+        description_sep = "\n\n" if not one_liners else ": "
         # FIXME: (lb): Add UTC support. Currently, all time assumed "local".
         localize = True
         line = fact.friendly_str(
@@ -68,4 +66,3 @@ class FactoidWriter(LineWriter):
 
     def write_report(self, table, headers, tabulation=None):
         raise NotImplementedError
-

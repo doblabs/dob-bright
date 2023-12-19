@@ -21,20 +21,16 @@ from gettext import gettext as _
 
 from config_decorator import section
 
-__all__ = (
-    'create_style_rules_object',
-)
+__all__ = ("create_style_rules_object",)
 
 
 def create_style_rules_object():
-
     COMPONENTRY_CLASSIFIER_HELP = _(
         "For component.style or (style, text) tuple, e.g., 'class:my-class1 fg:#000000'."
     )
 
     @section(None)
     class RulesRoot(object):
-
         def __init__(self):
             pass
 
@@ -65,12 +61,12 @@ def create_style_rules_object():
         def eval(self):
             # E.g.,
             #   eval = fact.category_name == 'My Category'
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             _("Generated value."),
-            name='__eval__',
+            name="__eval__",
             hidden=True,
             # Not necessary, because we generate the value, but could say:
             #   validate=inspect.iscode,
@@ -85,7 +81,7 @@ def create_style_rules_object():
             _("Match Facts with the specified Activity name."),
         )
         def activity(self):
-            return ''
+            return ""
 
         # ---
 
@@ -103,7 +99,7 @@ def create_style_rules_object():
             _("Match Facts with the specified Category name."),
         )
         def category(self):
-            return ''
+            return ""
 
         # ---
 
@@ -121,7 +117,7 @@ def create_style_rules_object():
             _("Match Facts with the specified Tag."),
         )
         def tag(self):
-            return ''
+            return ""
 
         # ---
 
@@ -137,7 +133,7 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             _("Match Facts with any of the matching tags."),
-            name='tags-any',
+            name="tags-any",
         )
         def tags_any(self):
             return []
@@ -147,7 +143,7 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             _("Match Facts with any of the matching tags."),
-            name='tags-or',
+            name="tags-or",
             hidden=True,
         )
         def tags_or(self):
@@ -158,7 +154,7 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             _("Match Facts with *all* of the matching tags."),
-            name='tags-all',
+            name="tags-all",
         )
         def tags_all(self):
             return []
@@ -168,7 +164,7 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             _("Match Facts with *all* of the matching tags."),
-            name='tags-and',
+            name="tags-and",
             hidden=True,
         )
         def tags_and(self):
@@ -210,15 +206,15 @@ def create_style_rules_object():
             COMPONENTRY_CLASSIFIER_HELP,
         )
         def streamer(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='streamer-line',
+            name="streamer-line",
         )
         def streamer_line(self):
-            return ''
+            return ""
 
         # ***
         # *** HEADER META LINES -- TITLES HALF (LEFT SIDE)
@@ -227,174 +223,174 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-normal',
+            name="title-normal",
         )
         def title_normal(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-normal-line',
+            name="title-normal-line",
         )
         def title_normal_line(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-focus',
+            name="title-focus",
         )
         def title_focus(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-focus-line',
+            name="title-focus-line",
         )
         def title_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-duration',
+            name="title-duration",
         )
         def title_duration(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-duration-line',
+            name="title-duration-line",
         )
         def title_duration_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-start',
+            name="title-start",
         )
         def title_start(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-start-line',
+            name="title-start-line",
         )
         def title_start_line(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-start-focus',
+            name="title-start-focus",
         )
         def title_start_focus(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-start-focus-line',
+            name="title-start-focus-line",
         )
         def title_start_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-end',
+            name="title-end",
         )
         def title_end(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-end-line',
+            name="title-end-line",
         )
         def title_end_line(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-end-focus',
+            name="title-end-focus",
         )
         def title_end_focus(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-end-focus-line',
+            name="title-end-focus-line",
         )
         def title_end_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-activity',
+            name="title-activity",
         )
         def title_activity(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-activity-line',
+            name="title-activity-line",
         )
         def title_activity_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-category',
+            name="title-category",
         )
         def title_category(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-category-line',
+            name="title-category-line",
         )
         def title_category_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-tags',
+            name="title-tags",
         )
         def title_tags(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='title-tags-line',
+            name="title-tags-line",
         )
         def title_tags_line(self):
-            return ''
+            return ""
 
         # ***
         # *** HEADER META LINES -- VALUES HALF (RIGHT SIDE)
@@ -403,184 +399,184 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-normal',
+            name="value-normal",
         )
         def value_normal(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-normal-line',
+            name="value-normal-line",
         )
         def value_normal_line(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-focus',
+            name="value-focus",
         )
         def value_focus(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-focus-line',
+            name="value-focus-line",
         )
         def value_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-duration',
+            name="value-duration",
         )
         def value_duration(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-duration-line',
+            name="value-duration-line",
         )
         def value_duration_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-start',
+            name="value-start",
         )
         def value_start(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-start-line',
+            name="value-start-line",
         )
         def value_start_line(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-start-focus',
+            name="value-start-focus",
         )
         def value_start_focus(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-start-focus-line',
+            name="value-start-focus-line",
         )
         def value_start_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-end',
+            name="value-end",
         )
         def value_end(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-end-line',
+            name="value-end-line",
         )
         def value_end_line(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-end-focus',
+            name="value-end-focus",
         )
         def value_end_focus(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-end-focus-line',
+            name="value-end-focus-line",
         )
         def value_end_focus_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-activity',
+            name="value-activity",
         )
         def value_activity(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-activity-line',
+            name="value-activity-line",
         )
         def value_activity_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-category',
+            name="value-category",
         )
         def value_category(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-category-line',
+            name="value-category-line",
         )
         def value_category_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-tags',
+            name="value-tags",
         )
         def value_tags(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='value-tags-line',
+            name="value-tags-line",
         )
         def value_tags_line(self):
-            return ''
+            return ""
 
         # ***
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='blank-line',
+            name="blank-line",
         )
         def blank_line(self):
-            return ''
+            return ""
 
         # ***
         # *** CONTENT AREA CONDITIONAL STYLE RULE
@@ -589,34 +585,34 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='content-fact',
+            name="content-fact",
         )
         def scrollable_frame(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='content-help',
+            name="content-help",
         )
         def content_help(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='interval-gap',
+            name="interval-gap",
         )
         def interval_gap(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='unsaved-fact',
+            name="unsaved-fact",
         )
         def unsaved_fact(self):
-            return ''
+            return ""
 
         # ***
         # *** FACT ID CONDITIONAL STYLE RULE (LOWER LEFT CORNER)
@@ -625,21 +621,20 @@ def create_style_rules_object():
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='footer',
+            name="footer",
         )
         def footer_normal(self):
-            return ''
+            return ""
 
         @property
         @RulesRoot.setting(
             COMPONENTRY_CLASSIFIER_HELP,
-            name='footer-fact-id',
+            name="footer-fact-id",
         )
         def footer_fact_id(self):
-            return ''
+            return ""
 
         # ***
         # ***
 
     return RulesRoot
-

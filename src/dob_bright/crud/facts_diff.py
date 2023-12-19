@@ -25,13 +25,12 @@ from nark.helpers.objects import resolve_attr_or_method
 from easy_as_pypi_termio.errors import echo_warning
 from easy_as_pypi_termio.style import stylize, verify_colors_attrs
 
-__all__ = (
-    'FactsDiff',
-)
+__all__ = ("FactsDiff",)
 
 
 class FactsDiff(object):
     """"""
+
     def __init__(self, orig_fact, edit_fact, formatted=False):
         self.orig_fact = orig_fact
         self.edit_fact = edit_fact
@@ -40,8 +39,9 @@ class FactsDiff(object):
         self.exclude_attrs = None
 
     def __str__(self):
-        return 'FactsDiff:\n- orig: {}\n- edit: {}'.format(
-            self.orig_fact.short, self.edit_fact.short,
+        return "FactsDiff:\n- orig: {}\n- edit: {}".format(
+            self.orig_fact.short,
+            self.edit_fact.short,
         )
 
     # ***
@@ -58,7 +58,7 @@ class FactsDiff(object):
             self.include_newlines = True
             self.exclude_attrs = exclude
 
-            result = '' if not self.formatted else []
+            result = "" if not self.formatted else []
             result = assemble_diff_attrs(result)
 
             self.include_newlines = False
@@ -74,36 +74,42 @@ class FactsDiff(object):
 
         def assemble_diff_attrs(result):
             result += self.diff_line_assemble(
-                None, self.time_humanize(show_now), 'interval',
+                None,
+                self.time_humanize(show_now),
+                "interval",
             )
             if show_midpoint:
                 result += self.diff_line_assemble(
-                    None, self.time_midpoint(), 'midpoint',
+                    None,
+                    self.time_midpoint(),
+                    "midpoint",
                 )
             if show_elapsed:
                 self_val, other_val = self.diff_time_elapsed(show_now)
                 result += self.diff_line_assemble(
-                    self_val, other_val, 'duration',
+                    self_val,
+                    other_val,
+                    "duration",
                 )
-            result += self.diff_attrs('start_fmt_local', 'start')
+            result += self.diff_attrs("start_fmt_local", "start")
             if not show_now:
-                result += self.diff_attrs('end_fmt_local', 'end')
+                result += self.diff_attrs("end_fmt_local", "end")
             else:
-                result += self.diff_attrs('end_fmt_local_nowwed', 'end')
+                result += self.diff_attrs("end_fmt_local_nowwed", "end")
             if (not truncate) or self.orig_fact.pk or self.edit_fact.pk:
-                result += self.diff_attrs('pk_str', 'id', beautify=self.beautify_pk)
-            result += self.diff_attrs('deleted', 'deleted')
+                result += self.diff_attrs("pk_str", "id", beautify=self.beautify_pk)
+            result += self.diff_attrs("deleted", "deleted")
             # MAYBE?: (lb): Would we even want to show the split_from fact?
             #  result += self.diff_attrs('split_from', 'split_from')
-            result += self.diff_attrs('activity_name', 'activity')
-            result += self.diff_attrs('category_name', 'category')
+            result += self.diff_attrs("activity_name", "activity")
+            result += self.diff_attrs("category_name", "category")
             if not self.formatted:
                 # For the command line, ANSI escape sequences.
-                result += self.diff_attrs('oid_tags', 'tags', colorful=True)
+                result += self.diff_attrs("oid_tags", "tags", colorful=True)
             else:
                 # For the interactive editor/Carousel, PTK style tuples.
-                result += self.diff_attrs('tags_tuples', 'tags', colorful=True)
-            result += self.diff_attrs('description', 'description', truncate=truncate)
+                result += self.diff_attrs("tags_tuples", "tags", colorful=True)
+            result += self.diff_attrs("description", "description", truncate=truncate)
             return result
 
         # ***
@@ -116,16 +122,16 @@ class FactsDiff(object):
         self,
         prop,
         name=None,
-        style_class='',
+        style_class="",
         truncate=False,
         beautify=None,
         mouse_handler=None,
         **kwargs
     ):
         if (self.exclude_attrs is not None) and (name in self.exclude_attrs):
-            return ''
+            return ""
         self_val = resolve_attr_or_method(self.orig_fact, prop, **kwargs)
-        other_val = ''
+        other_val = ""
         if self.edit_fact is not None:
             other_val = resolve_attr_or_method(self.edit_fact, prop, **kwargs)
             if callable(other_val):
@@ -141,7 +147,9 @@ class FactsDiff(object):
         elif truncate:
             self_val = self.format_value_truncate(self_val)
             self_val = self.format_prepare(
-                self_val, style_class=style_class, mouse_handler=mouse_handler,
+                self_val,
+                style_class=style_class,
+                mouse_handler=mouse_handler,
             )
             other_val = self.format_prepare(other_val, style_class=style_class)
         attr_diff = self.diff_line_assemble(self_val, other_val, name)
@@ -158,7 +166,7 @@ class FactsDiff(object):
         self,
         self_val,
         other_val,
-        style_class='',
+        style_class="",
         truncate=False,
         beautify=None,
         mouse_handler=None,
@@ -176,16 +184,20 @@ class FactsDiff(object):
         if differ:
             self_val = self.format_edited_before(self_val, style_class)
             self_val, other_val = self.format_edited_after(
-                self_val, other_val, style_class,
+                self_val,
+                other_val,
+                style_class,
             )
         else:
             self_val = self.format_prepare(
-                self_val, style_class=style_class, mouse_handler=mouse_handler,
+                self_val,
+                style_class=style_class,
+                mouse_handler=mouse_handler,
             )
-            other_val = self.format_prepare('', style_class=style_class)
+            other_val = self.format_prepare("", style_class=style_class)
         return (self_val, other_val)
 
-    def format_prepare(self, some_val, style_class='', mouse_handler=None):
+    def format_prepare(self, some_val, style_class="", mouse_handler=None):
         if not self.formatted or not isinstance(some_val, str):
             # tags, e.g.,:
             #   [('fg: #C6C6C6 underline', '#'), ('fg: #D7FF87 underline', 'my-tag')]
@@ -197,7 +209,12 @@ class FactsDiff(object):
                 and (len(some_val[0]) == 2)
             ):
                 return [
-                    (style_class + tup[0], tup[1], mouse_handler,) for tup in some_val
+                    (
+                        style_class + tup[0],
+                        tup[1],
+                        mouse_handler,
+                    )
+                    for tup in some_val
                 ]
             return some_val
         if mouse_handler is None:
@@ -208,12 +225,12 @@ class FactsDiff(object):
         # MAGIC_NUMBER: (lb): A third of the terminal (1 / 3.).
         # MAYBE/2019-02-15: Should have Carousel tells us width.
         term_width = click.get_terminal_size()[0]
-        trunc_width = int(term_width * (1 / 3.))
+        trunc_width = int(term_width * (1 / 3.0))
         return format_value_truncate(val, trunc_width)
 
     # ***
 
-    def diff_time_elapsed(self, show_now=False, style_class=''):
+    def diff_time_elapsed(self, show_now=False, style_class=""):
         self_val = self.time_elapsed(self.orig_fact, show_now)
         other_val = self.time_elapsed(self.edit_fact, show_now)
         if not self_val:
@@ -225,13 +242,11 @@ class FactsDiff(object):
         # NOTE: start and/or end might be string; e.g., clock or rel. time.
         if (not fact.times_ok) and (not show_now):
             return None
-        time_val = fact.format_delta(style='HHhMMm')
+        time_val = fact.format_delta(style="HHhMMm")
         return time_val
 
     def time_midpoint(self):
-        return self.format_prepare(
-            self.edit_fact.time_of_day_midpoint
-        )
+        return self.format_prepare(self.edit_fact.time_of_day_midpoint)
 
     def time_humanize(self, show_now=False):
         return self.format_prepare(
@@ -242,10 +257,10 @@ class FactsDiff(object):
         # (lb): NOTE: This is the only dirty_reasons usage in nark
         #               (most of its usage is in dob).
         # 'lsplit' and 'rsplit' are used by fix_times.resolve_overlapping.
-        if 'lsplit' in self.edit_fact.dirty_reasons:
-            other_val = 'New split fact, created before new fact'
-        if 'rsplit' in self.edit_fact.dirty_reasons:
-            other_val = 'New split fact, created after new fact'
+        if "lsplit" in self.edit_fact.dirty_reasons:
+            other_val = "New split fact, created before new fact"
+        if "rsplit" in self.edit_fact.dirty_reasons:
+            other_val = "New split fact, created after new fact"
         return (self_val, other_val)
 
     # ***
@@ -254,14 +269,13 @@ class FactsDiff(object):
 
     @classmethod
     def register_facts_diff_style(cls, facts_diff_style=None):
-        """Registers a dictionary of style lists for FactsDiff methods.
-        """
+        """Registers a dictionary of style lists for FactsDiff methods."""
         for part, styles in facts_diff_style.items():
-            if not part.endswith('-raw'):
+            if not part.endswith("-raw"):
                 continue
-            errs = ', '.join(verify_colors_attrs(*styles))
+            errs = ", ".join(verify_colors_attrs(*styles))
             if errs:
-                emsg = _('Unknown colors or attrs for “{}”: {}').format(part, errs)
+                emsg = _("Unknown colors or attrs for “{}”: {}").format(part, errs)
                 echo_warning(emsg)
         # Nonetheless, can still use even if some/all unknown colors/attrs.
         cls.FACTS_DIFF_STYLE = facts_diff_style or {}
@@ -271,21 +285,21 @@ class FactsDiff(object):
         try:
             return cls.FACTS_DIFF_STYLE[style_attr]
         except KeyError:
-            if style_attr.endswith('-raw'):
+            if style_attr.endswith("-raw"):
                 # Expect list of (color, *attrs) to pass to stylize()
                 return []
             else:
                 # Except ready-to-go PTK tuple style string.
-                return ''
+                return ""
 
     # ***
 
     def format_edited_before(self, before_val, style_class):
         if not self.formatted:
-            styles = FactsDiff.fetch_style('value-diff-old-raw')
+            styles = FactsDiff.fetch_style("value-diff-old-raw")
             return styles and stylize(before_val, *styles) or before_val
         style = style_class
-        style += FactsDiff.fetch_style('value-diff-old-ptk')
+        style += FactsDiff.fetch_style("value-diff-old-ptk")
         before_parts = []
         if isinstance(before_val, str):
             before_parts += [(style, before_val)]
@@ -296,12 +310,15 @@ class FactsDiff(object):
 
     def format_edited_after(self, self_val, other_val, style_class):
         if not self.formatted:
-            styles = FactsDiff.fetch_style('value-diff-new-raw')
-            return '{} | was: '.format(
-                styles and stylize(other_val, *styles) or other_val
-            ), self_val
+            styles = FactsDiff.fetch_style("value-diff-new-raw")
+            return (
+                "{} | was: ".format(
+                    styles and stylize(other_val, *styles) or other_val
+                ),
+                self_val,
+            )
         style = style_class
-        style += FactsDiff.fetch_style('value-diff-new-ptk')
+        style += FactsDiff.fetch_style("value-diff-new-ptk")
         after_parts = []
         if isinstance(other_val, str):
             after_parts += [(style, other_val)]
@@ -311,24 +328,24 @@ class FactsDiff(object):
         # (lb): Swap the order, for display purposes.
         #   (These formatting functions are so janky!)
         if self_val and self_val[0][1]:
-            after_parts += [('italic', ' | was: ')]
+            after_parts += [("italic", " | was: ")]
         return after_parts, self_val
 
     # ***
 
     def diff_values_padded_prefix(self, name):
         if name is None:
-            return ''
-        prefix_prefix = '  '
-        padded_prefix = '{}{:.<19} : '.format(prefix_prefix, name)
+            return ""
+        prefix_prefix = "  "
+        padded_prefix = "{}{:.<19} : ".format(prefix_prefix, name)
         return padded_prefix
 
-    def diff_line_inline_style(self, self_val, other_val, prefix=''):
-        format_inline = '{}{}{}'.format(prefix, self_val or '', other_val or '')
-        format_inline += "\n" if self.include_newlines else ''
+    def diff_line_inline_style(self, self_val, other_val, prefix=""):
+        format_inline = "{}{}{}".format(prefix, self_val or "", other_val or "")
+        format_inline += "\n" if self.include_newlines else ""
         return format_inline
 
-    def diff_line_tuples_style(self, self_val, other_val, prefix='', style_class=''):
+    def diff_line_tuples_style(self, self_val, other_val, prefix="", style_class=""):
         format_tuples = []
         if prefix:
             format_tuples += [(style_class, prefix)]
@@ -337,6 +354,5 @@ class FactsDiff(object):
         if other_val:
             format_tuples += other_val
         if self.include_newlines:
-            format_tuples += [('', '\n')]
+            format_tuples += [("", "\n")]
         return format_tuples
-

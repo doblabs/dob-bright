@@ -23,9 +23,7 @@ from nark.helpers import logging as logging_helpers
 
 from .config_manager import Controller_ConfigManager
 
-__all__ = (
-    'Controller_LoggingOutput',
-)
+__all__ = ("Controller_LoggingOutput",)
 
 
 class Controller_LoggingOutput(
@@ -43,13 +41,13 @@ class Controller_LoggingOutput(
 
     def setup_logging(self, verbose=False, verboser=False):
         """Setup logging for the lib_logger as well as client specific logging."""
-        self.client_logger = logging.getLogger('dob')
+        self.client_logger = logging.getLogger("dob")
         loggers = self.get_loggers()
         for logger in loggers:
             logger.handlers = []
         # Clear existing Handlers, and set the level.
         # MAYBE: Allow user to specify different levels for different loggers.
-        cli_log_level_name = self.config['dev.cli_log_level']
+        cli_log_level_name = self.config["dev.cli_log_level"]
         cli_log_level, warn_name = logging_helpers.resolve_log_level(cli_log_level_name)
         # We can at least allow some simpler optioning from the command args.
         if verbose:
@@ -65,22 +63,21 @@ class Controller_LoggingOutput(
         self.client_logger.handlers = []
         self.client_logger.setLevel(cli_log_level)
 
-        color = self.config['log.use_color']
+        color = self.config["log.use_color"]
         formatter = logging_helpers.formatter_basic(color=color)
 
-        if self.config['log.use_console']:
+        if self.config["log.use_console"]:
             console_handler = logging.StreamHandler()
             logging_helpers.setup_handler(console_handler, formatter, *loggers)
 
-        logfile = self.config['log.filepath']
+        logfile = self.config["log.filepath"]
         if logfile:
-            file_handler = logging.FileHandler(logfile, encoding='utf-8')
+            file_handler = logging.FileHandler(logfile, encoding="utf-8")
             logging_helpers.setup_handler(file_handler, formatter, *loggers)
 
         if warn_name:
             self.client_logger.warning(
-                'Unknown Client.cli_log_level specified: {}'
-                .format(cli_log_level)
+                "Unknown Client.cli_log_level specified: {}".format(cli_log_level)
             )
 
     def get_loggers(self):
@@ -106,4 +103,3 @@ class Controller_LoggingOutput(
             logger.setLevel(logging.NOTSET)
 
     # ***
-

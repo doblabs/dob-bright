@@ -30,24 +30,21 @@ from ..config.config_table import echo_config_decorator_table
 from ..crud.interrogate import run_editor_safe
 
 from .create_conf import create_basic_conf
-from .load_styling import (
-    load_rules_conf,
-    load_style_rules,
-    resolve_path_rules
-)
+from .load_styling import load_rules_conf, load_style_rules, resolve_path_rules
 from .rules_conf import create_style_rules_object
 from .style_engine import StyleEngine
 
 __all__ = (
-    'create_rules_conf',
-    'echo_rules_conf',
-    'echo_rule_names',
-    'echo_rules_table',
-    'edit_rules_conf',
+    "create_rules_conf",
+    "echo_rules_conf",
+    "echo_rule_names",
+    "echo_rules_table",
+    "edit_rules_conf",
 )
 
 
 # *** [CONF] RULES
+
 
 def echo_rules_conf(controller, rule_name, complete=False):
     config = controller.config
@@ -85,7 +82,8 @@ def echo_rules_conf(controller, rule_name, complete=False):
 
     def echo_error_no_rules_section(rule_name):
         msg = _("No matching section “{0}” found in rules file at: {1}").format(
-            rule_name, resolve_path_rules(config),
+            rule_name,
+            resolve_path_rules(config),
         )
         echo_warning(msg)
         return None
@@ -97,16 +95,17 @@ def echo_rules_conf(controller, rule_name, complete=False):
 
 # *** [CREATE] RULES
 
+
 def create_rules_conf(controller, force):
     def _create_rules_conf():
-        object_name = _('Rules file')
+        object_name = _("Rules file")
         rules_path = resolve_path_rules(controller.config)
         create_basic_conf(rules_path, object_name, create_rules_file, force)
 
     def create_rules_file(rules_path):
         # Load specified style, or DEFAULT_STYLE if not specified.
         ruleset = create_style_rules_object()
-        rule_name = _('Example Style Rule - Showing all built-in options')
+        rule_name = _("Example Style Rule - Showing all built-in options")
         config_obj = decorate_and_wrap(rule_name, ruleset, complete=True)
         config_obj.filename = rules_path
         config_obj.write()
@@ -116,6 +115,7 @@ def create_rules_conf(controller, force):
 
 # *** [EDIT] RULES
 
+
 def edit_rules_conf(controller):
     rules_path = resolve_path_rules(controller.config)
     run_editor_safe(filename=rules_path)
@@ -123,21 +123,24 @@ def edit_rules_conf(controller):
 
 # *** [LIST] RULES
 
+
 def echo_rule_names(controller):
     """"""
+
     def _echo_rule_names():
         rules_confobj = load_style_rules(controller)
-        print_rules_names(rules_confobj, _('User-created rules'))
+        print_rules_names(rules_confobj, _("User-created rules"))
 
     def print_rules_names(rules_confobj, title):
-        click_echo('{}{}{}'.format(attr('underlined'), title, attr('reset')))
+        click_echo("{}{}{}".format(attr("underlined"), title, attr("reset")))
         for rule_name in rules_confobj.keys():
-            click_echo('  ' + highlight_value(rule_name))
+            click_echo("  " + highlight_value(rule_name))
 
     return _echo_rule_names()
 
 
 # *** [SHOW] RULES
+
 
 def echo_rules_table(controller, name, output_format):
     def _echo_rules_table():
@@ -148,7 +151,7 @@ def echo_rules_table(controller, name, output_format):
         print_ruleset_table(rule_name, ruleset)
 
     def create_example_rule():
-        rule_name = _('example')
+        rule_name = _("example")
         ruleset = create_style_rules_object()
         return rule_name, ruleset
 
@@ -162,7 +165,7 @@ def echo_rules_table(controller, name, output_format):
         return name, ruleset
 
     def exit_rule_unknown(rule_name):
-        exit_warning(_('No rule named “{}”').format(rule_name))
+        exit_warning(_("No rule named “{}”").format(rule_name))
 
     def print_ruleset_table(rule_name, ruleset):
         condec = ConfigDecorator.create_root_for_section(rule_name, ruleset)
@@ -176,4 +179,3 @@ def echo_rules_table(controller, name, output_format):
         )
 
     _echo_rules_table()
-

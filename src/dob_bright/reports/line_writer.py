@@ -19,9 +19,7 @@
 
 from nark.reports import ReportWriter
 
-__all__ = (
-    'LineWriter',
-)
+__all__ = ("LineWriter",)
 
 
 class LineWriter(ReportWriter):
@@ -31,6 +29,5 @@ class LineWriter(ReportWriter):
     def output_setup(self, *args, **kwargs):
         super(LineWriter, self).output_setup(*args, **kwargs)
 
-    def output_write(self, line=''):
-        self.output_file.write(line + '\n')
-
+    def output_write(self, line=""):
+        self.output_file.write(line + "\n")

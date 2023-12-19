@@ -20,12 +20,13 @@ from dob_bright.reports.tabulate_results import tabulate_results
 
 # FIXME/2020-06-06 17:56: Move this module to dob-bright.
 
+
 class TestGenerateTable(object):
     def test_generate_table(self, controller_with_logging, fact):
         """Make sure the table contains all expected fact data."""
         controller = controller_with_logging
         tabulation = tabulate_results(controller, [fact])
-        assert tabulation.table[0].start == fact.start.strftime('%Y-%m-%d %H:%M:%S')
+        assert tabulation.table[0].start == fact.start.strftime("%Y-%m-%d %H:%M:%S")
         assert tabulation.table[0].activity == fact.activity.name
 
     def test_generate_basic_table_column_count(self, controller_with_logging):
@@ -36,4 +37,3 @@ class TestGenerateTable(object):
         # creates a table with the 8 following columns:
         #   key, start, end, activity, category, tags, description, duration
         assert len(tabulation.repcols) == 8
-

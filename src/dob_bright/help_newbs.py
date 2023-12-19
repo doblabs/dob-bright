@@ -27,11 +27,11 @@ from easy_as_pypi_termio.style import attr, bg, fg
 from . import __arg0name__
 
 __all__ = (
-    'NEWBIE_HELP_WELCOME',
-    'NEWBIE_HELP_ONBOARDING',
-    'NEWBIE_HELP_CREATE_CONFIG',
-    'NEWBIE_HELP_REPAIR_CONFIG',
-    'NEWBIE_HELP_CREATE_STORE',
+    "NEWBIE_HELP_WELCOME",
+    "NEWBIE_HELP_ONBOARDING",
+    "NEWBIE_HELP_CREATE_CONFIG",
+    "NEWBIE_HELP_REPAIR_CONFIG",
+    "NEWBIE_HELP_CREATE_STORE",
     # Private:
     #  'common_format',
     #  'section_heading',
@@ -47,15 +47,15 @@ def common_format():
     #        - Or probably disable for newbie message: we cannot discern terminal
     #          colors, and user will not have assigned a style, probably.
     common_format = {
-        'appname': highlight_value(__arg0name__),
-        'rawname': __arg0name__,
-        'codehi': fg('turquoise_2'),
-        'reset': attr('reset'),
-        'bold': attr('bold'),
-        'italic': attr('italic'),
-        'underlined': attr('underlined'),
-        'wordhi': fg('chartreuse_3a'),
-        'errcol': bg('red_1') + attr('bold'),
+        "appname": highlight_value(__arg0name__),
+        "rawname": __arg0name__,
+        "codehi": fg("turquoise_2"),
+        "reset": attr("reset"),
+        "bold": attr("bold"),
+        "italic": attr("italic"),
+        "underlined": attr("underlined"),
+        "wordhi": fg("chartreuse_3a"),
+        "errcol": bg("red_1") + attr("bold"),
     }
     return common_format
 
@@ -64,42 +64,53 @@ def common_format():
 # *** [INDUCTEE] help.
 # ***
 
+
 def NEWBIE_HELP_WELCOME(ctx):
     # FIXME: (lb): Need to test colors on light vs. night terminals. #styling
-    _help = _(
-        """
+    _help = (
+        _(
+            """
         {color}┏━━━━━━━━━━━━━━━━━┓{reset}
         {color}┃ Welcome to dob! ┃{reset}
         {color}┗━━━━━━━━━━━━━━━━━┛{reset}
         """
-    ).rstrip().strip('\n').format(
-        # FIXME: (lb): Replace hardcoding. Assign from styles.conf. #styling
-        color=(fg('spring_green_2a') + attr('bold')),
-        **common_format(),
+        )
+        .rstrip()
+        .strip("\n")
+        .format(
+            # FIXME: (lb): Replace hardcoding. Assign from styles.conf. #styling
+            color=(fg("spring_green_2a") + attr("bold")),
+            **common_format(),
+        )
     )
     return _help
 
 
 def section_heading(title):
     return (
-        """
+        (
+            """
         {color}{title}{reset}
         {line_color}{sep:{sep}<{len_title}}{reset}
         """
-    ).strip().format(
-        title=title,
-        sep='─',
-        len_title=len(title),
-        line_color='',
-        color='',
-        **common_format()
+        )
+        .strip()
+        .format(
+            title=title,
+            sep="─",
+            len_title=len(title),
+            line_color="",
+            color="",
+            **common_format(),
+        )
     )
 
 
 def NEWBIE_HELP_ONBOARDING(ctx):
     # NOTE: This help is not automatically formatted like other text.
-    _help = _(
-        """
+    _help = (
+        _(
+            """
         {banner}
 
         Let’s get you setup!
@@ -123,15 +134,18 @@ def NEWBIE_HELP_ONBOARDING(ctx):
           {cmd_color}{rawname} demo{reset}
         \b
         """
-    ).lstrip().format(
-        banner=NEWBIE_HELP_WELCOME(ctx),
-        upgrade_title=section_heading(_('Import existing facts')),
-        init_title=section_heading(_('Start from scratch')),
-        demo_title=section_heading(_('Demo Dob')),
-        help_title=section_heading(_('Such Help')),
-        # FIXME: (lb): Replace hardcoding. Assign from styles.conf. #styling
-        cmd_color=fg('spring_green_2a'),
-        **common_format(),
+        )
+        .lstrip()
+        .format(
+            banner=NEWBIE_HELP_WELCOME(ctx),
+            upgrade_title=section_heading(_("Import existing facts")),
+            init_title=section_heading(_("Start from scratch")),
+            demo_title=section_heading(_("Demo Dob")),
+            help_title=section_heading(_("Such Help")),
+            # FIXME: (lb): Replace hardcoding. Assign from styles.conf. #styling
+            cmd_color=fg("spring_green_2a"),
+            **common_format(),
+        )
     )
     return _help
 
@@ -139,8 +153,9 @@ def NEWBIE_HELP_ONBOARDING(ctx):
 def NEWBIE_HELP_CREATE_CONFIG(ctx, cfg_path):
     controller = ctx.obj
 
-    _help = _(
-        """
+    _help = (
+        _(
+            """
         {errcol}ERROR: No config file found at: “{cfg_path}”{reset}
 
         Where's your config file??
@@ -164,14 +179,17 @@ def NEWBIE_HELP_CREATE_CONFIG(ctx, cfg_path):
 
             {rawname} -F "{cfg_path}" init
         """
-    ).strip().format(
-        # FIXME/2019-11-19 14:42: Make wrapper for format() with common colors defined.
-        # - Maybe change errors to white on red, like here,
-        #   but only for white on black terms (based on some setting?).
-        cfg_path=cfg_path,
-        default_config_path=default_config_path(),
-        envkey=controller.DOB_CONFIGFILE_ENVKEY,
-        **common_format()
+        )
+        .strip()
+        .format(
+            # FIXME/2019-11-19 14:42: Make wrapper for format() with common colors defined.
+            # - Maybe change errors to white on red, like here,
+            #   but only for white on black terms (based on some setting?).
+            cfg_path=cfg_path,
+            default_config_path=default_config_path(),
+            envkey=controller.DOB_CONFIGFILE_ENVKEY,
+            **common_format(),
+        )
     )
     return _help
 
@@ -179,8 +197,9 @@ def NEWBIE_HELP_CREATE_CONFIG(ctx, cfg_path):
 def NEWBIE_HELP_REPAIR_CONFIG(ctx, cfg_path):
     controller = ctx.obj
 
-    _help = _(
-        """
+    _help = (
+        _(
+            """
         {errcol}ERROR: Please fix the config file found at: “{cfg_path}”{reset}
 
         The configuration file is at least missing the db.orm setting, if not others.
@@ -189,18 +208,22 @@ def NEWBIE_HELP_REPAIR_CONFIG(ctx, cfg_path):
           \b
           {codehi}{rawname} config create --force{reset}
         """
-    ).strip().format(
-        cfg_path=cfg_path,
-        default_config_path=default_config_path(),
-        envkey=controller.DOB_CONFIGFILE_ENVKEY,
-        **common_format()
+        )
+        .strip()
+        .format(
+            cfg_path=cfg_path,
+            default_config_path=default_config_path(),
+            envkey=controller.DOB_CONFIGFILE_ENVKEY,
+            **common_format(),
+        )
     )
     return _help
 
 
 def NEWBIE_HELP_CREATE_STORE(ctx, db_path, val_source):
-    _help = _(
-        """
+    _help = (
+        _(
+            """
         {errcol}ERROR: No database file found.{reset}
 
         - There was no file found at: {db_path}
@@ -211,10 +234,8 @@ def NEWBIE_HELP_CREATE_STORE(ctx, db_path, val_source):
           \b
           {codehi}{rawname} config --help{reset}
         """
-    ).strip().format(
-        db_path=db_path,
-        val_source=val_source,
-        **common_format()
+        )
+        .strip()
+        .format(db_path=db_path, val_source=val_source, **common_format())
     )
     return _help
-

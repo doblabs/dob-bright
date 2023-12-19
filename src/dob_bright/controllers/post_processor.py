@@ -19,9 +19,7 @@
 
 from .database_store import Controller_DatabaseStore
 
-__all__ = (
-    'Controller_PostProcessor',
-)
+__all__ = ("Controller_PostProcessor",)
 
 
 class Controller_PostProcessor(
@@ -89,4 +87,3 @@ class Controller_PostProcessor(
         )
 
     # ***
-

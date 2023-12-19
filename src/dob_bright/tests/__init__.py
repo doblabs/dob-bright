@@ -16,4 +16,3 @@
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
 """Packaged test methods for other ``dob_bright``-dependent projects."""
-

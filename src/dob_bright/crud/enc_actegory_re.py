@@ -19,13 +19,10 @@
 
 import re
 
-__all__ = (
-    'RegExpActegory',
-)
+__all__ = ("RegExpActegory",)
 
 
 class RegExpActegory(object):
-
     def __init__(self, sep):
         self.sep = sep
 
@@ -45,9 +42,9 @@ class RegExpActegory(object):
     # regex is more cumbersome. So we'll just stick with backslash escapes only.
 
     def reset_re(self):
-        self.re_unescaped_sep = re.compile(r'(?<!\\){}'.format(self.sep))
-        self.esc_sep = r'\\{}'.format(self.sep)
-        self.raw_sep = r'{}'.format(self.sep)
+        self.re_unescaped_sep = re.compile(r"(?<!\\){}".format(self.sep))
+        self.esc_sep = r"\\{}".format(self.sep)
+        self.raw_sep = r"{}".format(self.sep)
 
     def escape(self, text):
         escaped = re.sub(self.raw_sep, self.esc_sep, text)
@@ -66,4 +63,3 @@ class RegExpActegory(object):
         activity = self.unescape(escaped_act)
         category = self.unescape(escaped_cat)
         return activity, category
-
