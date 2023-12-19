@@ -20,13 +20,10 @@ import os
 from unittest import mock
 
 import pytest
-
 from easy_as_pypi_apppth import app_dirs_with_mkdir
-
 from easy_as_pypi_config import fileboss
 from easy_as_pypi_config.urable import ConfigUrable
-
-from nark.config import decorate_config, ConfigRoot
+from nark.config import ConfigRoot, decorate_config
 from nark.helpers import logging as logging_helpers
 
 from dob_bright.controller import Controller

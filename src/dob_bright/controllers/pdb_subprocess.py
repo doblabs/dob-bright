@@ -20,7 +20,6 @@
 from gettext import gettext as _
 
 from .. import __arg0name__
-
 from .logging_output import Controller_LoggingOutput
 
 __all__ = ("Controller_PdbSubprocess",)

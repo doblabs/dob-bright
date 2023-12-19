@@ -17,19 +17,17 @@
 
 """A time tracker for the command line. Utilizing the power of nark."""
 
-from gettext import gettext as _
-
 import copy
 import re
 import sys
 from datetime import datetime, time, timedelta
+from gettext import gettext as _
 from string import punctuation
-
-from nark.helpers.parsing import parse_factoid
 
 from easy_as_pypi_termio.echoes import click_echo, echo_block_header
 from easy_as_pypi_termio.errors import exit_warning_crude
 from easy_as_pypi_termio.style import attr, bg, fg
+from nark.helpers.parsing import parse_factoid
 
 from .fact_dressed import FactDressed
 from .fix_times import (

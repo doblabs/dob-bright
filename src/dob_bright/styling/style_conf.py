@@ -20,7 +20,6 @@
 from gettext import gettext as _
 
 import click_hotoffthehamster as click
-
 from config_decorator import section
 
 from .class_namilize import namilize

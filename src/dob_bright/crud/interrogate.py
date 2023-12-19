@@ -18,11 +18,9 @@
 import os
 import platform
 import tempfile
-
 from gettext import gettext as _
 
 import editor
-
 from easy_as_pypi_termio.errors import echo_warning
 
 __all__ = (

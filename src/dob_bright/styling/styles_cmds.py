@@ -18,22 +18,19 @@
 from gettext import gettext as _
 
 from config_decorator.config_decorator import ConfigDecorator
-
 from easy_as_pypi_config.dec_wrap import decorate_and_wrap
-
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.style import attr
 
 from ..config.config_table import echo_config_decorator_table
 from ..crud.interrogate import run_editor_safe
-
 from .create_conf import create_basic_conf
 from .load_styling import (
+    DEFAULT_STYLE,
     load_style_classes,
     load_styles_conf,
     resolve_named_style,
     resolve_path_styles,
-    DEFAULT_STYLE,
 )
 from .style_conf import KNOWN_STYLES
 from .styles_dump import echo_styles_conf as dump_styles_conf

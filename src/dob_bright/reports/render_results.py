@@ -18,16 +18,14 @@
 import sys
 
 import click_hotoffthehamster as click
-
+from easy_as_pypi_termio.errors import exit_warning
+from easy_as_pypi_termio.paging import ClickEchoPager
+from easy_as_pypi_termio.style import stylize
 from nark.reports.csv_writer import CSVWriter
 from nark.reports.ical_writer import ICALWriter
 from nark.reports.json_writer import JSONWriter
 from nark.reports.tsv_writer import TSVWriter
 from nark.reports.xml_writer import XMLWriter
-
-from easy_as_pypi_termio.errors import exit_warning
-from easy_as_pypi_termio.paging import ClickEchoPager
-from easy_as_pypi_termio.style import stylize
 
 from .factoid_writer import FactoidWriter
 from .journal_writer import JournalWriter

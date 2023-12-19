@@ -16,12 +16,10 @@
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
 import json
-
 from gettext import gettext as _
 
-from nark.helpers.parsing import ParserException
-
 from easy_as_pypi_termio.errors import exit_warning
+from nark.helpers.parsing import ParserException
 
 from .fact_dressed import FactDressed
 from .fix_times import reduce_time_hint

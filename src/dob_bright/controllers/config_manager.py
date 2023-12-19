@@ -19,11 +19,9 @@
 
 import inspect
 
-from nark.control import NarkControl
-
 from easy_as_pypi_config.urable import ConfigUrable
-
 from easy_as_pypi_termio.echoes import click_echo
+from nark.control import NarkControl
 
 from .. import help_newbs as help_strings
 from ..config import ConfigRoot

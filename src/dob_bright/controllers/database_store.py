@@ -19,13 +19,11 @@
 
 import os
 import sys
-
 from gettext import gettext as _
-
-from nark.items.fact import Fact
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import exit_warning
+from nark.items.fact import Fact
 
 from .setup_coloring import Controller_SetupColoring
 

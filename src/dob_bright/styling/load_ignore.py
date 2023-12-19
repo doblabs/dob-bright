@@ -19,7 +19,6 @@
 
 import os
 import re
-
 from gettext import gettext as _
 
 from easy_as_pypi_termio.errors import echo_warning
