@@ -26,7 +26,8 @@ __all__ = ("create_style_rules_object",)
 
 def create_style_rules_object():
     COMPONENTRY_CLASSIFIER_HELP = _(
-        "For component.style or (style, text) tuple, e.g., 'class:my-class1 fg:#000000'."
+        "For component.style or (style, text) tuple, "
+        "e.g., 'class:my-class1 fg:#000000'."
     )
 
     @section(None)

@@ -1037,9 +1037,8 @@ def tabulate_results(
         # should not have extraneous columns to remove.
         if row_slice != table_row:
             controller.client_logger.warning(
-                "Unexpected: row_slice != table_row / row_slice: {} / table_row: {}".format(
-                    row_slice, table_row
-                )
+                f"Unexpected: row_slice != table_row"
+                f" / row_slice: {row_slice} / table_row: {table_row}"
             )
 
         return row_slice
@@ -1312,9 +1311,8 @@ def tabulate_results(
         subexpect = expect_cols[-len(sort_attrs) :]
         if subexpect != sort_attrs:
             controller.client_logger.warning(
-                "Sort discrepency: sort_attrs: {} / expect_cols: {} (subexpect: {})".format(
-                    sort_attrs, expect_cols, subexpect
-                )
+                f"Sort discrepency: sort_attrs: {sort_attrs}"
+                f"/ expect_cols: {expect_cols} (subexpect: {subexpect})"
             )
             controller.affirm(False)
         else:

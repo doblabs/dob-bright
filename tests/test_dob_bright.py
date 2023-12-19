@@ -95,7 +95,7 @@ class TestSetupLogging(object):
 
 
 class TestGetConfig(object):
-    """Make sure that turning a config instance into proper config dictionaries works."""
+    """Make sure turning a config instance into proper config dictionaries works."""
 
     @pytest.mark.parametrize("cli_log_level", ["debug"])
     def test_log_levels_valid(self, cli_log_level, config_instance):
