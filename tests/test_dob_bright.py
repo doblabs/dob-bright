@@ -26,7 +26,7 @@ from easy_as_pypi_config.urable import ConfigUrable
 from nark.config import ConfigRoot, decorate_config
 from nark.helpers import logging as logging_helpers
 
-from dob_bright.controller import Controller
+from dob_bright.controllers.app_controller import Controller
 
 
 class TestSetupLogging(object):
