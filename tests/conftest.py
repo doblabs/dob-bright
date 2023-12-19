@@ -26,7 +26,7 @@ from dob_bright.tests.conftest import *  # noqa: F401, F403
 
 pytest_plugins = (
     # Import tmp_appdirs fixture.
-    "easy_as_pypi_appdirs.test_mock",
+    "easy_as_pypi_appdirs.tests.appdirs_mock",
     # Set KeyChainedValue._envvar_prefix.
     "tests.config.envvar_prefix",
     # Call app_dirs.register_application.
