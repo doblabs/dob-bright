@@ -49,7 +49,7 @@ __all__ = (
 # (lb): This fcn. could be moved to dob or dob-bright; only dob uses it.
 def parse_input(controller, file_in=None, progress=None):
     """
-    Import Facts from STDIN or a file.
+    Import Facts from stdin or a file.
     """
 
     # MAYBE/2018-05-16 00:11: (lb): Parse whole file before prompting.
