@@ -27,10 +27,10 @@
 #     add and import use cases. Run coverage on specific use cases could
 #     help a developer better understand this code.
 
+import shutil
 from datetime import datetime, timedelta
 from gettext import gettext as _
 
-import click_hotoffthehamster as click
 from easy_as_pypi_termio.echoes import click_echo, echo_block_header
 from easy_as_pypi_termio.errors import exit_warning_crude
 from nark.helpers import fact_time
@@ -781,7 +781,7 @@ def must_complete_times(
                 # FIXME/2020-06-10: (lb): friendly_str updated to handle
                 # cut_width a little differently, but this code not under
                 # test, so not really sure status of "subtract edges" request.
-                cut_width = click.get_terminal_size()[0]
+                cut_width = shutil.get_terminal_size()[0]
 
                 click_echo(
                     "\n{}: {}{}".format(

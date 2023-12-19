@@ -15,9 +15,9 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
+import shutil
 from gettext import gettext as _
 
-import click_hotoffthehamster as click
 from easy_as_pypi_termio.errors import echo_warning
 from easy_as_pypi_termio.style import stylize, verify_colors_attrs
 from nark.helpers.format_text import format_value_truncate
@@ -222,7 +222,7 @@ class FactsDiff(object):
     def format_value_truncate(self, val):
         # MAGIC_NUMBER: (lb): A third of the terminal (1 / 3.).
         # MAYBE/2019-02-15: Should have Carousel tells us width.
-        term_width = click.get_terminal_size()[0]
+        term_width = shutil.get_terminal_size()[0]
         trunc_width = int(term_width * (1 / 3.0))
         return format_value_truncate(val, trunc_width)
 

@@ -15,9 +15,9 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
+import shutil
 import sys
 
-import click_hotoffthehamster as click
 from easy_as_pypi_termio.errors import exit_warning
 from easy_as_pypi_termio.paging import ClickEchoPager
 from easy_as_pypi_termio.style import stylize
@@ -193,7 +193,7 @@ def render_results(
             return max_width
         elif sys.stdout.isatty():
             # MAGIC_NUMBER: Subtract 1 to leave an empty column border on the right.
-            return click.get_terminal_size()[0] - 1
+            return shutil.get_terminal_size()[0] - 1
         else:
             return 80
 
