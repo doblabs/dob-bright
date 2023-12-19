@@ -1,5 +1,5 @@
-dob_bright
-==========
+src
+===
 
 .. toctree::
    :maxdepth: 4

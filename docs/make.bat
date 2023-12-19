@@ -1,10 +1,13 @@
 @ECHO OFF
 
-REM This file exists within 'dob-bright':
-REM
-REM   https://github.com/tallybark/dob-bright
+REM vim:tw=0:ts=4:sw=4:noet:norl:nospell:ft=dosbatch:ff=dos
 
-set PROJECTNAME=dob_bright
+REM Author: Landon Bouma <https://tallybark.com/>
+REM Project: https://github.com/doblabs/dob-bright
+REM Pattern: https://github.com/doblabs/easy-as-pypi#🥧
+REM License: MIT
+
+set PROJECTNAME=dob-bright
 
 REM *** END: Project customization. Remainder of file is _boilerplate_.
 

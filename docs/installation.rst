@@ -2,8 +2,7 @@
 Installation
 ############
 
-.. |dob-bright| replace:: ``dob-bright``
-.. _dob-bright: https://github.com/tallybark/dob-bright
+.. vim:tw=0:ts=3:sw=3:et:norl:nospell:ft=rst
 
 .. |virtualenv| replace:: ``virtualenv``
 .. _virtualenv: https://virtualenv.pypa.io/en/latest/
@@ -21,21 +20,27 @@ To install user-local, simply run::
 
 To install within a |virtualenv|_, try::
 
-    $ mkvirtualenv dob-bright
+    $ cd "$(mktemp -d)"
+
+    $ python3 -m venv .venv
+
+    $ . ./.venv/bin/activate
+
     (dob-bright) $ pip install dob-bright
 
 To develop on the project, link to the source files instead::
 
     (dob-bright) $ deactivate
-    $ rmvirtualenv dob-bright
-    $ git clone git@github.com:tallybark/dob-bright.git
+    $ git clone git@github.com:doblabs/dob-bright.git
     $ cd dob-bright
-    $ mkvirtualenv -a $(pwd) --python=/usr/bin/python3.8 dob-bright
+    $ python3 -m venv dob-bright
+    $ . ./.venv/bin/activate
     (dob-bright) $ make develop
 
-After creating the virtual environment,
-to start developing from a fresh terminal, run |workon|_::
+After creating the virtual environment, it's easy to start
+developing from a fresh terminal::
 
-    $ workon dob-bright
+    $ cd dob-bright
+    $ . ./.venv/bin/activate
     (dob-bright) $ ...
 
