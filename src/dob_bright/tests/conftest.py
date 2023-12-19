@@ -39,7 +39,7 @@ from configobj import ConfigObj
 # Import module that contains AppDirsWithMkdir (AppDirs).
 from easy_as_pypi_appdirs import app_dirs
 from easy_as_pypi_appdirs.expand_and_mkdirs import must_ensure_directory_exists
-from easy_as_pypi_termio.errors import dob_been_warned_reset
+from easy_as_pypi_termio.errors import echoed_warnings_reset
 from nark.config import decorate_config
 from nark.items.fact import Fact
 
@@ -409,7 +409,7 @@ def prepare_controller(config_root):
     # (lb): My apologies for this assault. Reset module variable between tests.
     # (2020-05-26: We could try using @contextlib.contextmanager and `with:`,
     #  with setup code, a `yield`, and then teardown.)
-    dob_been_warned_reset()
+    echoed_warnings_reset()
     return controller
 
 
