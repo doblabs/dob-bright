@@ -28,10 +28,10 @@ from .create_conf import create_basic_conf
 from .load_ignore import ignore_file_path, load_no_completion
 
 __all__ = (
-    'create_ignore_conf',
-    'echo_ignore_sections',
-    'echo_ignore_table',
-    'edit_ignore_file',
+    "create_ignore_conf",
+    "echo_ignore_sections",
+    "echo_ignore_table",
+    "edit_ignore_file",
 )
 
 # Note that there's no `dob ignore conf` command like `dob styles conf`
@@ -70,7 +70,8 @@ BASIC_IGNORE_FILE = _(
 #   feature-*
 #   .*PROJ-.*
 
-""").lstrip()
+"""
+).lstrip()
 
 
 def create_ignore_conf(controller, force):
@@ -78,18 +79,19 @@ def create_ignore_conf(controller, force):
         # SIMILAR funcs: See also: ConfigUrable.create_config and
         #   reset_config; and styles_cmds.create_styles_conf;
         #                  and rules_cmds.create_rules_conf.
-        object_name = _('Ignore file')
+        object_name = _("Ignore file")
         ignore_path = ignore_file_path(controller.config)
         create_basic_conf(ignore_path, object_name, create_ignore_file, force)
 
     def create_ignore_file(ignore_path):
-        with open(ignore_path, 'w') as ignore_f:
+        with open(ignore_path, "w") as ignore_f:
             ignore_f.write(BASIC_IGNORE_FILE)
 
     _create_ignore_conf()
 
 
 # *** [EDIT] IGNORE
+
 
 def edit_ignore_file(controller):
     ignore_path = ignore_file_path(controller.config)
@@ -98,22 +100,25 @@ def edit_ignore_file(controller):
 
 # *** [LIST] IGNORE
 
+
 def echo_ignore_sections(controller):
     """"""
+
     def _echo_ignore_sections():
         no_completion = load_no_completion(controller)
         sections = no_completion.raw
-        print_ignore_sections(sections, _('Ignore file sections'))
+        print_ignore_sections(sections, _("Ignore file sections"))
 
     def print_ignore_sections(sections, title):
-        click_echo('{}{}{}'.format(attr('underlined'), title, attr('reset')))
+        click_echo("{}{}{}".format(attr("underlined"), title, attr("reset")))
         for section_name in sections.keys():
-            click_echo('  ' + highlight_value(section_name))
+            click_echo("  " + highlight_value(section_name))
 
     return _echo_ignore_sections()
 
 
 # *** [SHOW] IGNORE
+
 
 def echo_ignore_table(controller, name, output_format):
     def _echo_ignore_table():
@@ -132,7 +137,7 @@ def echo_ignore_table(controller, name, output_format):
         return section
 
     def exit_section_unknown(section_name):
-        exit_warning(_('No section named “{}”').format(section_name))
+        exit_warning(_("No section named “{}”").format(section_name))
 
     def print_ignore_table(sections):
         sec_key_vals = []
@@ -140,7 +145,10 @@ def echo_ignore_table(controller, name, output_format):
         for section_name in section_names:
             rules = sections[section_name]
             sec_key_vals += [(section_name, rule) for rule in rules]
-        headers = [_("Section"), _("Rule"), ]
+        headers = [
+            _("Section"),
+            _("Rule"),
+        ]
         render_results(
             controller,
             results=sec_key_vals,
@@ -149,4 +157,3 @@ def echo_ignore_table(controller, name, output_format):
         )
 
     _echo_ignore_table()
-

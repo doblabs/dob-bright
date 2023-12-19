@@ -21,9 +21,7 @@ from gettext import gettext as _
 
 from easy_as_pypi_termio.errors import echo_warning
 
-__all__ = (
-    'load_obj_from_internal',
-)
+__all__ = ("load_obj_from_internal",)
 
 
 def load_obj_from_internal(
@@ -32,7 +30,7 @@ def load_obj_from_internal(
     internal,
     default_name=None,
     warn_tell_not_found=False,
-    config_key='',
+    config_key="",
 ):
     """"""
 
@@ -54,10 +52,11 @@ def load_obj_from_internal(
     def warn_tell_on_object_not_found(obj_name):
         if not obj_name or not warn_tell_not_found:
             return
-        msg = _('Nothing matches “{0}”, from config setting “{1}”, in “{2}”.').format(
-            obj_name, config_key, internal.__name__,
+        msg = _("Nothing matches “{0}”, from config setting “{1}”, in “{2}”.").format(
+            obj_name,
+            config_key,
+            internal.__name__,
         )
         echo_warning(msg)  # Also blather to stdout.
 
     return _load_obj_from_internal()
-

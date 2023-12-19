@@ -28,24 +28,24 @@ from easy_as_pypi_termio.errors import echo_warning
 from . import load_obj_from_internal, style_conf
 
 __all__ = (
-    'load_style_classes',
-    'load_style_rules',
-    'load_rules_conf',
-    'resolve_named_style',
-    'resolve_path_rules',
-    'resolve_path_styles',
-    'DEFAULT_STYLE',
+    "load_style_classes",
+    "load_style_rules",
+    "load_rules_conf",
+    "resolve_named_style",
+    "resolve_path_rules",
+    "resolve_path_styles",
+    "DEFAULT_STYLE",
 )
 
 
-DEFAULT_STYLE = 'default'
+DEFAULT_STYLE = "default"
 
 
-def load_style_classes(controller, style_name='', skip_default=False):
+def load_style_classes(controller, style_name="", skip_default=False):
     # (lb): It's times like these -- adding a dict to get around scoping
     # when sharing a variable -- that I think a method (load_style_classes)
     # should be a class. But this works for now.
-    load_failed = {'styles': False}
+    load_failed = {"styles": False}
 
     def _load_style_classes():
         named_style = style_name or resolve_named_style(controller.config)
@@ -56,7 +56,7 @@ def load_style_classes(controller, style_name='', skip_default=False):
     def load_dict_from_styles_conf(named_style):
         styles_conf, failed = load_styles_conf(controller.config)
         if failed:
-            load_failed['styles'] = True
+            load_failed["styles"] = True
         elif styles_conf and named_style in styles_conf:
             # We could keep as ConfigObj, but not necessary, e.g.:
             #   classes_dict = create_configobj(styles_conf[named_style])
@@ -76,8 +76,8 @@ def load_style_classes(controller, style_name='', skip_default=False):
         # Load base-style (e.g., style_conf.default) to ensure
         # all keys present (and defaulted), and then update that.
         base_style = DEFAULT_STYLE
-        if 'base-style' in classes_dict:
-            base_style = classes_dict['base-style'] or 'default'
+        if "base-style" in classes_dict:
+            base_style = classes_dict["base-style"] or "default"
         try:
             # This gets a StylesRoot object created by _create_style_object.
             defaults = getattr(style_conf, base_style)()
@@ -92,7 +92,8 @@ def load_style_classes(controller, style_name='', skip_default=False):
             defaults.update_gross(classes_dict)
         except Exception as err:
             msg = _("Failed to load style named “{0}”: {1}").format(
-                named_style, str(err),
+                named_style,
+                str(err),
             )
             echo_warning(msg)
 
@@ -105,7 +106,7 @@ def load_style_classes(controller, style_name='', skip_default=False):
             obj_name=named_style,
             internal=style_conf,
             default_name=not skip_default and DEFAULT_STYLE or None,
-            warn_tell_not_found=not load_failed['styles'],
+            warn_tell_not_found=not load_failed["styles"],
             config_key=CFG_KEY_ACTIVE_STYLE,
         )
         # The Carousel/`dob edit` path leaves skip_default=False, so it will
@@ -121,6 +122,7 @@ def load_style_classes(controller, style_name='', skip_default=False):
 
 # ***
 
+
 def load_styles_conf(config):
     """Return 2-tuple, the styles.conf ConfigObj, and a bool indicating failure.
 
@@ -128,6 +130,7 @@ def load_styles_conf(config):
     loaded. Failure will be False if the object was loaded, or if the path does
     not exists; failure is True if the file exists, but ConfigObj failed to load it.
     """
+
     def _load_styles_conf():
         styles_path = resolve_path_styles(config)
         if not os.path.exists(styles_path):
@@ -135,7 +138,7 @@ def load_styles_conf(config):
         return load_dict_from_user_styling(styles_path)
 
     def load_dict_from_user_styling(styles_path):
-        styles_conf = create_configobj(styles_path, errname='styles_conf')
+        styles_conf = create_configobj(styles_path, errname="styles_conf")
         if styles_conf is None:
             return None, True
         return styles_conf, False
@@ -144,6 +147,7 @@ def load_styles_conf(config):
 
 
 # ***
+
 
 def load_style_rules(controller):
     def _load_style_rules():
@@ -163,20 +167,22 @@ def load_style_rules(controller):
         # ((lb): not that you'd likely notice any change in performance with or
         # without the pre-compile).
         for section, rules in rules_confobj.items():
-            if 'eval' not in rules:
+            if "eval" not in rules:
                 continue
             try:
-                rules['__eval__'] = compile(
-                    source=rules['eval'],
-                    filename='<string>',
+                rules["__eval__"] = compile(
+                    source=rules["eval"],
+                    filename="<string>",
                     # Specifying 'eval' because single expression.
                     # Could use 'exec' for sequence of statements.
-                    mode='eval',
+                    mode="eval",
                 )
             except Exception as err:
                 rules_path = resolve_path_rules(controller.config)
                 msg = _("compile() failed on 'eval' from “{0}” in “{1}”: {2}").format(
-                    section, rules_path, str(err),
+                    section,
+                    rules_path,
+                    str(err),
                 )
                 echo_warning(msg)
 
@@ -187,6 +193,7 @@ def load_style_rules(controller):
 
 # ***
 
+
 def load_rules_conf(config):
     def _load_rules_conf():
         rules_path = resolve_path_rules(config)
@@ -195,7 +202,7 @@ def load_rules_conf(config):
         return wrap_in_configobj(rules_path)
 
     def wrap_in_configobj(rules_path):
-        rules_confobj = create_configobj(rules_path, errname='rules_conf')
+        rules_confobj = create_configobj(rules_path, errname="rules_conf")
         if rules_confobj is None:
             return None, True
         return rules_confobj, False
@@ -205,7 +212,7 @@ def load_rules_conf(config):
 
 # ***
 
-CFG_KEY_ACTIVE_STYLE = 'editor.styling'
+CFG_KEY_ACTIVE_STYLE = "editor.styling"
 
 
 def resolve_named_style(config):
@@ -214,7 +221,7 @@ def resolve_named_style(config):
 
 # ***
 
-CFG_KEY_STYLES_FPATH = 'editor.styles_fpath'
+CFG_KEY_STYLES_FPATH = "editor.styles_fpath"
 
 
 def resolve_path_styles(config):
@@ -223,9 +230,8 @@ def resolve_path_styles(config):
 
 # ***
 
-CFG_KEY_RULESETS_FPATH = 'editor.rules_fpath'
+CFG_KEY_RULESETS_FPATH = "editor.rules_fpath"
 
 
 def resolve_path_rules(config):
     return config[CFG_KEY_RULESETS_FPATH]
-

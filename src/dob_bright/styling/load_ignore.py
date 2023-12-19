@@ -27,9 +27,9 @@ from easy_as_pypi_termio.errors import echo_warning
 from ..crud.enc_actegory_re import RegExpActegory
 
 __all__ = (
-    'ignore_file_path',
-    'load_no_completion',
-    'NoComplete',
+    "ignore_file_path",
+    "load_no_completion",
+    "NoComplete",
 )
 
 
@@ -50,9 +50,9 @@ def load_no_completion(controller):
     class SectionState(object):
         """File parsing state machine."""
 
-        section_activity = re.compile(r'^\s*\[activity\]\s*$')
-        section_category = re.compile(r'^\s*\[category\]\s*$')
-        section_tagnames = re.compile(r'^\s*\[tag\]\s*$')
+        section_activity = re.compile(r"^\s*\[activity\]\s*$")
+        section_category = re.compile(r"^\s*\[category\]\s*$")
+        section_tagnames = re.compile(r"^\s*\[tag\]\s*$")
 
         def __init__(self):
             self.state = None
@@ -90,21 +90,21 @@ def load_no_completion(controller):
     _categories = []
     _tagsofname = []
 
-    comment_line = re.compile(r'^\s*#')
-    comment_decode = re.compile(r'^(\s*)\\#')
+    comment_line = re.compile(r"^\s*#")
+    comment_decode = re.compile(r"^(\s*)\\#")
 
-    nothing_but_blankness = re.compile(r'^\s*$')
+    nothing_but_blankness = re.compile(r"^\s*$")
 
-    matches_nothing = re.compile(r'[^\w\W]')
+    matches_nothing = re.compile(r"[^\w\W]")
     nothing_matches = 3 * [matches_nothing]
 
-    sep_sym = '@'
+    sep_sym = "@"
     re_actegory = RegExpActegory(sep=sep_sym)
 
     state = SectionState()
 
     def decode_leading_comment(text):
-        return comment_decode.sub('\\1#', text)
+        return comment_decode.sub("\\1#", text)
 
     def _load_no_completion():
         try:
@@ -115,9 +115,9 @@ def load_no_completion(controller):
             re_act, re_cat, re_tag = nothing_matches
         no_completions = NoComplete(re_act, re_cat, re_tag)
         no_completions.raw = {
-            'activities': _activities,
-            'categories': _categories,
-            'tags': _tagsofname,
+            "activities": _activities,
+            "categories": _categories,
+            "tags": _tagsofname,
         }
         return no_completions
 
@@ -138,9 +138,9 @@ def load_no_completion(controller):
         return process_consumed_rules()
 
     def open_and_consume_rules(ignore_fpath):
-        with open(ignore_fpath, 'r', encoding='utf-8') as ignore_fpath_f:
+        with open(ignore_fpath, "r", encoding="utf-8") as ignore_fpath_f:
             for line in ignore_fpath_f:
-                consume_if_not_empty_line(line.rstrip('\n'))
+                consume_if_not_empty_line(line.rstrip("\n"))
 
     def consume_if_not_empty_line(rule):
         if nothing_but_blankness.match(rule):
@@ -186,9 +186,11 @@ def load_no_completion(controller):
         else:
             # Haven't seen first section yet!
             # FIXME/2019-11-30: (lb): Better error message.
-            echo_warning(_(
-                'Cannot discern no-completion rule seen before first section: ‘{}’'
-            ).format(rule))
+            echo_warning(
+                _(
+                    "Cannot discern no-completion rule seen before first section: ‘{}’"
+                ).format(rule)
+            )
 
     def process_consumed_rules():
         re_act = compile_rules(_activities)
@@ -199,7 +201,7 @@ def load_no_completion(controller):
     def compile_rules(rules):
         if not rules:
             return matches_nothing
-        return re.compile(r'^({})$'.format('|'.join(rules)))
+        return re.compile(r"^({})$".format("|".join(rules)))
 
     # ***
 
@@ -208,10 +210,9 @@ def load_no_completion(controller):
 
 # ***
 
-CFG_KEY_IGNORE_FPATH = 'editor.ignore_fpath'
+CFG_KEY_IGNORE_FPATH = "editor.ignore_fpath"
 
 
 def ignore_file_path(config):
     ignore_fpath = config[CFG_KEY_IGNORE_FPATH]
     return ignore_fpath
-

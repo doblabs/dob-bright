@@ -24,9 +24,7 @@ from ..crud.facts_diff import FactsDiff
 
 from .load_styling import load_style_classes
 
-__all__ = (
-    'pre_apply_style_conf',
-)
+__all__ = ("pre_apply_style_conf",)
 
 
 def pre_apply_style_conf(controller):
@@ -41,7 +39,7 @@ def pre_apply_style_conf(controller):
 
     # ***
 
-    RE_COMMA_WHITESPACE = re.compile(r',\s*')
+    RE_COMMA_WHITESPACE = re.compile(r",\s*")
 
     def unpack(csv):
         return RE_COMMA_WHITESPACE.split(csv)
@@ -54,16 +52,16 @@ def pre_apply_style_conf(controller):
 
     def unpack_factoioid_style(style_conf):
         factoioid_style = {
-            'pk': unpack(style_conf['factoid-pk']),
-            'act@gory': unpack(style_conf['factoid-act@gory']),
-            '#': unpack(style_conf['factoid-#']),
-            'tag': unpack(style_conf['factoid-tag']),
-            '#tag': unpack(style_conf['factoid-#tag']),
-            'start': unpack(style_conf['factoid-start']),
-            'end': unpack(style_conf['factoid-end']),
-            'at': unpack(style_conf['factoid-at']),
-            'to': unpack(style_conf['factoid-to']),
-            'duration': unpack(style_conf['factoid-duration']),
+            "pk": unpack(style_conf["factoid-pk"]),
+            "act@gory": unpack(style_conf["factoid-act@gory"]),
+            "#": unpack(style_conf["factoid-#"]),
+            "tag": unpack(style_conf["factoid-tag"]),
+            "#tag": unpack(style_conf["factoid-#tag"]),
+            "start": unpack(style_conf["factoid-start"]),
+            "end": unpack(style_conf["factoid-end"]),
+            "at": unpack(style_conf["factoid-at"]),
+            "to": unpack(style_conf["factoid-to"]),
+            "duration": unpack(style_conf["factoid-duration"]),
         }
         return factoioid_style
 
@@ -75,10 +73,10 @@ def pre_apply_style_conf(controller):
 
     def unpack_facts_diff_style(style_conf):
         facts_diff_style = {
-            'value-diff-old-raw': unpack(style_conf['value-diff-old-raw']),
-            'value-diff-old-ptk': style_conf['value-diff-old-ptk'],
-            'value-diff-new-raw': unpack(style_conf['value-diff-new-raw']),
-            'value-diff-new-ptk': style_conf['value-diff-new-ptk'],
+            "value-diff-old-raw": unpack(style_conf["value-diff-old-raw"]),
+            "value-diff-old-ptk": style_conf["value-diff-old-ptk"],
+            "value-diff-new-raw": unpack(style_conf["value-diff-new-raw"]),
+            "value-diff-new-ptk": style_conf["value-diff-new-ptk"],
         }
         return facts_diff_style
 
@@ -90,10 +88,9 @@ def pre_apply_style_conf(controller):
 
     def unpack_tags_tuples_style(style_conf):
         tags_tuples_style = {
-            'value-tag-#': style_conf['value-tag-#'],
-            'value-tag-label': style_conf['value-tag-label'],
+            "value-tag-#": style_conf["value-tag-#"],
+            "value-tag-label": style_conf["value-tag-label"],
         }
         return tags_tuples_style
 
     return _pre_apply_style_conf()
-

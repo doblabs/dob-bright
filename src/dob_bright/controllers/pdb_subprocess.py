@@ -23,9 +23,7 @@ from .. import __arg0name__
 
 from .logging_output import Controller_LoggingOutput
 
-__all__ = (
-    'Controller_PdbSubprocess',
-)
+__all__ = ("Controller_PdbSubprocess",)
 
 
 class Controller_PdbSubprocess(
@@ -53,10 +51,11 @@ class Controller_PdbSubprocess(
     def affirm(self, condition):
         if condition:
             return
-        self.client_logger.error(_('Something catastrophic happened!'))
-        if not self.config['dev.catch_errors']:
+        self.client_logger.error(_("Something catastrophic happened!"))
+        if not self.config["dev.catch_errors"]:
             return
         import traceback
+
         traceback.print_stack()
         traceback.print_exc()
         self.pdb_set_trace()
@@ -65,34 +64,36 @@ class Controller_PdbSubprocess(
 
     def pdb_set_trace(self):
         import pdb
+
         self.pdb_break_enter()
         pdb.set_trace()
         self.pdb_break_leave()
 
     def pdb_break_enter(self):
         import subprocess
+
         # If the developer breaks into code from within the Carousel,
         # i.e., from within the Python Prompt Toolkit library, then
         # pdb terminal echo of stdin back to stdout is broken. You'll
         # see that pdb.stdin and pdb.stdout still match the sys.__stdin__
         # and sys.__stdout__, so that's not the issue -- it's that pdb
         # terminal is in *raw* mode. We can fix this by shelling to stty.
-        proc = subprocess.Popen(['stty', '--save'], stdout=subprocess.PIPE)
+        proc = subprocess.Popen(["stty", "--save"], stdout=subprocess.PIPE)
         (stdout_data, stderr_data) = proc.communicate()
         self.stty_saved = stdout_data.strip()
         # Before breaking, twiddle the terminal away from PPT temporarily.
-        subprocess.Popen(['stty', 'sane'])
+        subprocess.Popen(["stty", "sane"])
 
     def pdb_break_leave(self):
         import subprocess
+
         # Aha! This is awesome! We can totally recover from an interactive
         # debug session! First, restore the terminal settings (which we
         # reset so the our keystrokes on stdin were echoed back to us)
         # so that sending keys to PPT works again.
-        subprocess.Popen(['stty', self.stty_saved])
+        subprocess.Popen(["stty", self.stty_saved])
         # And then the caller, if self.carousel, will redraw the interface
         # (because it has the handle to the application).
         self.client_logger.debug(_("Get on with it!"))
 
     # ***
-

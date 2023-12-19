@@ -32,14 +32,15 @@ from ..styling.class_namilize import namilize
 from .facts_diff import FactsDiff
 
 __all__ = (
-    'FactDressed',
+    "FactDressed",
     # PRIVATE:
     #  'FactoidSource',
 )
 
 
 FactoidSource = namedtuple(
-    'FactoidSource', ('line_num', 'line_raw'),
+    "FactoidSource",
+    ("line_num", "line_raw"),
 )
 
 
@@ -47,12 +48,7 @@ class FactDressed(Fact):
     """"""
 
     def __init__(
-        self,
-        *args,
-        dirty_reasons=None,
-        line_num=None,
-        line_raw=None,
-        **kwargs
+        self, *args, dirty_reasons=None, line_num=None, line_raw=None, **kwargs
     ):
         super(FactDressed, self).__init__(*args, **kwargs)
         # For tracking edits between store saves.
@@ -74,23 +70,20 @@ class FactDressed(Fact):
 
     @property
     def short(self):
-        friendly = (
-            '0x{:12x} / 🏭 {} / {} to {:23} / prev: {:12x} / next: {:12x}'.format(
-                id(self),
-                self.pk is not None and '{:6d}'.format(self.pk) or '<None>',
-                self.start_fmt_local,
-                self.end_fmt_local or '..........now..........',
-                self.prev_fact and id(self.prev_fact) or 0,
-                self.next_fact and id(self.next_fact) or 0,
-            )
+        friendly = "0x{:12x} / 🏭 {} / {} to {:23} / prev: {:12x} / next: {:12x}".format(
+            id(self),
+            self.pk is not None and "{:6d}".format(self.pk) or "<None>",
+            self.start_fmt_local,
+            self.end_fmt_local or "..........now..........",
+            self.prev_fact and id(self.prev_fact) or 0,
+            self.next_fact and id(self.next_fact) or 0,
         )
         return friendly
 
     # ***
 
     def copy(self, *args, **kwargs):
-        """
-        """
+        """ """
         new_fact = super(FactDressed, self).copy(*args, **kwargs)
         new_fact.dirty_reasons = set(list(self.dirty_reasons))
         new_fact.parsed_source = self.parsed_source
@@ -118,19 +111,17 @@ class FactDressed(Fact):
 
     @classmethod
     def register_factoid_style(cls, factoid_style=None):
-        """Registers a dictionary of style lists for oid_stylize.
-        """
+        """Registers a dictionary of style lists for oid_stylize."""
         for part, styles in factoid_style.items():
-            errs = ', '.join(verify_colors_attrs(*styles))
+            errs = ", ".join(verify_colors_attrs(*styles))
             if errs:
-                emsg = _('Unknown colors or attrs for “{}”: {}').format(part, errs)
+                emsg = _("Unknown colors or attrs for “{}”: {}").format(part, errs)
                 echo_warning(emsg)
         # Nonetheless, can still use even if some/all unknown colors/attrs.
         cls.FACTOID_STYLE = factoid_style or {}
 
     def oid_stylize(self, oid_part, oid_text):
-        """Stylizes parts of the Factoid with color and emphasis.
-        """
+        """Stylizes parts of the Factoid with color and emphasis."""
         try:
             styles = FactDressed.FACTOID_STYLE[oid_part]
         except KeyError:
@@ -140,7 +131,7 @@ class FactDressed(Fact):
 
     # ***
 
-    def squash(self, other, squash_sep=''):
+    def squash(self, other, squash_sep=""):
         def _squash():
             # (lb): The squash is a useful end user application feature for existing
             # facts, and I'm not sure what else it might be used for, so I'm putting
@@ -168,24 +159,24 @@ class FactDressed(Fact):
 
             description_squash(other, squash_sep)
 
-            self.dirty_reasons.add('squash')
+            self.dirty_reasons.add("squash")
             if self.end:
-                self.dirty_reasons.add('stopped')
-                self.dirty_reasons.add('end')
+                self.dirty_reasons.add("stopped")
+                self.dirty_reasons.add("end")
 
             other.deleted = True
             # For completeness, and to make verification easier.
             other.start = self.start
             other.end = self.end
 
-            other.dirty_reasons.add('deleted-squashed')
+            other.dirty_reasons.add("deleted-squashed")
 
-        def description_squash(other, squash_sep=''):
+        def description_squash(other, squash_sep=""):
             if not other.description:
                 return
             # (lb): Build local desc. copy, because setter stores None, never ''.
-            new_description = self.description or ''
-            new_description += squash_sep if new_description else ''
+            new_description = self.description or ""
+            new_description += squash_sep if new_description else ""
             new_description += other.description
             self.description = new_description
             other.description = None
@@ -196,8 +187,7 @@ class FactDressed(Fact):
 
     @classmethod
     def create_from_factoid(cls, factoid, *args, **kwargs):
-        """Creates a new Fact from Factoid text, and sets bulk import metadata.
-        """
+        """Creates a new Fact from Factoid text, and sets bulk import metadata."""
         new_fact, err = super(FactDressed, cls).create_from_factoid(
             factoid, *args, **kwargs
         )
@@ -212,7 +202,7 @@ class FactDressed(Fact):
     @property
     def dirty(self):  # MAYBE: Rename: positive()?
         # MAYBE/FIXME: Set dirty_reasons if fact.pk < 0, on new FactDressed.
-        return ((self.unstored or len(self.dirty_reasons) > 0) and not self.is_gap)
+        return (self.unstored or len(self.dirty_reasons) > 0) and not self.is_gap
 
     # *** Linked list methods.
 
@@ -228,20 +218,20 @@ class FactDressed(Fact):
 
     @property
     def is_gap(self):
-        return 'interval-gap' in self.dirty_reasons
+        return "interval-gap" in self.dirty_reasons
 
     @is_gap.setter
     def is_gap(self, is_gap):
         if is_gap:
-            self.dirty_reasons.add('interval-gap')
+            self.dirty_reasons.add("interval-gap")
         else:
-            self.dirty_reasons.discard('interval-gap')
+            self.dirty_reasons.discard("interval-gap")
 
     @classmethod
     def new_gap_fact(cls, start, end=None, pk=None):
         if pk is None:
             pk = -1
-        activity = Activity(name='')
+        activity = Activity(name="")
         gap_fact = FactDressed(
             pk=pk,
             activity=activity,
@@ -270,8 +260,7 @@ class FactDressed(Fact):
 
     @classmethod
     def register_tags_tuples_style(cls, tags_tuples_style=None):
-        """Registers a dictionary of PTK-style styles for tags_tuples.
-        """
+        """Registers a dictionary of PTK-style styles for tags_tuples."""
         # (lb): See command in CustomHeaderValues. These two special styles,
         # 'value-tag-#' and 'value-tag-label', let you style the hash symbol
         # separately from the tag label. As opposed to the 'value-tag' option.
@@ -283,47 +272,46 @@ class FactDressed(Fact):
     #   (For now, I'm happy this method at least made it out of nark!)
     def tags_tuples(
         self,
-        hashtag_token='#',
+        hashtag_token="#",
         quote_tokens=False,
         colorful=False,
         split_lines=False,
     ):
-
         def format_tagname(tag):
             tagged = []
             #
             # (lb): I had ' fg: ' prefix for class name, but not needed.
-            tclss_fmt = ' class:tag-{}'.format(namilize(tag.name))
+            tclss_fmt = " class:tag-{}".format(namilize(tag.name))
             #
-            token_fmt = ''
-            token_fmt += fetch_tag_part_fmt('value-tag-#')
+            token_fmt = ""
+            token_fmt += fetch_tag_part_fmt("value-tag-#")
             token_fmt += tclss_fmt
             tagged.append((token_fmt, hashtag_token))
             #
-            tname_fmt = ''
-            tname_fmt += fetch_tag_part_fmt('value-tag-label')
+            tname_fmt = ""
+            tname_fmt += fetch_tag_part_fmt("value-tag-label")
             tname_fmt += tclss_fmt
             tagged.append((tname_fmt, tag.name))
             #
             if quote_tokens:
-                fmt_quote = ('', '"')
+                fmt_quote = ("", '"')
                 tagged.insert(0, fmt_quote)
                 tagged.append(fmt_quote)
             return tagged
 
         def fetch_tag_part_fmt(style_attr):
             if not colorful:
-                return ''
+                return ""
             try:
                 return FactDressed.TAGS_TUPLE_STYLE[style_attr]
             except KeyError:
-                return ''
+                return ""
 
         # NOTE: The returned string includes leading space if nonempty!
         tagnames = []
         if self.tags:
             # Build array of PPT tuples.
-            fmt_sep = ('', "\n") if split_lines else ('', ' ')
+            fmt_sep = ("", "\n") if split_lines else ("", " ")
             n_tag = 0
             for fmtd_tagn in self.tagnames_sorted_formatted(format_tagname):
                 if n_tag > 0:
@@ -334,25 +322,21 @@ class FactDressed(Fact):
 
     # ***
 
-    def html_notif(self, cut_width_description=None, sep=': '):
+    def html_notif(self, cut_width_description=None, sep=": "):
         """
         A briefer Fact one-liner using HTML. Useful for, e.g., notifier toast.
         """
         # (lb): To be honest, the only HTML herein is the <i>No activity</i>.
         was_coloring = set_coloring(False)
-        duration = '[{}]'.format(self.format_delta(style=''))
-        actegory = self.oid_actegory(empty_actegory_placeholder='<i>No activity</i>')
+        duration = "[{}]".format(self.format_delta(style=""))
+        actegory = self.oid_actegory(empty_actegory_placeholder="<i>No activity</i>")
         description = self.oid_description(cut_width=cut_width_description, sep=sep)
-        simple_str = (
-            '{} {}{}'
-            .format(
-                duration,
-                actegory,
-                description,
-            )
+        simple_str = "{} {}{}".format(
+            duration,
+            actegory,
+            description,
         )
         set_coloring(was_coloring)
         return simple_str
 
     # ***
-

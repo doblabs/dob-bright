@@ -33,9 +33,7 @@ from easy_as_pypi_termio.errors import echo_warning
 
 from .rules_conf import create_style_rules_object
 
-__all__ = (
-    'StyleEngine',
-)
+__all__ = ("StyleEngine",)
 
 
 class StyleEngine(object):
@@ -61,7 +59,6 @@ class StyleEngine(object):
     # ***
 
     def consume_style_rules_conf(self, rules_confobj):
-
         def _consume_style_rules_conf():
             if rules_confobj is None:
                 return {}
@@ -128,7 +125,7 @@ class StyleEngine(object):
                 # setting by set it to the empty string.
                 if not ruleset[friendly_name]:
                     continue
-                if ruleset['disabled']:
+                if ruleset["disabled"]:
                     continue
                 # We're just building a convenience lookup of rules that apply
                 # to the named component. We'll run the rules check later.
@@ -137,7 +134,7 @@ class StyleEngine(object):
         # ***
 
         def apply_triggered_style_rules(ppt_widget, rulesets, fact):
-            accumulated = ''
+            accumulated = ""
             for section, ruleset in rulesets.items():
                 if not ruleset_triggered(section, ruleset, fact):
                     continue
@@ -195,10 +192,10 @@ class StyleEngine(object):
             trinary = 0
 
             activities = set()
-            if ruleset['activity']:
-                activities.add(ruleset['activity'])
-            if ruleset['activities']:
-                activities = activities.union(ruleset['activities'])
+            if ruleset["activity"]:
+                activities.add(ruleset["activity"])
+            if ruleset["activities"]:
+                activities = activities.union(ruleset["activities"])
             if activities:
                 if fact.activity_name in activities:
                     trinary = 1
@@ -206,10 +203,10 @@ class StyleEngine(object):
                     return -1
 
             categories = set()
-            if ruleset['category']:
-                categories.add(ruleset['category'])
-            if ruleset['categories']:
-                categories = categories.union(ruleset['categories'])
+            if ruleset["category"]:
+                categories.add(ruleset["category"])
+            if ruleset["categories"]:
+                categories = categories.union(ruleset["categories"])
             if categories:
                 if fact.category_name in categories:
                     trinary = 1
@@ -219,20 +216,20 @@ class StyleEngine(object):
             # (lb): Because I'm too accommodating, a zillion ways to conditional tags.
 
             tags_any = set()
-            if ruleset['tag']:
-                tags_any.add(ruleset['tag'])
-            if ruleset['tags']:
-                tags_any = tags_any.union(ruleset['tags'])
-            if ruleset['tags-any']:
-                tags_any = tags_any.union(ruleset['tags-any'])
-            if ruleset['tags-or']:
-                tags_any = tags_any.union(ruleset['tags-or'])
+            if ruleset["tag"]:
+                tags_any.add(ruleset["tag"])
+            if ruleset["tags"]:
+                tags_any = tags_any.union(ruleset["tags"])
+            if ruleset["tags-any"]:
+                tags_any = tags_any.union(ruleset["tags-any"])
+            if ruleset["tags-or"]:
+                tags_any = tags_any.union(ruleset["tags-or"])
 
             tags_all = set()
-            if ruleset['tags-all']:
-                tags_all = tags_all.union(ruleset['tags-all'])
-            if ruleset['tags-and']:
-                tags_all = tags_all.union(ruleset['tags-and'])
+            if ruleset["tags-all"]:
+                tags_all = tags_all.union(ruleset["tags-all"])
+            if ruleset["tags-and"]:
+                tags_all = tags_all.union(ruleset["tags-and"])
 
             if tags_any or tags_all:
                 fact_tags = set([tag.name for tag in fact.tags])
@@ -253,28 +250,28 @@ class StyleEngine(object):
             # (lb): `'<str>' in ruleset` sends 0, not '<str>', to __getitem__?!
             # So do `'__eval__' not in ruleset.keys()`. Except no need, because
             # the key should exist, because create_style_rules_object.
-            compiled_code = ruleset['__eval__']
+            compiled_code = ruleset["__eval__"]
             if compiled_code is None:
                 return 0
             try:
                 trinary = eval(compiled_code)
             except Exception as err:
-                msg = _(
-                    "eval() failed on style rule ‘eval’ from “{0}”: {1}"
-                ).format(section, str(err))
+                msg = _("eval() failed on style rule ‘eval’ from “{0}”: {1}").format(
+                    section, str(err)
+                )
                 # MAYBE/2019-12-02: (lb): Show errors in Carousel?
                 # - Also one of few places where traverser imports ...helpers
                 #   (and I want to make traverser less dob-dependent (coupled)).
                 echo_warning(msg)
                 # Such that we never do this error dance again!
-                ruleset['__eval__'] = None
+                ruleset["__eval__"] = None
                 return False
             return trinary and 1 or -1
 
         # ***
 
         def apply_style_rule_class(ppt_widget, ruleset):
-            custom_classes = ' {}'.format(ruleset[friendly_name])
+            custom_classes = " {}".format(ruleset[friendly_name])
             if ppt_widget is None:
                 # Style being used in a (style, text, handler) tuple.
                 pass
@@ -299,6 +296,7 @@ class StyleEngine(object):
                 #       could offer an affirm() singleton or module method
                 #       that is enabled after the config is read.
                 import click_hotoffthehamster as click
+
                 click.get_current_context().obj.affirm(False)
                 pass
             return custom_classes
@@ -317,7 +315,7 @@ class StyleEngine(object):
             #   - We use the magical suffix, "-line", to decide which it is, e.g.,
             #         value-activity = class:my-style-text-only
             #         value-activity-line = class:my-style-whole-line
-            if not friendly_name.endswith('-line'):
+            if not friendly_name.endswith("-line"):
                 # If label.text is tuples, their style beats formatted_text_control,
                 # so rebuild the tuples list if present.
                 if (
@@ -347,4 +345,3 @@ class StyleEngine(object):
         # ***
 
         return _process_style_rules()
-

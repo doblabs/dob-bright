@@ -21,16 +21,14 @@ from nark.reports import ReportWriter
 
 from easy_as_pypi_termio.ascii_table import generate_table
 
-__all__ = (
-    'TableWriter',
-)
+__all__ = ("TableWriter",)
 
 
 class TableWriter(ReportWriter):
     def __init__(
         self,
         *args,
-        table_type='texttable',
+        table_type="texttable",
         max_width=0,
         **kwargs,
     ):
@@ -57,4 +55,3 @@ class TableWriter(ReportWriter):
             cols_align=cols_align,
         )
         return len(table)
-

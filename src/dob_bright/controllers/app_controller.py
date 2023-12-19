@@ -37,9 +37,7 @@ from .pdb_subprocess import Controller_PdbSubprocess
 from .post_processor import Controller_PostProcessor
 from .setup_coloring import Controller_SetupColoring
 
-__all__ = (
-    'Controller',
-)
+__all__ = ("Controller",)
 
 
 # ***
@@ -51,6 +49,7 @@ __all__ = (
 # composable, but at the expense of readability. And it's not like using
 # multiple class inheritance decouples this class at all; it just spreads
 # to code out to separate files, which could make grokking more difficult.
+
 
 class Controller(
     # Ordered so earlier items depend on later items, and also
@@ -81,6 +80,7 @@ class Controller(
 
     def insist_germinated(self, fact_cls=Fact):
         """Assist user if config or database not present."""
+
         def _insist_germinated():
             # Check if both self.store_exists and self.looks_like_config.
             if self.is_germinated:
@@ -106,7 +106,7 @@ class Controller(
         def oblige_user_create_store():
             message = help_strings.NEWBIE_HELP_CREATE_STORE(
                 self.ctx,
-                db_path=self.config['db.path'],
+                db_path=self.config["db.path"],
                 val_source=self.config.asobj.db.path.source,
             )
             click_echo(inspect.cleandoc(message), err=True)
@@ -132,7 +132,7 @@ class Controller(
                 self.create_config(force=False)
             else:
                 click_echo(
-                    _('Configuration already exists at {}').format(
+                    _("Configuration already exists at {}").format(
                         highlight_value(cfg_path),
                     )
                 )
@@ -149,9 +149,11 @@ class Controller(
                 self._standup_and_version_store(fact_cls)
 
         def exit_already_germinated():
-            exit_warning(_(
-                'Dob is already setup. Run `{} details` for info.'
-            ).format(self.arg0name))
+            exit_warning(
+                _("Dob is already setup. Run `{} details` for info.").format(
+                    self.arg0name
+                )
+            )
 
         _create_config_and_store()
 
@@ -170,4 +172,3 @@ class Controller(
         return self.facts.find_oldest_fact()
 
     # ***
-

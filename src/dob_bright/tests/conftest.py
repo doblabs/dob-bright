@@ -36,7 +36,9 @@ import fauxfactory
 import pytest
 from unittest.mock import MagicMock
 
-from easy_as_pypi_appdirs import app_dirs  # Import module that contains AppDirsWithMkdir (AppDirs).
+from easy_as_pypi_appdirs import (
+    app_dirs,
+)  # Import module that contains AppDirsWithMkdir (AppDirs).
 from easy_as_pypi_appdirs.expand_and_mkdirs import ensure_directory_exists
 
 from easy_as_pypi_termio.errors import dob_been_warned_reset
@@ -52,14 +54,15 @@ from dob_bright.controllers.app_controller import Controller
 #
 #    from nark.tests.item_factories import *
 
-test_lib_log_level = 'WARNING'
-test_cli_log_level = 'WARNING'
+test_lib_log_level = "WARNING"
+test_cli_log_level = "WARNING"
 # DEV: Uncomment to see more log trace while testing:
-test_lib_log_level = 'DEBUG'
-test_cli_log_level = 'DEBUG'
+test_lib_log_level = "DEBUG"
+test_cli_log_level = "DEBUG"
 
 
 # ***
+
 
 @pytest.fixture
 def filename():
@@ -75,22 +78,23 @@ def filepath(tmpdir, filename):
 
 # ***
 
+
 @pytest.fixture
 def appdirs(mocker, tmpdir):
     """Provide mocked version specific user dirs using a tmpdir."""
     app_dirs_mock = mocker.MagicMock()
 
     app_dirs_mock.user_config_dir = ensure_directory_exists(
-        os.path.join(tmpdir.mkdir('config').strpath, 'dob/'),
+        os.path.join(tmpdir.mkdir("config").strpath, "dob/"),
     )
     app_dirs_mock.user_data_dir = ensure_directory_exists(
-        os.path.join(tmpdir.mkdir('data').strpath, 'dob/'),
+        os.path.join(tmpdir.mkdir("data").strpath, "dob/"),
     )
     app_dirs_mock.user_cache_dir = ensure_directory_exists(
-        os.path.join(tmpdir.mkdir('cache').strpath, 'dob/'),
+        os.path.join(tmpdir.mkdir("cache").strpath, "dob/"),
     )
     app_dirs_mock.user_log_dir = ensure_directory_exists(
-        os.path.join(tmpdir.mkdir('log').strpath, 'dob/'),
+        os.path.join(tmpdir.mkdir("log").strpath, "dob/"),
     )
 
     app_dirs.AppDirsWithMkdir = app_dirs_mock
@@ -99,6 +103,7 @@ def appdirs(mocker, tmpdir):
 
 
 # ***
+
 
 def _config_root(nark_config, dob_config):
     """Provide a generic baseline configuration."""
@@ -128,10 +133,10 @@ def _nark_config(tmpdir):
     # FETREQ/2020-01-09: (lb): Support dot-notation in dict keys on `update`.
     # - For now, create deep dictionary; not flat with dotted key names.
     return {
-        'db': {
-            'orm': 'sqlalchemy',
-            'engine': 'sqlite',
-            'path': ':memory:',
+        "db": {
+            "orm": "sqlalchemy",
+            "engine": "sqlite",
+            "path": ":memory:",
             # MAYBE/2019-02-20: (lb): Support for alt. DBMS is wired, but not tested.
             #   'host': '',
             #   'port': '',
@@ -139,30 +144,26 @@ def _nark_config(tmpdir):
             #   'user': '',
             #   'password': '',
         },
-        'dev': {
-            'lib_log_level': test_lib_log_level,
-            'sql_log_level': 'WARNING',
+        "dev": {
+            "lib_log_level": test_lib_log_level,
+            "sql_log_level": "WARNING",
         },
-        'time': {
+        "time": {
             # 2019-02-20: (lb): Note that allow_momentaneous=False probably Bad Idea,
             #                   especially for user upgrading from legacy hamster db.
-            'allow_momentaneous': True,
-
+            "allow_momentaneous": True,
             # MAYBE/2019-02-20: (lb): I don't day_start, so probably broke; needs tests.
             #   'day_start': datetime.time(hour=0, minute=0, second=0).isoformat(),
             #   'day_start': datetime.time(hour=5, minute=0, second=0).isoformat(),
-            'day_start': '',
-
+            "day_start": "",
             # MAYBE/2019-02-20: (lb): Perhaps test min-delta, another feature I !use!
             #   'fact_min_delta': '60',
-            'fact_min_delta': '0',
-
+            "fact_min_delta": "0",
             # FIXME/2019-02-20: (lb): Implement tzawareness/tz_aware/timezone feature.
-            'tz_aware': False,
-
+            "tz_aware": False,
             # FIXME/2019-02-20: (lb): Needs testing, e.g.,
             #   'default_tzinfo': 'America/Menominee',
-            'default_tzinfo': '',
+            "default_tzinfo": "",
         },
     }
 
@@ -183,34 +184,24 @@ def _dob_config(tmpdir):
     """
     return {
         # 'editor.centered': '',
-        'editor.centered': 'True',
-
-        'editor.lexer': '',
-
-        'term.editor_suffix': '',
-
+        "editor.centered": "True",
+        "editor.lexer": "",
+        "term.editor_suffix": "",
         # Disable color, otherwise tests will have to look for color codes.
-        'log.use_color': False,
-
+        "log.use_color": False,
         # Don't log to console, otherwise tests have to deal with that noise.
         # 'log_console': True,  # Default.
-        'log.use_console': False,
-
+        "log.use_console": False,
         # The default log filename does not need to be changed.
         # 'log_filename': 'dob.log',  # Default.
         # See also:
         #  'logfile_path': '',  # Generated value.
-
-        'dev.cli_log_level': test_cli_log_level,
-
-        'fact.separators': '',  # [,:\n]
-
-        'term.show_greeting': False,
-
-        'editor.styling': '',
-
-        'term.use_color': False,
-        'term.use_pager': False,
+        "dev.cli_log_level": test_cli_log_level,
+        "fact.separators": "",  # [,:\n]
+        "term.show_greeting": False,
+        "editor.styling": "",
+        "term.use_color": False,
+        "term.use_pager": False,
     }
 
 
@@ -239,7 +230,7 @@ def config_instance(tmpdir, faker):
         # NOPE: You'd overwrite your user's file with the default path:
         #   from easy_as_pypi_config.fileboss import default_config_path
         #   configfile_path = default_config_path()
-        configfile_path = os.path.join(tmpdir, 'dob.conf')
+        configfile_path = os.path.join(tmpdir, "dob.conf")
         config = ConfigObj(configfile_path)
         config.merge(cfg_dict)
         return config
@@ -250,94 +241,94 @@ def config_instance(tmpdir, faker):
         # ***
 
         cfg_db = {}
-        cfg_dict['db'] = cfg_db
+        cfg_dict["db"] = cfg_db
 
-        cfg_db.setdefault('orm', kwargs.get('orm', 'sqlalchemy'))
-        cfg_db.setdefault('engine', kwargs.get('engine', 'sqlite'))
+        cfg_db.setdefault("orm", kwargs.get("orm", "sqlalchemy"))
+        cfg_db.setdefault("engine", kwargs.get("engine", "sqlite"))
         # HARDCODED: This filename value does not matter, really.
-        db_path = os.path.join(tmpdir.strpath, 'dob.sqlite')
-        cfg_db.setdefault('path', kwargs.get('path', db_path))
-        cfg_db.setdefault('host', kwargs.get('host', ''))
-        cfg_db.setdefault('port', kwargs.get('port', ''))
-        cfg_db.setdefault('name', kwargs.get('name', ''))
-        cfg_db.setdefault('user', kwargs.get('user', '')),
-        cfg_db.setdefault('password', kwargs.get('password', ''))
+        db_path = os.path.join(tmpdir.strpath, "dob.sqlite")
+        cfg_db.setdefault("path", kwargs.get("path", db_path))
+        cfg_db.setdefault("host", kwargs.get("host", ""))
+        cfg_db.setdefault("port", kwargs.get("port", ""))
+        cfg_db.setdefault("name", kwargs.get("name", ""))
+        cfg_db.setdefault("user", kwargs.get("user", "")),
+        cfg_db.setdefault("password", kwargs.get("password", ""))
 
         # ***
 
         cfg_dev = {}
-        cfg_dict['dev'] = cfg_dev
+        cfg_dict["dev"] = cfg_dev
 
-        lib_log_level = kwargs.get('lib_log_level', test_lib_log_level)
-        cfg_dev.setdefault('lib_log_level', lib_log_level)
-        sql_log_level = kwargs.get('sql_log_level', 'WARNING')
-        cfg_dev.setdefault('sql_log_level', sql_log_level)
+        lib_log_level = kwargs.get("lib_log_level", test_lib_log_level)
+        cfg_dev.setdefault("lib_log_level", lib_log_level)
+        sql_log_level = kwargs.get("sql_log_level", "WARNING")
+        cfg_dev.setdefault("sql_log_level", sql_log_level)
 
         # ***
 
         cfg_time = {}
-        cfg_dict['time'] = cfg_time
+        cfg_dict["time"] = cfg_time
 
         # (lb): Need to always support momentaneous, because legacy data bugs.
         # cfg_time.setdefault('allow_momentaneous', 'False')
-        cfg_time.setdefault('allow_momentaneous', 'True')
+        cfg_time.setdefault("allow_momentaneous", "True")
 
         # day_start = kwargs.get('day_start', '')
-        day_start = kwargs.get('day_start', '00:00:00')
-        cfg_time.setdefault('day_start', day_start)
+        day_start = kwargs.get("day_start", "00:00:00")
+        cfg_time.setdefault("day_start", day_start)
 
         # fact_min_delta = kwargs.get('fact_min_delta', '0')
-        fact_min_delta = kwargs.get('fact_min_delta', '60')
-        cfg_time.setdefault('fact_min_delta', fact_min_delta)
+        fact_min_delta = kwargs.get("fact_min_delta", "60")
+        cfg_time.setdefault("fact_min_delta", fact_min_delta)
 
-        cfg_time.setdefault('tz_aware', kwargs.get('tz_aware', 'False'))
+        cfg_time.setdefault("tz_aware", kwargs.get("tz_aware", "False"))
         # FIXME/2019-02-20: (lb): Fix timezones. And parameterize, e.g.,
         #  default_tzinfo = kwargs.get('default_tzinfo', 'America/Menominee')
-        default_tzinfo = kwargs.get('default_tzinfo', '')
-        cfg_time.setdefault('default_tzinfo', default_tzinfo)
+        default_tzinfo = kwargs.get("default_tzinfo", "")
+        cfg_time.setdefault("default_tzinfo", default_tzinfo)
 
         # ***
 
         cfg_editor = {}
-        cfg_dict['editor'] = cfg_editor
+        cfg_dict["editor"] = cfg_editor
 
-        cfg_editor.setdefault('centered', False)
-        cfg_editor.setdefault('lexer', '')
-        cfg_editor.setdefault('styling', '')
+        cfg_editor.setdefault("centered", False)
+        cfg_editor.setdefault("lexer", "")
+        cfg_editor.setdefault("styling", "")
 
         # ***
 
         cfg_fact = {}
-        cfg_dict['fact'] = cfg_fact
+        cfg_dict["fact"] = cfg_fact
 
-        cfg_fact.setdefault('separators', '')  # [,:\n]
+        cfg_fact.setdefault("separators", "")  # [,:\n]
 
         # ***
 
-        assert 'dev' in cfg_dict
+        assert "dev" in cfg_dict
 
-        cli_log_level = kwargs.get('cli_log_level', test_cli_log_level)
-        cfg_dev.setdefault('cli_log_level', cli_log_level)
+        cli_log_level = kwargs.get("cli_log_level", test_cli_log_level)
+        cfg_dev.setdefault("cli_log_level", cli_log_level)
 
         # ***
 
         cfg_log = {}
-        cfg_dict['log'] = cfg_log
+        cfg_dict["log"] = cfg_log
 
-        cfg_log.setdefault('filename', kwargs.get('log_filename', faker.file_name()))
+        cfg_log.setdefault("filename", kwargs.get("log_filename", faker.file_name()))
         # The log_filename is used to make log.filepath, which we don't need to set.
-        cfg_log.setdefault('use_color', 'False')
-        cfg_log.setdefault('use_console', kwargs.get('log_console', 'False'))
+        cfg_log.setdefault("use_color", "False")
+        cfg_log.setdefault("use_console", kwargs.get("log_console", "False"))
 
         # ***
 
         cfg_term = {}
-        cfg_dict['term'] = cfg_term
+        cfg_dict["term"] = cfg_term
 
-        cfg_term.setdefault('editor_suffix', '')
-        cfg_term.setdefault('show_greeting', 'False')
-        cfg_term.setdefault('use_color', 'True')
-        cfg_term.setdefault('use_pager', 'False')
+        cfg_term.setdefault("editor_suffix", "")
+        cfg_term.setdefault("show_greeting", "False")
+        cfg_term.setdefault("use_color", "True")
+        cfg_term.setdefault("use_pager", "False")
 
         # ***
 
@@ -349,24 +340,27 @@ def config_instance(tmpdir, faker):
 @pytest.fixture
 def config_file(config_instance, appdirs):
     """Provide a config file store under our fake config dir."""
-    conf_path = os.path.join(appdirs.user_config_dir, 'dob.conf')
-    with codecs.open(conf_path, 'w', encoding='utf-8') as fobj:
+    conf_path = os.path.join(appdirs.user_config_dir, "dob.conf")
+    with codecs.open(conf_path, "w", encoding="utf-8") as fobj:
         config_instance().write(fobj)
 
 
 @pytest.fixture
 def get_config_file(config_instance, appdirs):
     """Provide a dynamic config file store under our fake config dir."""
+
     def generate(**kwargs):
         instance = config_instance(**kwargs)
-        conf_path = os.path.join(appdirs.user_config_dir, 'dob.conf')
-        with codecs.open(conf_path, 'w', encoding='utf-8') as fobj:
+        conf_path = os.path.join(appdirs.user_config_dir, "dob.conf")
+        with codecs.open(conf_path, "w", encoding="utf-8") as fobj:
             instance.write(fobj)
         return instance
+
     return generate
 
 
 # *** Various config settings
+
 
 @pytest.fixture
 def db_name(request):
@@ -400,6 +394,7 @@ def db_port(request):
 
 # ***
 
+
 @pytest.fixture
 def ongoing_fact(controller_with_logging, fact):
     """Fixture tests that ``ongoing fact`` can be saved to data store."""
@@ -409,6 +404,7 @@ def ongoing_fact(controller_with_logging, fact):
 
 
 # ***
+
 
 def prepare_controller(config_root):
     controller = Controller()
@@ -454,7 +450,9 @@ def _controller_with_logging(config_root, magic_mock, test_fact_cls):
 @pytest.fixture
 def controller_with_logging(config_root, mocker, test_fact_cls):
     controller = _controller_with_logging(
-        config_root, mocker.MagicMock, test_fact_cls,
+        config_root,
+        mocker.MagicMock,
+        test_fact_cls,
     )
     yield controller
     controller.store.cleanup()
@@ -463,8 +461,9 @@ def controller_with_logging(config_root, mocker, test_fact_cls):
 @pytest.fixture(scope="session")
 def controller_with_logging_ro(config_root_ro, test_fact_cls_ro):
     controller = _controller_with_logging(
-        config_root_ro, MagicMock, test_fact_cls_ro,
+        config_root_ro,
+        MagicMock,
+        test_fact_cls_ro,
     )
     yield controller
     controller.store.cleanup()
-

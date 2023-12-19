@@ -16,4 +16,3 @@
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
 """dob_bright.crud sub.package provides UX-aware Fact C.R.U.D. functionality."""
-

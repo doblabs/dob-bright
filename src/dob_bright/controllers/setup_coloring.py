@@ -21,9 +21,7 @@ from easy_as_pypi_termio.style import disable_colors, enable_colors
 
 from .pdb_subprocess import Controller_PdbSubprocess
 
-__all__ = (
-    'Controller_SetupColoring',
-)
+__all__ = ("Controller_SetupColoring",)
 
 
 class Controller_SetupColoring(
@@ -41,13 +39,12 @@ class Controller_SetupColoring(
 
     def setup_tty_color(self, use_color):
         if use_color is None:
-            use_color = self.config['term.use_color']
+            use_color = self.config["term.use_color"]
         else:
-            self.config['term.use_color'] = use_color
+            self.config["term.use_color"] = use_color
         if use_color:
             enable_colors()
         else:
             disable_colors()
 
     # ***
-

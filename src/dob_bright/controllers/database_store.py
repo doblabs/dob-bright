@@ -29,9 +29,7 @@ from easy_as_pypi_termio.errors import exit_warning
 
 from .setup_coloring import Controller_SetupColoring
 
-__all__ = (
-    'Controller_DatabaseStore',
-)
+__all__ = ("Controller_DatabaseStore",)
 
 
 class Controller_DatabaseStore(
@@ -56,9 +54,7 @@ class Controller_DatabaseStore(
 
     @property
     def data_store_exists_at(self):
-        return _(
-            'Data store already exists at {}'
-        ).format(self.config['db.path'])
+        return _("Data store already exists at {}").format(self.config["db.path"])
 
     @property
     def data_store_url(self):
@@ -66,14 +62,14 @@ class Controller_DatabaseStore(
 
     @property
     def sqlite_db_path(self):
-        if self.config['db.engine'] == 'sqlite':
-            return self.config['db.path']
+        if self.config["db.engine"] == "sqlite":
+            return self.config["db.path"]
 
         # (lb): I don't super-like this. It's a weird side effect.
         #   And it's knowledgeable about the CLI command API. Meh.
-        exit_warning(_(
-            'Not a SQLite database. Try `{} store url`'
-        ).format(self.arg0name))
+        exit_warning(
+            _("Not a SQLite database. Try `{} store url`").format(self.arg0name)
+        )
 
     @property
     def is_germinated(self):
@@ -93,10 +89,10 @@ class Controller_DatabaseStore(
     @property
     def store_exists(self):
         # Check either db.path is set, or all of db.host/port/name/user.
-        if self.config['db.engine'] == 'sqlite':
-            if self.config['db.path'] == ':memory:':
+        if self.config["db.engine"] == "sqlite":
+            if self.config["db.path"] == ":memory:":
                 return True
-            return os.path.isfile(self.config['db.path'])
+            return os.path.isfile(self.config["db.path"])
         else:
             # NOTE: db_url is an attribute of SQLAlchemyStore, not BaseStore.
             return bool(self.store.db_url)
@@ -123,32 +119,32 @@ class Controller_DatabaseStore(
     # ***
 
     def check_sqlite_store_ready(self):
-        if self.config['db.engine'] != 'sqlite':
+        if self.config["db.engine"] != "sqlite":
             return None
-        db_path = self.config['db.path']
+        db_path = self.config["db.path"]
         if not os.path.isfile(db_path):
             return False
         return True
 
     def _reset_data_store(self):
-        if self.config['db.engine'] != 'sqlite':
+        if self.config["db.engine"] != "sqlite":
             # raise NotImplementedError
-            exit_warning(_(
-                'FIXME: Reset non-SQLite data store not supported (yet).'
-            ))
+            exit_warning(_("FIXME: Reset non-SQLite data store not supported (yet)."))
         else:
             self.must_unlink_db_path(force=True)
 
     # ***
 
     def must_unlink_db_path(self, *_args, force):
-        db_path = self.config['db.path']
+        db_path = self.config["db.path"]
         if not os.path.exists(db_path):
             return
         if not os.path.isfile(db_path):
-            exit_warning(_(
-                'Data store exists but is not a file, so not overwriting {}'
-            ).format(db_path))
+            exit_warning(
+                _("Data store exists but is not a file, so not overwriting {}").format(
+                    db_path
+                )
+            )
         if not force:
             exit_warning(self.data_store_exists_at)
         os.unlink(db_path)
@@ -157,8 +153,9 @@ class Controller_DatabaseStore(
 
     def _announce_recreated_store(self):
         click_echo(
-            _('Recreated data store at {}')
-            .format(highlight_value(self.config['db.path']))
+            _("Recreated data store at {}").format(
+                highlight_value(self.config["db.path"])
+            )
         )
 
     # ***
@@ -166,12 +163,13 @@ class Controller_DatabaseStore(
     def _standup_and_version_store(self, fact_cls):
         created_fresh = self.standup_store(fact_cls)
         if created_fresh:
-            verb = _('created')
+            verb = _("created")
         else:
-            verb = _('already ready')
+            verb = _("already ready")
         click_echo(
-            _('Dob database {verb} at {url}').format(
-                verb=verb, url=highlight_value(self.store.db_url),
+            _("Dob database {verb} at {url}").format(
+                verb=verb,
+                url=highlight_value(self.store.db_url),
             )
         )
 
@@ -186,12 +184,8 @@ class Controller_DatabaseStore(
         # Also tell the store not to log if user did not specify anything,
         #   because we'll show the help/usage (which Click would normally
         #   handle if we had not tampered with invoke_without_command).
-        if (
-            (len(sys.argv) > 2)
-            or (
-                (len(sys.argv) == 2)
-                and (sys.argv[1] not in ('-v', 'version'))
-            )
+        if (len(sys.argv) > 2) or (
+            (len(sys.argv) == 2) and (sys.argv[1] not in ("-v", "version"))
         ):
             return
         # FIXME/EXPLAIN/2019-01-22: (lb): What about other 2 loggers?
@@ -203,7 +197,6 @@ class Controller_DatabaseStore(
         # setdefault) so I think for clarity we should lookup via [].
         # Except the []-lookup returns the value, not the keyval object.
         # So here we have to use dotted attribute notation.
-        self.config.asobj.dev.sql_log_level.value_from_forced = 'WARNING'
+        self.config.asobj.dev.sql_log_level.value_from_forced = "WARNING"
 
     # ***
-

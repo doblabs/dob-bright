@@ -28,9 +28,7 @@ from easy_as_pypi_termio.echoes import click_echo
 from .. import help_newbs as help_strings
 from ..config import ConfigRoot
 
-__all__ = (
-    'Controller_ConfigManager',
-)
+__all__ = ("Controller_ConfigManager",)
 
 
 class Controller_ConfigManager(
@@ -38,7 +36,7 @@ class Controller_ConfigManager(
 ):
     """This is final (lowermost) class in the Controller() super()-chain."""
 
-    DOB_CONFIGFILE_ENVKEY = 'DOB_CONFIGFILE'
+    DOB_CONFIGFILE_ENVKEY = "DOB_CONFIGFILE"
 
     def __init__(self, *args, **kwargs):
         super(Controller_ConfigManager, self).__init__(*args, **kwargs)
@@ -100,7 +98,8 @@ class Controller_ConfigManager(
 
     def setup_config(self, configfile_path, *keyvals):
         self.configurable = self.setup_config_from_file_and_cli(
-            configfile_path, *keyvals,
+            configfile_path,
+            *keyvals,
         )
 
     def setup_config_from_file_and_cli(self, configfile_path, *keyvals):
@@ -162,4 +161,3 @@ class Controller_ConfigManager(
         pass
 
     # ***
-

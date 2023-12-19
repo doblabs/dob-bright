@@ -34,9 +34,7 @@ from .journal_writer import JournalWriter
 from .table_writer import TableWriter
 from .tabulate_results import tabulate_results
 
-__all__ = (
-    'render_results',
-)
+__all__ = ("render_results",)
 
 
 def render_results(
@@ -48,12 +46,12 @@ def render_results(
     show_duration=False,
     hide_description=False,
     custom_columns=None,
-    output_format='table',
-    table_type='texttable',
+    output_format="table",
+    table_type="texttable",
     max_width=-1,
     row_limit=0,
     output_obj_or_path=None,
-    factoid_rule='',
+    factoid_rule="",
     datetime_format=None,
     duration_fmt=None,
     spark_total=None,
@@ -96,19 +94,19 @@ def render_results(
 
     def fetch_report_writer_cls(output_format, table_type):
         writer = None
-        if output_format == 'csv':
+        if output_format == "csv":
             writer = CSVWriter()
-        elif output_format == 'tsv':
+        elif output_format == "tsv":
             writer = TSVWriter()
-        elif output_format == 'ical':
+        elif output_format == "ical":
             writer = ICALWriter()
-        elif output_format == 'json':
+        elif output_format == "json":
             writer = JSONWriter()
-        elif output_format == 'xml':
+        elif output_format == "xml":
             writer = XMLWriter()
-        elif output_format == 'factoid':
-            colorful = controller.config['term.use_color']
-            factoid_sep = ''
+        elif output_format == "factoid":
+            colorful = controller.config["term.use_color"]
+            factoid_sep = ""
             if factoid_rule:
                 # MAYBE/2020-06-16: (lb): Now that max_width truncates, this no
                 # longer works as expected. max_width will generally be -1 now...
@@ -118,31 +116,31 @@ def render_results(
                 if max_width > 0 and len(factoid_rule) == 1:
                     rule_mult = max_width
                 # FIXME: This color should be customizable, eh. #styling
-                factoid_sep = stylize(factoid_rule * rule_mult, 'indian_red_1c')
+                factoid_sep = stylize(factoid_rule * rule_mult, "indian_red_1c")
             writer = FactoidWriter(
                 colorful=colorful,
                 cut_width_complete=max_width,
                 factoid_sep=factoid_sep,
                 show_duration=show_duration,
             )
-        elif output_format == 'journal':
+        elif output_format == "journal":
             # For default `dob report` command, or when otherwise grouping
             # results by day, show a blank line between sections (Days).
             print_blank_line_between_sections = (
                 query_terms.group_days
                 and query_terms.sort_cols
-                and query_terms.sort_cols[0] == 'day'
+                and query_terms.sort_cols[0] == "day"
             )
             writer = JournalWriter(
                 section_nls=print_blank_line_between_sections,
             )
-        elif output_format == 'table':
+        elif output_format == "table":
             writer = TableWriter(
                 table_type=table_type,
                 max_width=restrict_width(max_width),
             )
         else:
-            raise Exception('Unknown output_format: {}'.format(output_format))
+            raise Exception("Unknown output_format: {}".format(output_format))
         return writer
 
     # ***
@@ -205,5 +203,5 @@ def render_results(
 
     return _render_results()
 
-# ***
 
+# ***

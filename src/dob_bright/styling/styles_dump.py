@@ -26,21 +26,14 @@ from easy_as_pypi_config.fileboss import create_configobj, echo_config_obj
 
 from easy_as_pypi_termio.errors import echo_warning
 
-from .load_styling import (
-    load_style_classes,
-    load_styles_conf,
-    resolve_path_styles
-)
+from .load_styling import load_style_classes, load_styles_conf, resolve_path_styles
 from .style_conf import KNOWN_STYLES
 
-__all__ = (
-    'echo_styles_conf',
-)
+__all__ = ("echo_styles_conf",)
 
 
-def echo_styles_conf(controller, style_name='', internal=False, complete=False):
-    """Prints style config section(s) from styles.conf or internal sources.
-    """
+def echo_styles_conf(controller, style_name="", internal=False, complete=False):
+    """Prints style config section(s) from styles.conf or internal sources."""
     config = controller.config
 
     def _echo_styles_conf():
@@ -81,7 +74,8 @@ def echo_styles_conf(controller, style_name='', internal=False, complete=False):
 
     def echo_error_no_styles_section():
         msg = _("No matching section “{0}” found in styles file at: {1}").format(
-            style_name, resolve_path_styles(config),
+            style_name,
+            resolve_path_styles(config),
         )
         echo_warning(msg)
         return None
@@ -110,16 +104,17 @@ def echo_styles_conf(controller, style_name='', internal=False, complete=False):
         is_default = True
         for name in KNOWN_STYLES:
             style_classes = load_style_classes(controller, name, skip_default=True)
-            styles_conf = ConfigDecorator(object, cls_or_name='', parent=None)
+            styles_conf = ConfigDecorator(object, cls_or_name="", parent=None)
             styles_conf.set_section(name, style_classes)
-            config_obj.merge(styles_conf.as_dict(
-                skip_unset=not is_default and not complete,
-                keep_empties=not is_default and not complete,
-            ))
+            config_obj.merge(
+                styles_conf.as_dict(
+                    skip_unset=not is_default and not complete,
+                    keep_empties=not is_default and not complete,
+                )
+            )
             is_default = False
         return config_obj
 
     # ***
 
     return _echo_styles_conf()
-
