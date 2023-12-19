@@ -17,19 +17,16 @@
 
 """The Controller."""
 
-from gettext import gettext as _
-
 import inspect
 import os
 import sys
-
-from nark.items.fact import Fact
+from gettext import gettext as _
 
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import echo_warning, exit_warning
+from nark.items.fact import Fact
 
 from .. import help_newbs as help_strings
-
 from .config_manager import Controller_ConfigManager
 from .database_store import Controller_DatabaseStore
 from .logging_output import Controller_LoggingOutput

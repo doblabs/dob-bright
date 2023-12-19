@@ -17,18 +17,15 @@
 
 """Fact Editing State Machine"""
 
+from collections import namedtuple
 from gettext import gettext as _
 
-from collections import namedtuple
-
+from easy_as_pypi_termio.errors import echo_warning
+from easy_as_pypi_termio.style import set_coloring, stylize, verify_colors_attrs
 from nark.items.activity import Activity
 from nark.items.fact import Fact
 
-from easy_as_pypi_termio.errors import echo_warning
-from easy_as_pypi_termio.style import stylize, set_coloring, verify_colors_attrs
-
 from ..styling.class_namilize import namilize
-
 from .facts_diff import FactsDiff
 
 __all__ = (

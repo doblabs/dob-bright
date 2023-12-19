@@ -17,12 +17,10 @@
 
 """Creates and populates basic config files or (gracefully) dies trying."""
 
+import os
 from gettext import gettext as _
 
-import os
-
 from easy_as_pypi_appdirs.exists_or_mkdirs import must_ensure_file_path_dirred
-
 from easy_as_pypi_termio.echoes import click_echo, highlight_value
 from easy_as_pypi_termio.errors import exit_warning
 

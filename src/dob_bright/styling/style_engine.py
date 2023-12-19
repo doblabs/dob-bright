@@ -18,14 +18,11 @@
 """~/.config/dob/styling/rules.conf definition and encapsulating class."""
 
 import os
-
 from gettext import gettext as _
 
-from prompt_toolkit.layout.containers import Container
-from prompt_toolkit.widgets.base import Label
-from prompt_toolkit.widgets.base import TextArea
-
 from easy_as_pypi_config.fileboss import warn_user_config_errors
+from prompt_toolkit.layout.containers import Container
+from prompt_toolkit.widgets.base import Label, TextArea
 
 # MAYBE/2019-12-02: (lb) Is using normal stdout to print errors okay?
 #                        Or should we use the Carousel (e.g., PPT modal)?

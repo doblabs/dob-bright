@@ -23,7 +23,6 @@ from easy_as_pypi_termio.style import attr
 
 from ..crud.interrogate import run_editor_safe
 from ..reports.render_results import render_results
-
 from .create_conf import create_basic_conf
 from .load_ignore import ignore_file_path, load_no_completion
 

@@ -20,7 +20,6 @@
 from gettext import gettext as _
 
 from easy_as_pypi_config.fileboss import default_config_path
-
 from easy_as_pypi_termio.echoes import highlight_value
 from easy_as_pypi_termio.style import attr, bg, fg
 

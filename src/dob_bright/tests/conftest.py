@@ -28,21 +28,18 @@ Fixtures available to the tests/.
 
 import codecs
 import os
-import py
 import tempfile
-from configobj import ConfigObj
-
-import fauxfactory
-import pytest
 from unittest.mock import MagicMock
 
-from easy_as_pypi_appdirs import (
-    app_dirs,
-)  # Import module that contains AppDirsWithMkdir (AppDirs).
+import fauxfactory
+import py
+import pytest
+from configobj import ConfigObj
+
+# Import module that contains AppDirsWithMkdir (AppDirs).
+from easy_as_pypi_appdirs import app_dirs
 from easy_as_pypi_appdirs.expand_and_mkdirs import ensure_directory_exists
-
 from easy_as_pypi_termio.errors import dob_been_warned_reset
-
 from nark.config import decorate_config
 from nark.items.fact import Fact
 

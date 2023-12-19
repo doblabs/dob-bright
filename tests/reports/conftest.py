@@ -25,5 +25,5 @@
 #   )
 # because:
 #   Defining 'pytest_plugins' in a non-top-level conftest is no longer supported.
-from nark.tests.conftest import *  # noqa: F401, F403
 from nark.tests.backends.sqlalchemy.conftest import *  # noqa: F401, F403
+from nark.tests.conftest import *  # noqa: F401, F403

@@ -17,7 +17,6 @@
 
 from dob_bright.reports.tabulate_results import tabulate_results
 
-
 # FIXME/2020-06-06 17:56: Move this module to dob-bright.
 
 

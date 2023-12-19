@@ -27,19 +27,16 @@
 #     add and import use cases. Run coverage on specific use cases could
 #     help a developer better understand this code.
 
+from datetime import datetime, timedelta
 from gettext import gettext as _
 
-from datetime import datetime, timedelta
-
 import click_hotoffthehamster as click
-
+from easy_as_pypi_termio.echoes import click_echo, echo_block_header
+from easy_as_pypi_termio.errors import exit_warning_crude
 from nark.helpers import fact_time
 from nark.helpers.fact_time import datetime_from_clock_after, datetime_from_clock_prior
 from nark.helpers.facts_fit import antecedent_fact, subsequent_fact
 from nark.helpers.parse_time import parse_clock_time, parse_relative_minutes
-
-from easy_as_pypi_termio.echoes import click_echo, echo_block_header
-from easy_as_pypi_termio.errors import exit_warning_crude
 
 from .fact_dressed import FactDressed
 from .parse_mistakes import conflict_prefix, prepare_log_msg

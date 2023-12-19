@@ -18,12 +18,10 @@
 from gettext import gettext as _
 
 import click_hotoffthehamster as click
-
-from nark.helpers.format_text import format_value_truncate
-from nark.helpers.objects import resolve_attr_or_method
-
 from easy_as_pypi_termio.errors import echo_warning
 from easy_as_pypi_termio.style import stylize, verify_colors_attrs
+from nark.helpers.format_text import format_value_truncate
+from nark.helpers.objects import resolve_attr_or_method
 
 __all__ = ("FactsDiff",)
 

@@ -15,13 +15,12 @@
 # If you lost the GNU General Public License that ships with this software
 # repository (read the 'LICENSE' file), see <http://www.gnu.org/licenses/>.
 
-from click_hotoffthehamster._compat import term_len
 from collections import namedtuple
 from collections.abc import Iterable
+from gettext import gettext as _
 from operator import attrgetter
 
-from gettext import gettext as _
-
+from click_hotoffthehamster._compat import term_len
 from nark.backends.sqlalchemy.managers import query_sort_order_at_index
 from nark.backends.sqlalchemy.managers.fact import FactManager
 from nark.helpers.format_time import format_delta
