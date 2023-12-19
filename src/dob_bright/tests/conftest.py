@@ -38,7 +38,7 @@ from configobj import ConfigObj
 
 # Import module that contains AppDirsWithMkdir (AppDirs).
 from easy_as_pypi_appdirs import app_dirs
-from easy_as_pypi_appdirs.expand_and_mkdirs import ensure_directory_exists
+from easy_as_pypi_appdirs.expand_and_mkdirs import must_ensure_directory_exists
 from easy_as_pypi_termio.errors import dob_been_warned_reset
 from nark.config import decorate_config
 from nark.items.fact import Fact
@@ -81,16 +81,16 @@ def appdirs(mocker, tmpdir):
     """Provide mocked version specific user dirs using a tmpdir."""
     app_dirs_mock = mocker.MagicMock()
 
-    app_dirs_mock.user_config_dir = ensure_directory_exists(
+    app_dirs_mock.user_config_dir = must_ensure_directory_exists(
         os.path.join(tmpdir.mkdir("config").strpath, "dob/"),
     )
-    app_dirs_mock.user_data_dir = ensure_directory_exists(
+    app_dirs_mock.user_data_dir = must_ensure_directory_exists(
         os.path.join(tmpdir.mkdir("data").strpath, "dob/"),
     )
-    app_dirs_mock.user_cache_dir = ensure_directory_exists(
+    app_dirs_mock.user_cache_dir = must_ensure_directory_exists(
         os.path.join(tmpdir.mkdir("cache").strpath, "dob/"),
     )
-    app_dirs_mock.user_log_dir = ensure_directory_exists(
+    app_dirs_mock.user_log_dir = must_ensure_directory_exists(
         os.path.join(tmpdir.mkdir("log").strpath, "dob/"),
     )
 
