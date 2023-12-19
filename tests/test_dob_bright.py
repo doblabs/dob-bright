@@ -20,7 +20,7 @@ import os
 from unittest import mock
 
 import pytest
-from easy_as_pypi_apppth import app_dirs_with_mkdir
+from easy_as_pypi_appdirs import app_dirs_with_mkdir
 from easy_as_pypi_config import fileboss
 from easy_as_pypi_config.urable import ConfigUrable
 from nark.config import ConfigRoot, decorate_config
