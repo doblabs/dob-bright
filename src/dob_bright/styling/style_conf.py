@@ -17,9 +17,9 @@
 
 """Facts Carousel Custom User (Pygment-defined) Styles."""
 
+import shutil
 from gettext import gettext as _
 
-import click_hotoffthehamster as click
 from config_decorator import section
 
 from .class_namilize import namilize
@@ -118,7 +118,7 @@ def _create_style_object():
     def evaluate_content_dimension(value, dim):
         if isinstance(value, int):
             return value
-        term_width, term_height = click.get_terminal_size()
+        term_width, term_height = shutil.get_terminal_size()
         # E.g., = value.replace('term_width', str(term_width))
         evalable = value.replace(dim, str(locals()[dim]))
         compiled = compile(evalable, filename="<string>", mode="eval")
@@ -225,7 +225,7 @@ def _create_style_object():
             # NOTE: There's no need to cache the calculated default value.
             # - (lb): This method is called only once per runtime, AFAICT.
 
-            # We could `return click.get_terminal_size()[1] - 15` directly here,
+            # We could `return shutil.get_terminal_size()[1] - 15` directly here,
             # but let's use a string and show off how to use the magic value. If
             # the user dumps the styling config, they'll see this string and have
             # a better idea how best to customize this value.
