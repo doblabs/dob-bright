@@ -31,4 +31,7 @@ pytest_plugins = (
     "tests.config.envvar_prefix",
     # Call app_dirs.register_application.
     "tests.config.init_app_dirs",
+    "nark.tests.backends.sqlalchemy.conftest",
+    # Make sure fixtures required by fixtures available, e.g., 'base_config'.
+    "nark.tests.conftest",
 )
