@@ -21,7 +21,6 @@ from unittest import mock
 
 import pytest
 from easy_as_pypi_appdirs import app_dirs_with_mkdir
-from easy_as_pypi_config import fileboss
 from easy_as_pypi_config.urable import ConfigUrable
 from nark.config import ConfigRoot, decorate_config
 from nark.helpers import logging as logging_helpers
@@ -179,10 +178,10 @@ class TestGetConfigInstance(object):
 
     def test_config_path_getter(self, appdirs, mocker):
         """Make sure the config target path is constructed to our expectations."""
-        mocker.patch("easy_as_pypi_config.fileboss.load_config_obj")
         # DRY?/2020-01-09: (lb): Perhaps move repeated ConfigUrable code to fixture.
         self.configurable = self.get_configurable()
+        mocker.patch.object(self.configurable, "_load_config_obj")
         self.configurable.load_config(configfile_path=None)
-        # 'dob.conf' defined and used in dob_bright.config.fileboss.default_config_path.
-        expectation = os.path.join(appdirs.user_config_dir, "dob.conf")
-        assert fileboss.load_config_obj.called_with(expectation)
+        # The config path, e.g., '/home/user/.config/test__dob-bright/app.conf'
+        expectation = self.configurable.configfile_path
+        self.configurable._load_config_obj.assert_called_with(expectation)
