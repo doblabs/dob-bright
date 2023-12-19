@@ -115,7 +115,7 @@ class DobConfigurableEditor(object):
         #                 or maybe help() callback that customizes
         #                 text based on -T option?
         # - Another option: Truncate after first period '.' on global dob-bright-dump,
-        #                    but include complete help on dob-bright-dump-setting (e.g.,)
+        #               but include complete help on dob-bright-dump-setting (e.g.,)
         _(
             "Path to file containing newline-separated ‘act@gory’ and ‘#tag’\n"
             "names to omit from completions and suggestions (regex-aware)."
