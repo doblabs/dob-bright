@@ -58,7 +58,7 @@ DEFAULT_SQUASH_SEP = "\n\n--\n\n"
 
 
 TIME_ERROR_ZEROTH_FACT_MUST_START = _(
-    "Please specify `start` for Fact being added before time existed."
+    "Please specify `start` to add Fact before time existed."
 )
 
 
