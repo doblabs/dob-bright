@@ -35,11 +35,7 @@ def must_create_fact_from_factoid(
     factoid,
     time_hint,
 ):
-    def _must_create_fact_from_factoid(
-        controller,
-        factoid,
-        time_hint,
-    ):
+    def _must_create_fact_from_factoid():
         separators = must_prepare_factoid_item_separators(controller)
         use_hint = reduce_time_hint(time_hint)
         try:
@@ -86,4 +82,4 @@ def must_create_fact_from_factoid(
 
     # ***
 
-    return _must_create_fact_from_factoid(controller, factoid, time_hint)
+    return _must_create_fact_from_factoid()
