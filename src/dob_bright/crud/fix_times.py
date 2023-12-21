@@ -1155,7 +1155,7 @@ def resolve_overlapping(fact, conflicts, squash_sep="", allow_momentaneous=False
 # ***
 
 
-# (lb): This fcn. could be moved to dob or dob-bright; only dob uses it.
+# MAYBE: Move this fcn. to dob; dob-bright doesn't use it.
 def mend_fact_timey_wimey(controller, fact, time_hint, other_edits={}):
     """"""
 
