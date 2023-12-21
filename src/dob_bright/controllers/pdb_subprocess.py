@@ -50,7 +50,7 @@ class Controller_PdbSubprocess(
     def affirm(self, condition):
         if condition:
             return
-        self.client_logger.error(_("Something catastrophic happened!"))
+        self.client_logger.error(_("Dob detected an Illegal State!"))
         if not self.config["dev.catch_errors"]:
             return
         import traceback
