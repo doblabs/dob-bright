@@ -57,21 +57,6 @@ test_cli_log_level = "DEBUG"
 # ***
 
 
-@pytest.fixture
-def filename():
-    """Provide a filename string."""
-    return fauxfactory.gen_utf8()
-
-
-@pytest.fixture
-def filepath(tmpdir, filename):
-    """Provide a fully qualified pathame within our tmp-dir."""
-    return os.path.join(tmpdir.strpath, filename)
-
-
-# ***
-
-
 def _config_root(nark_config, dob_config):
     """Provide a generic baseline configuration."""
     config_root = decorate_config(nark_config)
