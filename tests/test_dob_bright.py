@@ -145,10 +145,18 @@ class TestGetConfig(object):
         assert config["db.password"] == confnstnc["db"]["password"]
 
 
+# DUNNO/2023-12-21: This looks like a leftover duplicate from
+# the 2020-12-15 refactor (when a single dob monolith was split
+# into ten separate packages), but it (somehow?) provides 38 lines
+# of coverage (though it looks like it only runs EAPP-config code).
+# - CXREF: See same-named and similiar class upstream:
+#     ~/.kit/py/easy-as-pypi-config/tests/test_urable.py
 class TestGetConfigInstance(object):
     def get_configurable(self):
         return ConfigUrable(
             config_root=ConfigRoot,
+            # EAPP-config uses:
+            #  configfile_envkey=self.EASY_AS_PYPI_CONFIG_CONFIGFILE_ENVKEY,
             configfile_envkey=Controller.DOB_CONFIGFILE_ENVKEY,
         )
 
