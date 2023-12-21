@@ -358,8 +358,8 @@ def parse_input(controller, file_in=None, progress=None):
             #   I sorta like using the proper tag symbol
             #   when not worried about shell interpolation.
             hash_stamps="#",
-            # We'll handle errors ourselves, later, in bulk, either
-            # `--ask`'ing the user for more Fact details, or barfing
+            # Set lenient=True to handle errors ourselves, later, in bulk,
+            # either `--ask`'ing the user for more Fact details or puking
             # all the errors and exiting.
             lenient=True,
         )
