@@ -236,7 +236,13 @@ def mend_facts_times(controller, fact, time_hint, skip_store=False):
             if not fact.start:
                 fact.start = now
         elif time_hint in ["verify_start", "verify_then", "verify_still"]:
-            controller.affirm(not fact.end)
+            controller.affirm(
+                not fact.end,
+                (
+                    "factoid has end but time_hint not "
+                    "verify_both, verify_end, or verify_last"
+                ),
+            )
             open_end = True
             if not fact.start:
                 fact.start = now

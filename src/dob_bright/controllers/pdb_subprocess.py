@@ -47,10 +47,16 @@ class Controller_PdbSubprocess(
 
     # ***
 
-    def affirm(self, condition):
+    def affirm(self, condition, message=None):
         if condition:
             return
         self.client_logger.error(_("Dob detected an Illegal State!"))
+
+        append_context = ""
+        if message:
+            append_context = f": {message}"
+
+        self.client_logger.error(_("Dob detected an Illegal State") + append_context)
         if not self.config["dev.catch_errors"]:
             return
         import traceback
