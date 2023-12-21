@@ -34,6 +34,7 @@ def must_create_fact_from_factoid(
     controller,
     factoid,
     time_hint,
+    lenient=False,
 ):
     def _must_create_fact_from_factoid():
         separators = must_prepare_factoid_item_separators(controller)
@@ -43,7 +44,7 @@ def must_create_fact_from_factoid(
                 factoid=factoid,
                 time_hint=use_hint,
                 separators=separators,
-                lenient=True,
+                lenient=lenient,
             )
             controller.client_logger.info(str(err)) if err else None
         except ParserException as err:
