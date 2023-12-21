@@ -543,6 +543,8 @@ def must_complete_times(
         # If -delta, relative to *next* time; if +delta, relative to *prev* time.
         dt_suss = None
         if delta_minus is False:
+            if which == "start" and prev_time is None:
+                prev_time = controller.now
             if prev_time is not None:
                 dt_suss = prev_time + timedelta(minutes=delta_mins)
             # else, we'll add a conflict below.
@@ -551,9 +553,10 @@ def must_complete_times(
             dt_suss = fact.end + timedelta(minutes=delta_mins)
         else:
             next_time, _next_fact = find_next_datetime(later_facts)
-            if next_time is not None:
-                # NOTE: delta_mins is negative, so add to next_time.
-                dt_suss = next_time + timedelta(minutes=delta_mins)
+            if next_time is None:
+                next_time = controller.now
+            # NOTE: delta_mins is negative, so add to next_time.
+            dt_suss = next_time + timedelta(minutes=delta_mins)
 
         if dt_suss is not None:
             setattr(fact, which, dt_suss)
@@ -1180,8 +1183,9 @@ def mend_fact_timey_wimey(controller, fact, time_hint, other_edits={}):
 
     def must_complete_time(controller, fact, other_edits):
         reset_end = fact.end is None
-        if fact.end is None:
+        if fact.start is None and fact.end is None:
             fact.end = controller.now
+
         new_facts = [
             fact,
         ]
