@@ -74,12 +74,12 @@ class TestSetupLogging(object):
         assert len(controller.lib_logger.handlers) == 1
         assert len(controller.client_logger.handlers) == 1
 
-    def test_setup_logging_log_file_true(self, controller, appdirs):
+    def test_setup_logging_log_file_true(self, controller, tmp_appdirs):
         """
         Make sure that if we enable logfile_path, both loggers receive ``FileHandler``.
         """
         controller.config["log.filepath"] = os.path.join(
-            appdirs.user_log_dir,
+            tmp_appdirs.user_log_dir,
             "foobar.log",
         )
         controller.setup_logging()
@@ -152,7 +152,7 @@ class TestGetConfigInstance(object):
             configfile_envkey=Controller.DOB_CONFIGFILE_ENVKEY,
         )
 
-    def test_no_file_present(self, appdirs, mocker):
+    def test_no_file_present(self, tmp_appdirs, mocker):
         # In lieu of testing from completely vanilla account, ensure config file does
         # not exist (which probably exists for your user at ~/.config/dob/dob.conf).
         # NOTE: AppDirs is a module-scope object with immutable attributes, so we
@@ -176,7 +176,7 @@ class TestGetConfigInstance(object):
         assert cfg_val == config_instance()["db"]["orm"]
         assert config_instance() is not self.configurable.config_root
 
-    def test_config_path_getter(self, appdirs, mocker):
+    def test_config_path_getter(self, tmp_appdirs, mocker):
         """Make sure the config target path is constructed to our expectations."""
         # DRY?/2020-01-09: (lb): Perhaps move repeated ConfigUrable code to fixture.
         self.configurable = self.get_configurable()

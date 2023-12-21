@@ -35,10 +35,6 @@ import fauxfactory
 import py
 import pytest
 from configobj import ConfigObj
-
-# Import module that contains AppDirsWithMkdir (AppDirs).
-from easy_as_pypi_appdirs import app_dirs
-from easy_as_pypi_appdirs.expand_and_mkdirs import must_ensure_directory_exists
 from easy_as_pypi_termio.errors import echoed_warnings_reset
 from nark.config import decorate_config
 from nark.items.fact import Fact
@@ -71,32 +67,6 @@ def filename():
 def filepath(tmpdir, filename):
     """Provide a fully qualified pathame within our tmp-dir."""
     return os.path.join(tmpdir.strpath, filename)
-
-
-# ***
-
-
-@pytest.fixture
-def appdirs(mocker, tmpdir):
-    """Provide mocked version specific user dirs using a tmpdir."""
-    app_dirs_mock = mocker.MagicMock()
-
-    app_dirs_mock.user_config_dir = must_ensure_directory_exists(
-        os.path.join(tmpdir.mkdir("config").strpath, "dob/"),
-    )
-    app_dirs_mock.user_data_dir = must_ensure_directory_exists(
-        os.path.join(tmpdir.mkdir("data").strpath, "dob/"),
-    )
-    app_dirs_mock.user_cache_dir = must_ensure_directory_exists(
-        os.path.join(tmpdir.mkdir("cache").strpath, "dob/"),
-    )
-    app_dirs_mock.user_log_dir = must_ensure_directory_exists(
-        os.path.join(tmpdir.mkdir("log").strpath, "dob/"),
-    )
-
-    app_dirs.AppDirsWithMkdir = app_dirs_mock
-
-    return app_dirs_mock
 
 
 # ***
@@ -335,20 +305,20 @@ def config_instance(tmpdir, faker):
 
 
 @pytest.fixture
-def config_file(config_instance, appdirs):
+def config_file(config_instance, tmp_appdirs):
     """Provide a config file store under our fake config dir."""
-    conf_path = os.path.join(appdirs.user_config_dir, "dob.conf")
+    conf_path = os.path.join(tmp_appdirs.user_config_dir, "dob.conf")
     with codecs.open(conf_path, "w", encoding="utf-8") as fobj:
         config_instance().write(fobj)
 
 
 @pytest.fixture
-def get_config_file(config_instance, appdirs):
+def get_config_file(config_instance, tmp_appdirs):
     """Provide a dynamic config file store under our fake config dir."""
 
     def generate(**kwargs):
         instance = config_instance(**kwargs)
-        conf_path = os.path.join(appdirs.user_config_dir, "dob.conf")
+        conf_path = os.path.join(tmp_appdirs.user_config_dir, "dob.conf")
         with codecs.open(conf_path, "w", encoding="utf-8") as fobj:
             instance.write(fobj)
         return instance
