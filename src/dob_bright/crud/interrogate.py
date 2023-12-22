@@ -141,7 +141,7 @@ def run_editor_safe(filename, contents=None):
         #           chmod 755 ~/.local/bin/vim-wrap
         #           export EDITOR="vim-wrap"
         #
-        result = editor.edit(filename=filename, contents=contents)
+        result = editor(filename=filename, text=contents)
         edited = result.decode()
         # Necessary?:
         #   edited = result.decode('utf-8')
