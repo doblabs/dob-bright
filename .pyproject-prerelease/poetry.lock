@@ -596,6 +596,20 @@ files = [
 ]
 
 [[package]]
+name = "dek"
+version = "1.3.0"
+description = "🎴 The decorator-decorator 🎴"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "dek-1.3.0-py3-none-any.whl", hash = "sha256:decba02e75242c1b8841b3cd1a33f6724245a675559e642366d3de726c38acec"},
+    {file = "dek-1.3.0.tar.gz", hash = "sha256:7dc66c0a8654dcb0ff1ae6043ab5cd7ed9f2d75a12885f5191d36b88857da4a9"},
+]
+
+[package.dependencies]
+xmod = "*"
+
+[[package]]
 name = "distlib"
 version = "0.3.8"
 description = "Distribution utilities"
@@ -763,6 +777,21 @@ readthedocs = ["sphinx (>=6.2.1,<7.0.0)", "sphinx (>=7.2.6,<8.0.0)", "sphinx-rtd
 type = "legacy"
 url = "https://test.pypi.org/simple"
 reference = "testpypi"
+
+[[package]]
+name = "editor"
+version = "1.4.0"
+description = "🖋 Open the default text editor 🖋"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "editor-1.4.0-py3-none-any.whl", hash = "sha256:3411aab71b5edb39706ce6802b82cab01fc8302b295a8b802c9887b49e2def94"},
+    {file = "editor-1.4.0.tar.gz", hash = "sha256:c9a4efcb9d49cf1c42df699e299442973526dfec40f07b6cdfbdfbd921ab8f0f"},
+]
+
+[package.dependencies]
+runs = ">=1.1.0,<2.0.0"
+xmod = ">=1.3.2,<2.0.0"
 
 [[package]]
 name = "exceptiongroup"
@@ -1783,18 +1812,6 @@ files = [
 six = ">=1.5"
 
 [[package]]
-name = "python-editor"
-version = "1.0.4"
-description = "Programmatically open an editor, capture the result."
-optional = false
-python-versions = "*"
-files = [
-    {file = "python-editor-1.0.4.tar.gz", hash = "sha256:51fda6bcc5ddbbb7063b2af7509e43bd84bfc32a4ff71349ec7847713882327b"},
-    {file = "python_editor-1.0.4-py2-none-any.whl", hash = "sha256:5f98b069316ea1c2ed3f67e7f5df6c0d8f10b689964a4a811ff64f0106819ec8"},
-    {file = "python_editor-1.0.4-py3-none-any.whl", hash = "sha256:1bf6e860a8ad52a14c3ee1252d5dc25b2030618ed80c022598f00176adc8367d"},
-]
-
-[[package]]
 name = "pytz"
 version = "2023.3.post1"
 description = "World timezone definitions, modern and historical"
@@ -2087,6 +2104,20 @@ typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.9
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
+
+[[package]]
+name = "runs"
+version = "1.1.0"
+description = "Runs a block of text as a subrprocess"
+optional = false
+python-versions = "*"
+files = [
+    {file = "runs-1.1.0-py3-none-any.whl", hash = "sha256:702a31bec6d3336175ab6dcadd605ebd39b75d792a98303202b090d4556883e3"},
+    {file = "runs-1.1.0.tar.gz", hash = "sha256:c8685f129e54086f103b365c8d20c3f117f7518d0717962905c96248643530ef"},
+]
+
+[package.dependencies]
+xmod = "*"
 
 [[package]]
 name = "secretstorage"
@@ -2815,6 +2846,20 @@ files = [
 ]
 
 [[package]]
+name = "xmod"
+version = "1.6.0"
+description = "🌱 Turn any object into a module 🌱"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "xmod-1.6.0-py3-none-any.whl", hash = "sha256:e8309df5de74ba1baeb28510592910ac17284aaaff49fc795c1cf6c1641dd392"},
+    {file = "xmod-1.6.0.tar.gz", hash = "sha256:87efbacbf2ef18e534740ecf802f9f6b9811543d9436c1a3ab2ea4dfbf9273af"},
+]
+
+[package.dependencies]
+dek = "*"
+
+[[package]]
 name = "yamllint"
 version = "1.33.0"
 description = "A linter for YAML files."
@@ -2873,4 +2918,4 @@ readthedocs = ["sphinx", "sphinx", "sphinx-rtd-theme", "tomli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "4030e2c250d61c8ec3ef39f256133a50744b542d1bf23cbf1f70bd79998c5fb0"
+content-hash = "ccc67fbd2600215d772e42bd321ab0aa898f0b85207168c20d3396a39d73e416"
