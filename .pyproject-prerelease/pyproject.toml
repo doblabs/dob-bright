@@ -1048,24 +1048,24 @@ python-editor = "^1.0.4"
 #         https://github.com/pallets/click
 #  - Forked to make a few adjustments, and too impatient to ask for a pull...
 #  https://github.com/hotoffthehamster/click
-click-hotoffthehamster = { version = ">0", source = "testpypi" }
+click-hotoffthehamster = { version = ">0", source = "testpypi", allow-prereleases = true }
 # Pythonic config @decorator.
 #  https://github.com/hotoffthehamster/config-decorator
-config-decorator = { version = ">0", source = "testpypi" }
+config-decorator = { version = ">0", source = "testpypi", allow-prereleases = true }
 # ActiveState/appdirs + Singleton (app-wide access w/out appname) + `mkdir -p`.
 #  https://github.com/doblabs/easy-as-pypi-appdirs#🛣
-easy-as-pypi-appdirs = { version = ">0", source = "testpypi" }
+easy-as-pypi-appdirs = { version = ">0", source = "testpypi", allow-prereleases = true }
 # configobj + config-decorator helper.
 #  https://github.com/tallybark/easy-as-pypi-config
-easy-as-pypi-config = { version = ">0", source = "testpypi" }
+easy-as-pypi-config = { version = ">0", source = "testpypi", allow-prereleases = true }
 # Get-package-or-Git-version helper.
 #  https://github.com/tallybark/easy-as-pypi-getver
-easy-as-pypi-getver = { version = ">0", source = "testpypi" }
+easy-as-pypi-getver = { version = ">0", source = "testpypi", allow-prereleases = true }
 # Click + ansi_escape_room (color) + convenience.
 #  https://github.com/tallybark/easy-as-pypi-termio
-easy-as-pypi-termio = { version = ">0", source = "testpypi" }
+easy-as-pypi-termio = { version = ">0", source = "testpypi", allow-prereleases = true }
 
 # The heart of Hamster. (Ye olde `hamster-lib`).
 #  https://github.com/tallybark/nark
-nark = { version = ">0", source = "testpypi" }
+nark = { version = ">0", source = "testpypi", allow-prereleases = true }
 
