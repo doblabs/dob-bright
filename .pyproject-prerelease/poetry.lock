@@ -1458,13 +1458,13 @@ files = [
 
 [[package]]
 name = "nark"
-version = "3.2.6a4"
+version = "3.2.7a1"
 description = "Back end framework for journaling and time tracking apps (like `dob`!)"
 optional = false
 python-versions = ">=3.8.1,<4.0.0"
 files = [
-    {file = "nark-3.2.6a4-py3-none-any.whl", hash = "sha256:b504bde19bea7af1016b371a4abee97a414548d1bb60f3d84a0640d5d751bb30"},
-    {file = "nark-3.2.6a4.tar.gz", hash = "sha256:e29745cb376f7d4c562ba6788487742059ba5c09dc1d574b200fb08b4cf44965"},
+    {file = "nark-3.2.7a1-py3-none-any.whl", hash = "sha256:f30b7971834214a2825715318b50ab76e885a03bf0ce443e87c8b2adf7a521fb"},
+    {file = "nark-3.2.7a1.tar.gz", hash = "sha256:c76906325f8e36b6028afaeab62a3e886e67667a12b86cf234a250f67e206af4"},
 ]
 
 [package.dependencies]
